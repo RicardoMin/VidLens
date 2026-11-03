@@ -1,0 +1,178 @@
+{
+  "date": "2026-11-03",
+  "caption_track_sha256": "51b4e9116bf7d8f8c10ed6165950483774219fdffc39b8bf0d0accb6dda6cc2f",
+  "captions": 231,
+  "reading": {
+    "development_baseline": {
+      "source_hashes": {
+        "service.py": "fa0cdd65481bf8529febc1ee5c4b1706cf68f6de4e692961bd4a6cfc33a87221",
+        "retrieval.py": "a6c481c70cc7e65f49d84c7400ff6bd2db5c751ed7d6ac5b3ff823a261b5730e",
+        "budget.py": "d2bb4800ab156e73ba8aee3b1148ad89e868c27ae9e5c90b17d5ca82dfdeff00",
+        "store.py": "97e1095648ac97807f5fdad4002f0e9c8aa2369d30b691310d901498790df567"
+      },
+      "summary": [
+        {
+          "budget": 2500,
+          "mode": "fresh_process_cached_source",
+          "samples": 5,
+          "question_count": 5,
+          "latency_p50_seconds": 0.148351,
+          "latency_p95_seconds": 0.1579104,
+          "mean_payload_text_tokens_estimate": 2185,
+          "all_responses_within_budget": true,
+          "micro_target_window_recall": 1.0,
+          "all_windows_hit_fraction": 1,
+          "mean_payload_to_full_transcript_token_ratio": 0.45125980999586945
+        },
+        {
+          "budget": 2500,
+          "mode": "warm_process_cached_source",
+          "samples": 15,
+          "question_count": 5,
+          "latency_p50_seconds": 0.007146,
+          "latency_p95_seconds": 0.0073359,
+          "mean_payload_text_tokens_estimate": 2185,
+          "all_responses_within_budget": true,
+          "micro_target_window_recall": 1.0,
+          "all_windows_hit_fraction": 1,
+          "mean_payload_to_full_transcript_token_ratio": 0.45125980999586945
+        },
+        {
+          "budget": 4000,
+          "mode": "fresh_process_cached_source",
+          "samples": 5,
+          "question_count": 5,
+          "latency_p50_seconds": 0.151916,
+          "latency_p95_seconds": 0.17006179999999999,
+          "mean_payload_text_tokens_estimate": 2185,
+          "all_responses_within_budget": true,
+          "micro_target_window_recall": 1.0,
+          "all_windows_hit_fraction": 1,
+          "mean_payload_to_full_transcript_token_ratio": 0.45125980999586945
+        },
+        {
+          "budget": 4000,
+          "mode": "warm_process_cached_source",
+          "samples": 15,
+          "question_count": 5,
+          "latency_p50_seconds": 0.007384,
+          "latency_p95_seconds": 0.011158999999999999,
+          "mean_payload_text_tokens_estimate": 2185,
+          "all_responses_within_budget": true,
+          "micro_target_window_recall": 1.0,
+          "all_windows_hit_fraction": 1,
+          "mean_payload_to_full_transcript_token_ratio": 0.45125980999586945
+        }
+      ],
+      "min_window_fraction": 0.977248,
+      "all_window_anchors_present": true
+    },
+    "v0.1.0": {
+      "source_hashes": {
+        "service.py": "f0cea452a6433b7d9e1fabe84915e2c5e6755fea718f0e3eed01e591b80652f0",
+        "reading.py": "9b08312fb72f76081bf37789764f672262e1c5b06004ce06212e2df14f208926",
+        "retrieval.py": "0f5c4faf3a2b4aab224eed37d0058839b1aecf341f176a4f2a48278226ad5087",
+        "budget.py": "661a14907a35d80f557ba9a29eaba967ff68ff7687718b6a6d126718e12ef180",
+        "store.py": "3eb437a169baf0329710f0eff660984452a80f1a3ef24418d709bcfcca4cf7da"
+      },
+      "summary": [
+        {
+          "budget": 2500,
+          "mode": "fresh_process_cached_source",
+          "samples": 5,
+          "question_count": 5,
+          "latency_p50_seconds": 0.191741,
+          "latency_p95_seconds": 0.204962,
+          "mean_payload_text_tokens_estimate": 1740.2,
+          "all_responses_within_budget": true,
+          "micro_target_window_recall": 1.0,
+          "all_windows_hit_fraction": 1,
+          "mean_payload_to_full_transcript_token_ratio": 0.3593969434118133
+        },
+        {
+          "budget": 2500,
+          "mode": "warm_process_cached_source",
+          "samples": 15,
+          "question_count": 5,
+          "latency_p50_seconds": 0.002353,
+          "latency_p95_seconds": 0.0028348999999999996,
+          "mean_payload_text_tokens_estimate": 1740.2,
+          "all_responses_within_budget": true,
+          "micro_target_window_recall": 1.0,
+          "all_windows_hit_fraction": 1,
+          "mean_payload_to_full_transcript_token_ratio": 0.3593969434118133
+        },
+        {
+          "budget": 4000,
+          "mode": "fresh_process_cached_source",
+          "samples": 5,
+          "question_count": 5,
+          "latency_p50_seconds": 0.15434,
+          "latency_p95_seconds": 0.2137722,
+          "mean_payload_text_tokens_estimate": 1740.2,
+          "all_responses_within_budget": true,
+          "micro_target_window_recall": 1.0,
+          "all_windows_hit_fraction": 1,
+          "mean_payload_to_full_transcript_token_ratio": 0.3593969434118133
+        },
+        {
+          "budget": 4000,
+          "mode": "warm_process_cached_source",
+          "samples": 15,
+          "question_count": 5,
+          "latency_p50_seconds": 0.001778,
+          "latency_p95_seconds": 0.0022075,
+          "mean_payload_text_tokens_estimate": 1740.2,
+          "all_responses_within_budget": true,
+          "micro_target_window_recall": 1.0,
+          "all_windows_hit_fraction": 1,
+          "mean_payload_to_full_transcript_token_ratio": 0.3593969434118133
+        }
+      ],
+      "min_window_fraction": 1.0,
+      "all_window_anchors_present": true
+    }
+  },
+  "paging_600_cues": {
+    "development_baseline": {
+      "seconds": [
+        1.031586208002409,
+        1.0316010410024319,
+        1.0301987920029205
+      ],
+      "median": 1.031586208002409,
+      "items": 21,
+      "tokens": 1475
+    },
+    "v0.1.0": {
+      "seconds": [
+        0.014712165997480042,
+        0.011399959003028926,
+        0.010947957998723723
+      ],
+      "median": 0.011399959003028926,
+      "items": 21,
+      "tokens": 1475,
+      "method": "o200k_base_estimate"
+    }
+  },
+  "skill_o200k_base": {
+    "development_baseline": 1221,
+    "v0.1.0": 436
+  },
+  "separate_course_check": {
+    "url": "https://www.youtube.com/watch?v=kCc8FmEb1nY",
+    "duration_seconds": 6980,
+    "language": "en",
+    "source": "automatic",
+    "question": "Why scale attention by the square root of head size before softmax?",
+    "available_transcript_tokens_estimate": 25178,
+    "initial_response_tokens_estimate": 1114,
+    "follow_up_interval": [
+      4680,
+      4718
+    ],
+    "follow_up_tokens_estimate": 1186,
+    "observed": "The first response located the variance explanation; reading the next interval supplied the softmax saturation qualification."
+  }
+}

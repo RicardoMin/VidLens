@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="270" viewBox="0 0 960 270" role="img" aria-labelledby="title desc">
+  <title id="title">VidLens 阅读示例：神经元的激活值能超过 1 吗？</title>
+  <desc id="desc">一段 18 分 40 秒的课程。2 分 58 秒介绍激活值，10 分 14 秒讨论 Sigmoid，17 分 42 秒给出 ReLU 定义。</desc>
+  <rect width="960" height="270" rx="16" fill="#11252b"/>
+  <g font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', sans-serif">
+    <text x="40" y="39" fill="#8ce8c6" font-size="15" font-weight="650" letter-spacing="2">VIDLENS</text>
+    <text x="920" y="39" text-anchor="end" fill="#bfd3d0" font-size="15">3Blue1Brown · 18:40</text>
+    <text x="40" y="89" fill="#fff" font-size="30" font-weight="650">神经元的激活值能超过 1 吗？</text>
+    <text x="40" y="125" fill="#cfdfdc" font-size="18">讲者用 Sigmoid 把输出压到 0 到 1 之间。结尾给出的 ReLU 可以输出大于 1 的值。</text>
+    <path d="M40 179H920" stroke="#466368" stroke-width="5" stroke-linecap="round"/>
+    <path d="M180 179h6 M523 179h23 M870 179h10" stroke="#8ce8c6" stroke-width="9" stroke-linecap="round"/>
+    <g fill="#8ce8c6" font-size="16" font-family="ui-monospace, Menlo, monospace">
+      <text x="180" y="212" text-anchor="middle">02:58</text><text x="531" y="212" text-anchor="middle">10:14</text><text x="874" y="212" text-anchor="middle">17:42</text>
+    </g>
+    <g fill="#e3efec" font-size="17" text-anchor="middle">
+      <text x="180" y="238">开头的限定</text><text x="531" y="238">Sigmoid 示例</text><text x="874" y="238">ReLU 定义</text>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "caption_track": {"source": "manual", "language": "zh"},
+  "video_id": "youtube:aircAruvnKk",
+  "source_url": "https://www.youtube.com/watch?v=aircAruvnKk",
+  "title": "But what is a neural network? | Deep learning chapter 1",
+  "annotation_basis": "Manually checked against the cached Chinese manual subtitles on 2026-11-02. These five development questions cover four topics, including two phrasings of the activation-range question. They are not a held-out benchmark and do not measure model answer accuracy.",
+  "questions": [
+    {
+      "id": "input_encoding",
+      "question": "视频示例的输入层有多少个神经元？输入数字 0 和 1 分别代表什么？",
+      "reference_answer": "输入层有 784 个神经元，每个对应一个像素的灰度值；0 表示黑色，1 表示白色。这里描述的是该示例的输入编码。",
+      "required_windows": [
+        {"label": "784 input neurons and grayscale encoding", "start": 191.72, "end": 204.3, "anchors_any": ["784"]}
+      ],
+      "manual_review_notes": "Check that the answer distinguishes input pixel encoding from every hidden neuron's possible activation range. No independent audio or image verification was performed for this annotation."
+    },
+    {
+      "id": "parameter_count_and_learning",
+      "question": "视频说这个示例网络大约有多少个可调整的权重和偏置参数？这里的学习是在寻找什么？",
+      "reference_answer": "视频将总数概括为大约 13,000 个权重和偏置，即可调整参数；学习是让计算机找到能解决问题的合适参数。13,000 是视频的近似表述。",
+      "required_windows": [
+        {"label": "approximately 13,000 adjustable parameters", "start": 741.28, "end": 749.54, "anchors_any": ["13,000", "13000"]},
+        {"label": "learning searches for suitable parameters", "start": 750.52, "end": 761.7, "anchors_any": ["參數", "参数"]}
+      ],
+      "manual_review_notes": "Do not present the rounded spoken 13,000 as an exact independently counted total. The subtitle around 12:02 has ambiguous wording about per-neuron versus per-layer biases; this question does not rely on it."
+    },
+    {
+      "id": "architecture_is_illustrative",
+      "question": "为什么演示采用两个隐藏层、每层 16 个神经元？视频把这个结构当作通用设计建议了吗？",
+      "reference_answer": "两个隐藏层和每层 16 个神经元是为了可视化、版面和看得清楚；讲者接着说明实际结构会根据实验调整，因此不能将演示布局理解为通用推荐。最后一句是结合上下文的判断。",
+      "required_windows": [
+        {"label": "visual layout choice and practical architecture variation", "start": 253.74, "end": 272.2, "anchors_any": ["16"]}
+      ],
+      "manual_review_notes": "The answer should retain the limitation that the demonstrated size was selected for explanation rather than claiming an optimized architecture."
+    },
+    {
+      "id": "relu_cross_section_qualification",
+      "question": "前面说神经元激活值介于 0 和 1，是否意味着所有神经网络都必须如此？结合开头的限定、Sigmoid 示例与结尾 ReLU 讨论解释。",
+      "reference_answer": "不是。开头已经说实际不止于此；中段说明本例用 Sigmoid 把任意实数的加权总和压到 0 和 1 之间；结尾介绍 ReLU 返回 0 与输入值的最大值。因此 ReLU 没有 1 的上界是从其定义得到的数学推论。",
+      "required_windows": [
+        {"label": "early caveat", "start": 178.2, "end": 182.12, "anchors_any": ["不止", "不只"]},
+        {"label": "weighted sum and example-specific Sigmoid range", "start": 614.279, "end": 643.339, "anchors_any": ["Sigmoid", "sigmoid"]},
+        {"label": "ReLU training qualification and max definition", "start": 1056.12, "end": 1068.84, "anchors_any": ["ReLU", "relu"]}
+      ],
+      "manual_review_notes": "This question deliberately names Sigmoid and ReLU, so it supplies useful retrieval terms; see the unassisted paraphrase for a less directed query. At 17:19 the Chinese subtitle says weights are between 0 and 1, which conflicts with the preceding description of weighted sums and activations. Original audio and the relevant visual frames have not been verified."
+    },
+    {
+      "id": "activation_range_unassisted",
+      "question": "视频里的神经元激活值是不是一定不能超过 1？",
+      "reference_answer": "不是普遍规则。开头就有实际不止于此的限定，中段的 0 到 1 是本例 Sigmoid 的输出范围，结尾 ReLU 定义允许大于 1 的输入直接成为输出。后一项是数学推论。",
+      "required_windows": [
+        {"label": "early caveat", "start": 178.2, "end": 182.12, "anchors_any": ["不止", "不只"]},
+        {"label": "example-specific Sigmoid range", "start": 614.279, "end": 643.339, "anchors_any": ["Sigmoid", "sigmoid"]},
+        {"label": "ReLU training qualification and max definition", "start": 1056.12, "end": 1068.84, "anchors_any": ["ReLU", "relu"]}
+      ],
+      "manual_review_notes": "This natural paraphrase supplies no activation-function names, chapter names or timestamps. It is a diagnostic for lexical retrieval missing a later exception, not an additional independent topic. Retain misses rather than rewriting the query after observing retrieval."
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+# Local video evidence, downloads, models and generated Astra configuration
+/.vidlens/
+/benchmarks/results/reading-eval-*/
+/.agents/
+/.codex/
+/integrations/astra/
+
+# Python environments, builds and test artifacts
+/.venv/
+/build/
+/dist/
+*.egg-info/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+
+# Local credentials and operating-system files
+/.aws/
+.env
+.env.*
+!.env.example
+cookies*.txt
+*.cookies.txt
+.DS_Store

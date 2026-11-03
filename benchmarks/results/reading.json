@@ -1,0 +1,5112 @@
+{
+  "schema_version": 2,
+  "measured_at_utc": "2026-11-03T13:09:09.423616+00:00",
+  "video_id": "youtube:aircAruvnKk",
+  "source_url": "https://www.youtube.com/watch?v=aircAruvnKk",
+  "title": "But what is a neural network? | Deep learning chapter 1",
+  "questions_file": "reading_questions.json",
+  "questions_sha256": "78ef723ca488c918fab399668f59b7d37e192c3d1b7e456a2a6096e9a4d66e98",
+  "benchmark_sha256": "9bd195bdfc8462691fbba2dc741a5420d61ada0ef4587e1dc8a6fcd71bbc3d38",
+  "python": "3.12.16 (main, Oct 26 2026, 13:59:40) [Clang 23.1.3 ]",
+  "source_hashes": {
+    "service.py": "f0cea452a6433b7d9e1fabe84915e2c5e6755fea718f0e3eed01e591b80652f0",
+    "reading.py": "9b08312fb72f76081bf37789764f672262e1c5b06004ce06212e2df14f208926",
+    "retrieval.py": "0f5c4faf3a2b4aab224eed37d0058839b1aecf341f176a4f2a48278226ad5087",
+    "budget.py": "661a14907a35d80f557ba9a29eaba967ff68ff7687718b6a6d126718e12ef180",
+    "store.py": "3eb437a169baf0329710f0eff660984452a80f1a3ef24418d709bcfcca4cf7da"
+  },
+  "source_changed_during_run": false,
+  "baseline": {
+    "definition": "Original cached transcript text joined with newlines; no JSON metadata, prompts, or model output.",
+    "text_tokens_estimate": 4842,
+    "token_count_method": "o200k_base_estimate",
+    "segment_count": 231,
+    "transcript_sha256": "51b4e9116bf7d8f8c10ed6165950483774219fdffc39b8bf0d0accb6dda6cc2f",
+    "caption_track": {
+      "source": "manual",
+      "language": "zh"
+    },
+    "subtitle_sources": [
+      "manual"
+    ],
+    "subtitle_languages": [
+      "zh"
+    ]
+  },
+  "settings": {
+    "budgets": [
+      2500,
+      4000
+    ],
+    "fresh_process_repeats": 1,
+    "warm_process_repeats": 3,
+    "minimum_target_window_coverage": 0.5,
+    "evidence_text_included": false
+  },
+  "methodology": [
+    "No paid model or model API was called; source acquisition is disabled.",
+    "Measurements use an isolated SQLite backup and a copied local tokenizer cache.",
+    "Fresh process latency includes launching Python but source subtitles and tokenizer files are already cached.",
+    "Warm process latency excludes initialization and follows one unmeasured prime for each question and budget.",
+    "Both latency modes measure evidence retrieval only, not URL download, ASR, video decoding, or a model's answer.",
+    "Payload tokens are counted independently over the complete compact JSON response; they are not Astra billing tokens.",
+    "Evidence text is replaced by its SHA-256 and character count only after full-payload token counting and window scoring, unless private-cache debug export is explicitly enabled.",
+    "The transcript baseline contains text only and therefore deliberately exposes metadata overhead.",
+    "Target time-window recall is a retrieval proxy. It does not establish that a model understood or correctly answered a question.",
+    "Window overlap may overstate coverage when a returned passage's text is truncated; per-window flags retain this limitation.",
+    "Manually authored questions from one development video, including paraphrases of one topic, are not representative or held out.",
+    "Percentiles over these small samples are descriptive and must not be presented as production latency guarantees."
+  ],
+  "summary": [
+    {
+      "budget": 2500,
+      "mode": "fresh_process_cached_source",
+      "samples": 5,
+      "question_count": 5,
+      "latency_p50_seconds": 0.191741,
+      "latency_p95_seconds": 0.204962,
+      "mean_payload_text_tokens_estimate": 1740.2,
+      "all_responses_within_budget": true,
+      "micro_target_window_recall": 1.0,
+      "all_windows_hit_fraction": 1,
+      "mean_payload_to_full_transcript_token_ratio": 0.3593969434118133
+    },
+    {
+      "budget": 2500,
+      "mode": "warm_process_cached_source",
+      "samples": 15,
+      "question_count": 5,
+      "latency_p50_seconds": 0.002353,
+      "latency_p95_seconds": 0.0028348999999999996,
+      "mean_payload_text_tokens_estimate": 1740.2,
+      "all_responses_within_budget": true,
+      "micro_target_window_recall": 1.0,
+      "all_windows_hit_fraction": 1,
+      "mean_payload_to_full_transcript_token_ratio": 0.3593969434118133
+    },
+    {
+      "budget": 4000,
+      "mode": "fresh_process_cached_source",
+      "samples": 5,
+      "question_count": 5,
+      "latency_p50_seconds": 0.15434,
+      "latency_p95_seconds": 0.2137722,
+      "mean_payload_text_tokens_estimate": 1740.2,
+      "all_responses_within_budget": true,
+      "micro_target_window_recall": 1.0,
+      "all_windows_hit_fraction": 1,
+      "mean_payload_to_full_transcript_token_ratio": 0.3593969434118133
+    },
+    {
+      "budget": 4000,
+      "mode": "warm_process_cached_source",
+      "samples": 15,
+      "question_count": 5,
+      "latency_p50_seconds": 0.001778,
+      "latency_p95_seconds": 0.0022075,
+      "mean_payload_text_tokens_estimate": 1740.2,
+      "all_responses_within_budget": true,
+      "micro_target_window_recall": 1.0,
+      "all_windows_hit_fraction": 1,
+      "mean_payload_to_full_transcript_token_ratio": 0.3593969434118133
+    }
+  ],
+  "measurements": [
+    {
+      "question_id": "input_encoding",
+      "question": "视频示例的输入层有多少个神经元？输入数字 0 和 1 分别代表什么？",
+      "budget": 2500,
+      "mode": "fresh_process_cached_source",
+      "repetition": 0,
+      "wall_seconds": 0.155108,
+      "worker_timings": {
+        "initialization_seconds": 0.08903666699916357,
+        "call_seconds": 0.026159290995565243,
+        "initialization_and_call_seconds": 0.11519595799472881
+      },
+      "payload_text_tokens_estimate": 1666,
+      "payload_utf8_bytes": 5137,
+      "reported_text_tokens_estimate": 1666,
+      "within_requested_budget": true,
+      "payload_to_full_transcript_token_ratio": 0.3440726972325485,
+      "saved_vs_full_transcript_text_fraction": 0.6559273027674515,
+      "windows": [
+        {
+          "label": "784 input neurons and grayscale encoding",
+          "start": 191.72,
+          "end": 204.3,
+          "temporal_coverage_fraction": 1.0,
+          "window_hit": true,
+          "any_anchor_found": true,
+          "overlapping_text_was_truncated": false
+        }
+      ],
+      "window_hits": 1,
+      "required_window_count": 1,
+      "target_window_recall": 1.0,
+      "all_target_windows_hit": true,
+      "evidence_passage_count": 8,
+      "payload": {
+        "video_id": "youtube:aircAruvnKk",
+        "title": "But what is a neural network? | Deep learning chapter 1",
+        "source_url": "https://www.youtube.com/watch?v=aircAruvnKk",
+        "timestamp_parameter": "t",
+        "duration": 1120.0,
+        "mode": "question_evidence",
+        "evidence": [
+          {
+            "start": 172.08,
+            "end": 208.48,
+            "source": "subtitle/manual",
+            "text_sha256": "8cedee03dd31157f2906c030e0fac351f5757d4d74638cf1f40019804e9b6e7c",
+            "text_chars": 167
+          },
+          {
+            "start": 216.26,
+            "end": 253.54,
+            "source": "subtitle/manual",
+            "text_sha256": "58a3aa24c45a32f5a61afe0bfdeef70180057b11d1896b289a5453aa0e169e1c",
+            "text_chars": 179
+          },
+          {
+            "start": 927.78,
+            "end": 956.24,
+            "source": "subtitle/manual",
+            "text_sha256": "2d1eb3e98f07ef0b49c74834abe2c5678f8a3fccddcdc3032126f5d2057240ee",
+            "text_chars": 137
+          },
+          {
+            "start": 542.38,
+            "end": 602.62,
+            "source": "subtitle/manual",
+            "text_sha256": "cb75228dbb8fdbf69a345089b9c0a978b38fc6d935a9a07a924a7c46127fd1f4",
+            "text_chars": 217
+          },
+          {
+            "start": 643.34,
+            "end": 670.279,
+            "source": "subtitle/manual",
+            "text_sha256": "48550ad8e02189b7a705fd26366abd5c324b3d2ca9ceefdc727f327f0150f5c8",
+            "text_chars": 108
+          },
+          {
+            "start": 374.88,
+            "end": 416.34,
+            "source": "subtitle/manual",
+            "text_sha256": "42221b6ceee358ddd929950724211c614ff70bff33eb2543058de686b8135be9",
+            "text_chars": 216
+          },
+          {
+            "start": 288.9,
+            "end": 329.359,
+            "source": "subtitle/manual",
+            "text_sha256": "d06ae821f92e8381ea92f288207e6eb7cd3ecdc0ebe3ac1e8fb3bf947c11bd6b",
+            "text_chars": 242
+          },
+          {
+            "start": 614.279,
+            "end": 643.339,
+            "source": "subtitle/manual",
+            "text_sha256": "c3afc86d68fb85f61a9335507af1099ae7560bd7e09ed257d1f4d8bdbb784c02",
+            "text_chars": 149
+          }
+        ],
+        "warnings": [],
+        "speech_scope": "available_platform_or_imported_captions",
+        "source_notes": [
+          "Correction 14:45 - The final index on the bias vector should be \"k\""
+        ],
+        "cache_hit": true,
+        "available_transcript_tokens_estimate": 4842,
+        "elapsed_seconds": 0.025,
+        "transcript_complete": false,
+        "accounting": {
+          "text_tokens_estimate": 1666,
+          "budget": 2500,
+          "method": "o200k_base_estimate",
+          "excludes": "images, model reasoning, transport envelope"
+        },
+        "truncated": false,
+        "available_items": 8
+      }
+    },
+    {
+      "question_id": "input_encoding",
+      "question": "视频示例的输入层有多少个神经元？输入数字 0 和 1 分别代表什么？",
+      "budget": 2500,
+      "mode": "warm_process_cached_source",
+      "repetition": 0,
+      "wall_seconds": 0.00216,
+      "worker_timings": {},
+      "payload_text_tokens_estimate": 1666,
+      "payload_utf8_bytes": 5137,
+      "reported_text_tokens_estimate": 1666,
+      "within_requested_budget": true,
+      "payload_to_full_transcript_token_ratio": 0.3440726972325485,
+      "saved_vs_full_transcript_text_fraction": 0.6559273027674515,
+      "windows": [
+        {
+          "label": "784 input neurons and grayscale encoding",
+          "start": 191.72,
+          "end": 204.3,
+          "temporal_coverage_fraction": 1.0,
+          "window_hit": true,
+          "any_anchor_found": true,
+          "overlapping_text_was_truncated": false
+        }
+      ],
+      "window_hits": 1,
+      "required_window_count": 1,
+      "target_window_recall": 1.0,
+      "all_target_windows_hit": true,
+      "evidence_passage_count": 8,
+      "payload": {
+        "video_id": "youtube:aircAruvnKk",
+        "title": "But what is a neural network? | Deep learning chapter 1",
+        "source_url": "https://www.youtube.com/watch?v=aircAruvnKk",
+        "timestamp_parameter": "t",
+        "duration": 1120.0,
+        "mode": "question_evidence",
+        "evidence": [
+          {
+            "start": 172.08,
+            "end": 208.48,
+            "source": "subtitle/manual",
+            "text_sha256": "8cedee03dd31157f2906c030e0fac351f5757d4d74638cf1f40019804e9b6e7c",
+            "text_chars": 167
+          },
+          {
+            "start": 216.26,
+            "end": 253.54,
+            "source": "subtitle/manual",
+            "text_sha256": "58a3aa24c45a32f5a61afe0bfdeef70180057b11d1896b289a5453aa0e169e1c",
+            "text_chars": 179
+          },
+          {
+            "start": 927.78,
+            "end": 956.24,
+            "source": "subtitle/manual",
+            "text_sha256": "2d1eb3e98f07ef0b49c74834abe2c5678f8a3fccddcdc3032126f5d2057240ee",
+            "text_chars": 137
+          },
+          {
+            "start": 542.38,
+            "end": 602.62,
+            "source": "subtitle/manual",
+            "text_sha256": "cb75228dbb8fdbf69a345089b9c0a978b38fc6d935a9a07a924a7c46127fd1f4",
+            "text_chars": 217
+          },
+          {
+            "start": 643.34,
+            "end": 670.279,
+            "source": "subtitle/manual",
+            "text_sha256": "48550ad8e02189b7a705fd26366abd5c324b3d2ca9ceefdc727f327f0150f5c8",
+            "text_chars": 108
+          },
+          {
+            "start": 374.88,
+            "end": 416.34,
+            "source": "subtitle/manual",
+            "text_sha256": "42221b6ceee358ddd929950724211c614ff70bff33eb2543058de686b8135be9",
+            "text_chars": 216
+          },
+          {
+            "start": 288.9,
+            "end": 329.359,
+            "source": "subtitle/manual",
+            "text_sha256": "d06ae821f92e8381ea92f288207e6eb7cd3ecdc0ebe3ac1e8fb3bf947c11bd6b",
+            "text_chars": 242
+          },
+          {
+            "start": 614.279,
+            "end": 643.339,
+            "source": "subtitle/manual",
+            "text_sha256": "c3afc86d68fb85f61a9335507af1099ae7560bd7e09ed257d1f4d8bdbb784c02",
+            "text_chars": 149
+          }
+        ],
+        "warnings": [],
+        "speech_scope": "available_platform_or_imported_captions",
+        "source_notes": [
+          "Correction 14:45 - The final index on the bias vector should be \"k\""
+        ],
+        "cache_hit": true,
+        "available_transcript_tokens_estimate": 4842,
+        "elapsed_seconds": 0.001,
+        "transcript_complete": false,
+        "accounting": {
+          "text_tokens_estimate": 1666,
+          "budget": 2500,
+          "method": "o200k_base_estimate",
+          "excludes": "images, model reasoning, transport envelope"
+        },
+        "truncated": false,
+        "available_items": 8
+      }
+    },
+    {
+      "question_id": "input_encoding",
+      "question": "视频示例的输入层有多少个神经元？输入数字 0 和 1 分别代表什么？",
+      "budget": 2500,
+      "mode": "warm_process_cached_source",
+      "repetition": 1,
+      "wall_seconds": 0.002102,
+      "worker_timings": {},
+      "payload_text_tokens_estimate": 1666,
+      "payload_utf8_bytes": 5137,
+      "reported_text_tokens_estimate": 1666,
+      "within_requested_budget": true,
+      "payload_to_full_transcript_token_ratio": 0.3440726972325485,
+      "saved_vs_full_transcript_text_fraction": 0.6559273027674515,
+      "windows": [
+        {
+          "label": "784 input neurons and grayscale encoding",
+          "start": 191.72,
+          "end": 204.3,
+          "temporal_coverage_fraction": 1.0,
+          "window_hit": true,
+          "any_anchor_found": true,
+          "overlapping_text_was_truncated": false
+        }
+      ],
+      "window_hits": 1,
+      "required_window_count": 1,
+      "target_window_recall": 1.0,
+      "all_target_windows_hit": true,
+      "evidence_passage_count": 8,
+      "payload": {
+        "video_id": "youtube:aircAruvnKk",
+        "title": "But what is a neural network? | Deep learning chapter 1",
+        "source_url": "https://www.youtube.com/watch?v=aircAruvnKk",
+        "timestamp_parameter": "t",
+        "duration": 1120.0,
+        "mode": "question_evidence",
+        "evidence": [
+          {
+            "start": 172.08,
+            "end": 208.48,
+            "source": "subtitle/manual",
+            "text_sha256": "8cedee03dd31157f2906c030e0fac351f5757d4d74638cf1f40019804e9b6e7c",
+            "text_chars": 167
+          },
+          {
+            "start": 216.26,
+            "end": 253.54,
+            "source": "subtitle/manual",
+            "text_sha256": "58a3aa24c45a32f5a61afe0bfdeef70180057b11d1896b289a5453aa0e169e1c",
+            "text_chars": 179
+          },
+          {
+            "start": 927.78,
+            "end": 956.24,
+            "source": "subtitle/manual",
+            "text_sha256": "2d1eb3e98f07ef0b49c74834abe2c5678f8a3fccddcdc3032126f5d2057240ee",
+            "text_chars": 137
+          },
+          {
+            "start": 542.38,
+            "end": 602.62,
+            "source": "subtitle/manual",
+            "text_sha256": "cb75228dbb8fdbf69a345089b9c0a978b38fc6d935a9a07a924a7c46127fd1f4",
+            "text_chars": 217
+          },
+          {
+            "start": 643.34,
+            "end": 670.279,
+            "source": "subtitle/manual",
+            "text_sha256": "48550ad8e02189b7a705fd26366abd5c324b3d2ca9ceefdc727f327f0150f5c8",
+            "text_chars": 108
+          },
+          {
+            "start": 374.88,
+            "end": 416.34,
+            "source": "subtitle/manual",
+            "text_sha256": "42221b6ceee358ddd929950724211c614ff70bff33eb2543058de686b8135be9",
+            "text_chars": 216
+          },
+          {
+            "start": 288.9,
+            "end": 329.359,
+            "source": "subtitle/manual",
+            "text_sha256": "d06ae821f92e8381ea92f288207e6eb7cd3ecdc0ebe3ac1e8fb3bf947c11bd6b",
+            "text_chars": 242
+          },
+          {
+            "start": 614.279,
+            "end": 643.339,
+            "source": "subtitle/manual",
+            "text_sha256": "c3afc86d68fb85f61a9335507af1099ae7560bd7e09ed257d1f4d8bdbb784c02",
+            "text_chars": 149
+          }
+        ],
+        "warnings": [],
+        "speech_scope": "available_platform_or_imported_captions",
+        "source_notes": [
+          "Correction 14:45 - The final index on the bias vector should be \"k\""
+        ],
+        "cache_hit": true,
+        "available_transcript_tokens_estimate": 4842,
+        "elapsed_seconds": 0.001,
+        "transcript_complete": false,
+        "accounting": {
+          "text_tokens_estimate": 1666,
+          "budget": 2500,
+          "method": "o200k_base_estimate",
+          "excludes": "images, model reasoning, transport envelope"
+        },
+        "truncated": false,
+        "available_items": 8
+      }
+    },
+    {
+      "question_id": "input_encoding",
+      "question": "视频示例的输入层有多少个神经元？输入数字 0 和 1 分别代表什么？",
+      "budget": 2500,
+      "mode": "warm_process_cached_source",
+      "repetition": 2,
+      "wall_seconds": 0.001753,
+      "worker_timings": {},
+      "payload_text_tokens_estimate": 1666,
+      "payload_utf8_bytes": 5137,
+      "reported_text_tokens_estimate": 1666,
+      "within_requested_budget": true,
+      "payload_to_full_transcript_token_ratio": 0.3440726972325485,
+      "saved_vs_full_transcript_text_fraction": 0.6559273027674515,
+      "windows": [
+        {
+          "label": "784 input neurons and grayscale encoding",
+          "start": 191.72,
+          "end": 204.3,
+          "temporal_coverage_fraction": 1.0,
+          "window_hit": true,
+          "any_anchor_found": true,
+          "overlapping_text_was_truncated": false
+        }
+      ],
+      "window_hits": 1,
+      "required_window_count": 1,
+      "target_window_recall": 1.0,
+      "all_target_windows_hit": true,
+      "evidence_passage_count": 8,
+      "payload": {
+        "video_id": "youtube:aircAruvnKk",
+        "title": "But what is a neural network? | Deep learning chapter 1",
+        "source_url": "https://www.youtube.com/watch?v=aircAruvnKk",
+        "timestamp_parameter": "t",
+        "duration": 1120.0,
+        "mode": "question_evidence",
+        "evidence": [
+          {
+            "start": 172.08,
+            "end": 208.48,
+            "source": "subtitle/manual",
+            "text_sha256": "8cedee03dd31157f2906c030e0fac351f5757d4d74638cf1f40019804e9b6e7c",
+            "text_chars": 167
+          },
+          {
+            "start": 216.26,
+            "end": 253.54,
+            "source": "subtitle/manual",
+            "text_sha256": "58a3aa24c45a32f5a61afe0bfdeef70180057b11d1896b289a5453aa0e169e1c",
+            "text_chars": 179
+          },
+          {
+            "start": 927.78,
+            "end": 956.24,
+            "source": "subtitle/manual",
+            "text_sha256": "2d1eb3e98f07ef0b49c74834abe2c5678f8a3fccddcdc3032126f5d2057240ee",
+            "text_chars": 137
+          },
+          {
+            "start": 542.38,
+            "end": 602.62,
+            "source": "subtitle/manual",
+            "text_sha256": "cb75228dbb8fdbf69a345089b9c0a978b38fc6d935a9a07a924a7c46127fd1f4",
+            "text_chars": 217
+          },
+          {
+            "start": 643.34,
+            "end": 670.279,
+            "source": "subtitle/manual",
+            "text_sha256": "48550ad8e02189b7a705fd26366abd5c324b3d2ca9ceefdc727f327f0150f5c8",
+            "text_chars": 108
+          },
+          {
+            "start": 374.88,
+            "end": 416.34,
+            "source": "subtitle/manual",
+            "text_sha256": "42221b6ceee358ddd929950724211c614ff70bff33eb2543058de686b8135be9",
+            "text_chars": 216
+          },
+          {
+            "start": 288.9,
+            "end": 329.359,
+            "source": "subtitle/manual",
+            "text_sha256": "d06ae821f92e8381ea92f288207e6eb7cd3ecdc0ebe3ac1e8fb3bf947c11bd6b",
+            "text_chars": 242
+          },
+          {
+            "start": 614.279,
+            "end": 643.339,
+            "source": "subtitle/manual",
+            "text_sha256": "c3afc86d68fb85f61a9335507af1099ae7560bd7e09ed257d1f4d8bdbb784c02",
+            "text_chars": 149
+          }
+        ],
+        "warnings": [],
+        "speech_scope": "available_platform_or_imported_captions",
+        "source_notes": [
+          "Correction 14:45 - The final index on the bias vector should be \"k\""
+        ],
+        "cache_hit": true,
+        "available_transcript_tokens_estimate": 4842,
+        "elapsed_seconds": 0.001,
+        "transcript_complete": false,
+        "accounting": {
+          "text_tokens_estimate": 1666,
+          "budget": 2500,
+          "method": "o200k_base_estimate",
+          "excludes": "images, model reasoning, transport envelope"
+        },
+        "truncated": false,
+        "available_items": 8
+      }
+    },
+    {
+      "question_id": "parameter_count_and_learning",
+      "question": "视频说这个示例网络大约有多少个可调整的权重和偏置参数？这里的学习是在寻找什么？",
+      "budget": 2500,
+      "mode": "fresh_process_cached_source",
+      "repetition": 0,
+      "wall_seconds": 0.206328,
+      "worker_timings": {
+        "initialization_seconds": 0.11614920900319703,
+        "call_seconds": 0.04063154100003885,
+        "initialization_and_call_seconds": 0.15678075000323588
+      },
+      "payload_text_tokens_estimate": 1703,
+      "payload_utf8_bytes": 5381,
+      "reported_text_tokens_estimate": 1703,
+      "within_requested_budget": true,
+      "payload_to_full_transcript_token_ratio": 0.3517141676992978,
+      "saved_vs_full_transcript_text_fraction": 0.6482858323007021,
+      "windows": [
+        {
+          "label": "approximately 13,000 adjustable parameters",
+          "start": 741.28,
+          "end": 749.54,
+          "temporal_coverage_fraction": 1.0,
+          "window_hit": true,
+          "any_anchor_found": true,
+          "overlapping_text_was_truncated": false
+        },
+        {
+          "label": "learning searches for suitable parameters",
+          "start": 750.52,
+          "end": 761.7,
+          "temporal_coverage_fraction": 1.0,
+          "window_hit": true,
+          "any_anchor_found": true,
+          "overlapping_text_was_truncated": false
+        }
+      ],
+      "window_hits": 2,
+      "required_window_count": 2,
+      "target_window_recall": 1.0,
+      "all_target_windows_hit": true,
+      "evidence_passage_count": 8,
+      "payload": {
+        "video_id": "youtube:aircAruvnKk",
+        "title": "But what is a neural network? | Deep learning chapter 1",
+        "source_url": "https://www.youtube.com/watch?v=aircAruvnKk",
+        "timestamp_parameter": "t",
+        "duration": 1120.0,
+        "mode": "question_evidence",
+        "evidence": [
+          {
+            "start": 718.02,
+            "end": 761.7,
+            "source": "subtitle/manual",
+            "text_sha256": "a1851b42012e9b86c8b04c25265a1dc6c52a81a784b479fe70168a21f72ef170",
+            "text_chars": 188
+          },
+          {
+            "start": 931.96,
+            "end": 966.39,
+            "source": "subtitle/manual",
+            "text_sha256": "23bb6ec290f54622688ff440560dc022bc4cf5408fc00211bd9c0367fb91870d",
+            "text_chars": 155
+          },
+          {
+            "start": 762.38,
+            "end": 820.46,
+            "source": "subtitle/manual",
+            "text_sha256": "6a4753443c7ca195b2324c11ee18c341872013ff73c3b837d4a720e59b409731",
+            "text_chars": 270
+          },
+          {
+            "start": 535.26,
+            "end": 585.84,
+            "source": "subtitle/manual",
+            "text_sha256": "7786b4e48ce4a21c87c5a3fd734fb46f0d1cf63acfcfd4fa18bc78356f1251a3",
+            "text_chars": 176
+          },
+          {
+            "start": 443.22,
+            "end": 494.66,
+            "source": "subtitle/manual",
+            "text_sha256": "a19475ec6a4637ca4e0a6aef9ff208aa889fca9bf7720c43088da27ca53d337f",
+            "text_chars": 274
+          },
+          {
+            "start": 966.39,
+            "end": 997.56,
+            "source": "subtitle/manual",
+            "text_sha256": "293e2a26ab00e3b965e0d843d3fcdcdb7b5508a3a395e10ac38993df3868ee48",
+            "text_chars": 160
+          },
+          {
+            "start": 821.11,
+            "end": 849.33,
+            "source": "subtitle/manual",
+            "text_sha256": "91b7c5242c2d4e87b6306e1f0cd4097dd2ee97466c382e858cf71fdb010fbdcd",
+            "text_chars": 111
+          },
+          {
+            "start": 598.86,
+            "end": 632.0,
+            "source": "subtitle/manual",
+            "text_sha256": "ceb2fe77296a229c5966c355a3fe19ecdfb19792cd695d3f889d9a9a291ad828",
+            "text_chars": 152
+          }
+        ],
+        "warnings": [],
+        "speech_scope": "available_platform_or_imported_captions",
+        "source_notes": [
+          "Correction 14:45 - The final index on the bias vector should be \"k\""
+        ],
+        "cache_hit": true,
+        "available_transcript_tokens_estimate": 4842,
+        "elapsed_seconds": 0.038,
+        "transcript_complete": false,
+        "accounting": {
+          "text_tokens_estimate": 1703,
+          "budget": 2500,
+          "method": "o200k_base_estimate",
+          "excludes": "images, model reasoning, transport envelope"
+        },
+        "truncated": false,
+        "available_items": 8
+      }
+    },
+    {
+      "question_id": "parameter_count_and_learning",
+      "question": "视频说这个示例网络大约有多少个可调整的权重和偏置参数？这里的学习是在寻找什么？",
+      "budget": 2500,
+      "mode": "warm_process_cached_source",
+      "repetition": 0,
+      "wall_seconds": 0.003061,
+      "worker_timings": {},
+      "payload_text_tokens_estimate": 1703,
+      "payload_utf8_bytes": 5381,
+      "reported_text_tokens_estimate": 1703,
+      "within_requested_budget": true,
+      "payload_to_full_transcript_token_ratio": 0.3517141676992978,
+      "saved_vs_full_transcript_text_fraction": 0.6482858323007021,
+      "windows": [
+        {
+          "label": "approximately 13,000 adjustable parameters",
+          "start": 741.28,
+          "end": 749.54,
+          "temporal_coverage_fraction": 1.0,
+          "window_hit": true,
+          "any_anchor_found": true,
+          "overlapping_text_was_truncated": false
+        },
+        {
+          "label": "learning searches for suitable parameters",
+          "start": 750.52,
+          "end": 761.7,
+          "temporal_coverage_fraction": 1.0,
+          "window_hit": true,
+          "any_anchor_found": true,
+          "overlapping_text_was_truncated": false
+        }
+      ],
+      "window_hits": 2,
+      "required_window_count": 2,
+      "target_window_recall": 1.0,
+      "all_target_windows_hit": true,
+      "evidence_passage_count": 8,
+      "payload": {
+        "video_id": "youtube:aircAruvnKk",
+        "title": "But what is a neural network? | Deep learning chapter 1",
+        "source_url": "https://www.youtube.com/watch?v=aircAruvnKk",
+        "timestamp_parameter": "t",
+        "duration": 1120.0,
+        "mode": "question_evidence",
+        "evidence": [
+          {
+            "start": 718.02,
+            "end": 761.7,
+            "source": "subtitle/manual",
+            "text_sha256": "a1851b42012e9b86c8b04c25265a1dc6c52a81a784b479fe70168a21f72ef170",
+            "text_chars": 188
+          },
+          {
+            "start": 931.96,
+            "end": 966.39,
+            "source": "subtitle/manual",
+            "text_sha256": "23bb6ec290f54622688ff440560dc022bc4cf5408fc00211bd9c0367fb91870d",
+            "text_chars": 155
+          },
+          {
+            "start": 762.38,
+            "end": 820.46,
+            "source": "subtitle/manual",
+            "text_sha256": "6a4753443c7ca195b2324c11ee18c341872013ff73c3b837d4a720e59b409731",
+            "text_chars": 270
+          },
+          {
+            "start": 535.26,
+            "end": 585.84,
+            "source": "subtitle/manual",
+            "text_sha256": "7786b4e48ce4a21c87c5a3fd734fb46f0d1cf63acfcfd4fa18bc78356f1251a3",
+            "text_chars": 176
+          },
+          {
+            "start": 443.22,
+            "end": 494.66,
+            "source": "subtitle/manual",
+            "text_sha256": "a19475ec6a4637ca4e0a6aef9ff208aa889fca9bf7720c43088da27ca53d337f",
+            "text_chars": 274
+          },
+          {
+            "start": 966.39,
+            "end": 997.56,
+            "source": "subtitle/manual",
+            "text_sha256": "293e2a26ab00e3b965e0d843d3fcdcdb7b5508a3a395e10ac38993df3868ee48",
+            "text_chars": 160
+          },
+          {
+            "start": 821.11,
+            "end": 849.33,
+            "source": "subtitle/manual",
+            "text_sha256": "91b7c5242c2d4e87b6306e1f0cd4097dd2ee97466c382e858cf71fdb010fbdcd",
+            "text_chars": 111
+          },
+          {
+            "start": 598.86,
+            "end": 632.0,
+            "source": "subtitle/manual",
+            "text_sha256": "ceb2fe77296a229c5966c355a3fe19ecdfb19792cd695d3f889d9a9a291ad828",
+            "text_chars": 152
+          }
+        ],
+        "warnings": [],
+        "speech_scope": "available_platform_or_imported_captions",
+        "source_notes": [
+          "Correction 14:45 - The final index on the bias vector should be \"k\""
+        ],
+        "cache_hit": true,
+        "available_transcript_tokens_estimate": 4842,
+        "elapsed_seconds": 0.001,
+        "transcript_complete": false,
+        "accounting": {
+          "text_tokens_estimate": 1703,
+          "budget": 2500,
+          "method": "o200k_base_estimate",
+          "excludes": "images, model reasoning, transport envelope"
+        },
+        "truncated": false,
+        "available_items": 8
+      }
+    },
+    {
+      "question_id": "parameter_count_and_learning",
+      "question": "视频说这个示例网络大约有多少个可调整的权重和偏置参数？这里的学习是在寻找什么？",
+      "budget": 2500,
+      "mode": "warm_process_cached_source",
+      "repetition": 1,
+      "wall_seconds": 0.002738,
+      "worker_timings": {},
+      "payload_text_tokens_estimate": 1703,
+      "payload_utf8_bytes": 5381,
+      "reported_text_tokens_estimate": 1703,
+      "within_requested_budget": true,
+      "payload_to_full_transcript_token_ratio": 0.3517141676992978,
+      "saved_vs_full_transcript_text_fraction": 0.6482858323007021,
+      "windows": [
+        {
+          "label": "approximately 13,000 adjustable parameters",
+          "start": 741.28,
+          "end": 749.54,
+          "temporal_coverage_fraction": 1.0,
+          "window_hit": true,
+          "any_anchor_found": true,
+          "overlapping_text_was_truncated": false
+        },
+        {
+          "label": "learning searches for suitable parameters",
+          "start": 750.52,
+          "end": 761.7,
+          "temporal_coverage_fraction": 1.0,
+          "window_hit": true,
+          "any_anchor_found": true,
+          "overlapping_text_was_truncated": false
+        }
+      ],
+      "window_hits": 2,
+      "required_window_count": 2,
+      "target_window_recall": 1.0,
+      "all_target_windows_hit": true,
+      "evidence_passage_count": 8,
+      "payload": {
+        "video_id": "youtube:aircAruvnKk",
+        "title": "But what is a neural network? | Deep learning chapter 1",
+        "source_url": "https://www.youtube.com/watch?v=aircAruvnKk",
+        "timestamp_parameter": "t",
+        "duration": 1120.0,
+        "mode": "question_evidence",
+        "evidence": [
+          {
+            "start": 718.02,
+            "end": 761.7,
+            "source": "subtitle/manual",
+            "text_sha256": "a1851b42012e9b86c8b04c25265a1dc6c52a81a784b479fe70168a21f72ef170",
+            "text_chars": 188
+          },
+          {
+            "start": 931.96,
+            "end": 966.39,
+            "source": "subtitle/manual",
+            "text_sha256": "23bb6ec290f54622688ff440560dc022bc4cf5408fc00211bd9c0367fb91870d",
+            "text_chars": 155
+          },
+          {
+            "start": 762.38,
+            "end": 820.46,
+            "source": "subtitle/manual",
+            "text_sha256": "6a4753443c7ca195b2324c11ee18c341872013ff73c3b837d4a720e59b409731",
+            "text_chars": 270
+          },
+          {
+            "start": 535.26,
+            "end": 585.84,
+            "source": "subtitle/manual",
+            "text_sha256": "7786b4e48ce4a21c87c5a3fd734fb46f0d1cf63acfcfd4fa18bc78356f1251a3",
+            "text_chars": 176
+          },
+          {
+            "start": 443.22,
+            "end": 494.66,
+            "source": "subtitle/manual",
+            "text_sha256": "a19475ec6a4637ca4e0a6aef9ff208aa889fca9bf7720c43088da27ca53d337f",
+            "text_chars": 274
+          },
+          {
+            "start": 966.39,
+            "end": 997.56,
+            "source": "subtitle/manual",
+            "text_sha256": "293e2a26ab00e3b965e0d843d3fcdcdb7b5508a3a395e10ac38993df3868ee48",
+            "text_chars": 160
+          },
+          {
+            "start": 821.11,
+            "end": 849.33,
+            "source": "subtitle/manual",
+            "text_sha256": "91b7c5242c2d4e87b6306e1f0cd4097dd2ee97466c382e858cf71fdb010fbdcd",
+            "text_chars": 111
+          },
+          {
+            "start": 598.86,
+            "end": 632.0,
+            "source": "subtitle/manual",
+            "text_sha256": "ceb2fe77296a229c5966c355a3fe19ecdfb19792cd695d3f889d9a9a291ad828",
+            "text_chars": 152
+          }
+        ],
+        "warnings": [],
+        "speech_scope": "available_platform_or_imported_captions",
+        "source_notes": [
+          "Correction 14:45 - The final index on the bias vector should be \"k\""
+        ],
+        "cache_hit": true,
+        "available_transcript_tokens_estimate": 4842,
+        "elapsed_seconds": 0.001,
+        "transcript_complete": false,
+        "accounting": {
+          "text_tokens_estimate": 1703,
+          "budget": 2500,
+          "method": "o200k_base_estimate",
+          "excludes": "images, model reasoning, transport envelope"
+        },
+        "truncated": false,
+        "available_items": 8
+      }
+    },
+    {
+      "question_id": "parameter_count_and_learning",
+      "question": "视频说这个示例网络大约有多少个可调整的权重和偏置参数？这里的学习是在寻找什么？",
+      "budget": 2500,
+      "mode": "warm_process_cached_source",
+      "repetition": 2,
+      "wall_seconds": 0.002479,
+      "worker_timings": {},
+      "payload_text_tokens_estimate": 1703,
+      "payload_utf8_bytes": 5381,
+      "reported_text_tokens_estimate": 1703,
+      "within_requested_budget": true,
+      "payload_to_full_transcript_token_ratio": 0.3517141676992978,
+      "saved_vs_full_transcript_text_fraction": 0.6482858323007021,
+      "windows": [
+        {
+          "label": "approximately 13,000 adjustable parameters",
+          "start": 741.28,
+          "end": 749.54,
+          "temporal_coverage_fraction": 1.0,
+          "window_hit": true,
+          "any_anchor_found": true,
+          "overlapping_text_was_truncated": false
+        },
+        {
+          "label": "learning searches for suitable parameters",
+          "start": 750.52,
+          "end": 761.7,
+          "temporal_coverage_fraction": 1.0,
+          "window_hit": true,
+          "any_anchor_found": true,
+          "overlapping_text_was_truncated": false
+        }
+      ],
+      "window_hits": 2,
+      "required_window_count": 2,
+      "target_window_recall": 1.0,
+      "all_target_windows_hit": true,
+      "evidence_passage_count": 8,
+      "payload": {
+        "video_id": "youtube:aircAruvnKk",
+        "title": "But what is a neural network? | Deep learning chapter 1",
+        "source_url": "https://www.youtube.com/watch?v=aircAruvnKk",
+        "timestamp_parameter": "t",
+        "duration": 1120.0,
+        "mode": "question_evidence",
+        "evidence": [
+          {
+            "start": 718.02,
+            "end": 761.7,
+            "source": "subtitle/manual",
+            "text_sha256": "a1851b42012e9b86c8b04c25265a1dc6c52a81a784b479fe70168a21f72ef170",
+            "text_chars": 188
+          },
+          {
+            "start": 931.96,
+            "end": 966.39,
+            "source": "subtitle/manual",
+            "text_sha256": "23bb6ec290f54622688ff440560dc022bc4cf5408fc00211bd9c0367fb91870d",
+            "text_chars": 155
+          },
+          {
+            "start": 762.38,
+            "end": 820.46,
+            "source": "subtitle/manual",
+            "text_sha256": "6a4753443c7ca195b2324c11ee18c341872013ff73c3b837d4a720e59b409731",
+            "text_chars": 270
+          },
+          {
+            "start": 535.26,
+            "end": 585.84,
+            "source": "subtitle/manual",
+            "text_sha256": "7786b4e48ce4a21c87c5a3fd734fb46f0d1cf63acfcfd4fa18bc78356f1251a3",
+            "text_chars": 176
+          },
+          {
+            "start": 443.22,
+            "end": 494.66,
+            "source": "subtitle/manual",
+            "text_sha256": "a19475ec6a4637ca4e0a6aef9ff208aa889fca9bf7720c43088da27ca53d337f",
+            "text_chars": 274
+          },
+          {
+            "start": 966.39,
+            "end": 997.56,
+            "source": "subtitle/manual",
+            "text_sha256": "293e2a26ab00e3b965e0d843d3fcdcdb7b5508a3a395e10ac38993df3868ee48",
+            "text_chars": 160
+          },
+          {
+            "start": 821.11,
+            "end": 849.33,
+            "source": "subtitle/manual",
+            "text_sha256": "91b7c5242c2d4e87b6306e1f0cd4097dd2ee97466c382e858cf71fdb010fbdcd",
+            "text_chars": 111
+          },
+          {
+            "start": 598.86,
+            "end": 632.0,
+            "source": "subtitle/manual",
+            "text_sha256": "ceb2fe77296a229c5966c355a3fe19ecdfb19792cd695d3f889d9a9a291ad828",
+            "text_chars": 152
+          }
+        ],
+        "warnings": [],
+        "speech_scope": "available_platform_or_imported_captions",
+        "source_notes": [
+          "Correction 14:45 - The final index on the bias vector should be \"k\""
+        ],
+        "cache_hit": true,
+        "available_transcript_tokens_estimate": 4842,
+        "elapsed_seconds": 0.001,
+        "transcript_complete": false,
+        "accounting": {
+          "text_tokens_estimate": 1703,
+          "budget": 2500,
+          "method": "o200k_base_estimate",
+          "excludes": "images, model reasoning, transport envelope"
+        },
+        "truncated": false,
+        "available_items": 8
+      }
+    },
+    {
+      "question_id": "architecture_is_illustrative",
+      "question": "为什么演示采用两个隐藏层、每层 16 个神经元？视频把这个结构当作通用设计建议了吗？",
+      "budget": 2500,
+      "mode": "fresh_process_cached_source",
+      "repetition": 0,
+      "wall_seconds": 0.199498,
+      "worker_timings": {
+        "initialization_seconds": 0.1180047080051736,
+        "call_seconds": 0.029163791994506028,
+        "initialization_and_call_seconds": 0.14716849999967963
+      },
+      "payload_text_tokens_estimate": 1680,
+      "payload_utf8_bytes": 5234,
+      "reported_text_tokens_estimate": 1680,
+      "within_requested_budget": true,
+      "payload_to_full_transcript_token_ratio": 0.3469640644361834,
+      "saved_vs_full_transcript_text_fraction": 0.6530359355638167,
+      "windows": [
+        {
+          "label": "visual layout choice and practical architecture variation",
+          "start": 253.74,
+          "end": 272.2,
+          "temporal_coverage_fraction": 1.0,
+          "window_hit": true,
+          "any_anchor_found": true,
+          "overlapping_text_was_truncated": false
+        }
+      ],
+      "window_hits": 1,
+      "required_window_count": 1,
+      "target_window_recall": 1.0,
+      "all_target_windows_hit": true,
+      "evidence_passage_count": 8,
+      "payload": {
+        "video_id": "youtube:aircAruvnKk",
+        "title": "But what is a neural network? | Deep learning chapter 1",
+        "source_url": "https://www.youtube.com/watch?v=aircAruvnKk",
+        "timestamp_parameter": "t",
+        "duration": 1120.0,
+        "mode": "question_evidence",
+        "evidence": [
+          {
+            "start": 236.88,
+            "end": 278.329,
+            "source": "subtitle/manual",
+            "text_sha256": "d166eb2f78903fd4c6ebec00413d90f2772fe7fc7582092e86c1793072f9b8ce",
+            "text_chars": 255
+          },
+          {
+            "start": 711.32,
+            "end": 737.2,
+            "source": "subtitle/manual",
+            "text_sha256": "8185ecbfc4f3cc99ce004614b0a1720957ae8f413a8fae2b489c4f8311a765f1",
+            "text_chars": 130
+          },
+          {
+            "start": 332.07,
+            "end": 357.2,
+            "source": "subtitle/manual",
+            "text_sha256": "e8fc35035d908ab73fecf4fdcbb4b027950b5635236e5248597ade0fb0fc6150",
+            "text_chars": 145
+          },
+          {
+            "start": 163.09,
+            "end": 208.48,
+            "source": "subtitle/manual",
+            "text_sha256": "7abef056945970086e962aa690d71c7eb88fbb30bba13a4bbfb62b87076cb82c",
+            "text_chars": 221
+          },
+          {
+            "start": 921.79,
+            "end": 949.58,
+            "source": "subtitle/manual",
+            "text_sha256": "a27aa036067e93e3884f9d09bf3a523405c9573b1cec736c703861f2efdbf464",
+            "text_chars": 131
+          },
+          {
+            "start": 285.57,
+            "end": 329.359,
+            "source": "subtitle/manual",
+            "text_sha256": "541dee08708bd7fbaa6f6c41905dc1ade3fb849e058f6f652f9611b6fce681b7",
+            "text_chars": 267
+          },
+          {
+            "start": 618.24,
+            "end": 646.6,
+            "source": "subtitle/manual",
+            "text_sha256": "3aebc583178b0d8ff509b2f50a86c4af9320125f89679778a09aedbd5665c21d",
+            "text_chars": 144
+          },
+          {
+            "start": 495.07,
+            "end": 521.8,
+            "source": "subtitle/manual",
+            "text_sha256": "1d39ddccaccfb052c972c2487fc32ee85362f89108c8517a273d80609cabd93e",
+            "text_chars": 142
+          }
+        ],
+        "warnings": [],
+        "speech_scope": "available_platform_or_imported_captions",
+        "source_notes": [
+          "Correction 14:45 - The final index on the bias vector should be \"k\""
+        ],
+        "cache_hit": true,
+        "available_transcript_tokens_estimate": 4842,
+        "elapsed_seconds": 0.027,
+        "transcript_complete": false,
+        "accounting": {
+          "text_tokens_estimate": 1680,
+          "budget": 2500,
+          "method": "o200k_base_estimate",
+          "excludes": "images, model reasoning, transport envelope"
+        },
+        "truncated": false,
+        "available_items": 8
+      }
+    },
+    {
+      "question_id": "architecture_is_illustrative",
+      "question": "为什么演示采用两个隐藏层、每层 16 个神经元？视频把这个结构当作通用设计建议了吗？",
+      "budget": 2500,
+      "mode": "warm_process_cached_source",
+      "repetition": 0,
+      "wall_seconds": 0.002214,
+      "worker_timings": {},
+      "payload_text_tokens_estimate": 1680,
+      "payload_utf8_bytes": 5234,
+      "reported_text_tokens_estimate": 1680,
+      "within_requested_budget": true,
+      "payload_to_full_transcript_token_ratio": 0.3469640644361834,
+      "saved_vs_full_transcript_text_fraction": 0.6530359355638167,
+      "windows": [
+        {
+          "label": "visual layout choice and practical architecture variation",
+          "start": 253.74,
+          "end": 272.2,
+          "temporal_coverage_fraction": 1.0,
+          "window_hit": true,
+          "any_anchor_found": true,
+          "overlapping_text_was_truncated": false
+        }
+      ],
+      "window_hits": 1,
+      "required_window_count": 1,
+      "target_window_recall": 1.0,
+      "all_target_windows_hit": true,
+      "evidence_passage_count": 8,
+      "payload": {
+        "video_id": "youtube:aircAruvnKk",
+        "title": "But what is a neural network? | Deep learning chapter 1",
+        "source_url": "https://www.youtube.com/watch?v=aircAruvnKk",
+        "timestamp_parameter": "t",
+        "duration": 1120.0,
+        "mode": "question_evidence",
+        "evidence": [
+          {
+            "start": 236.88,
+            "end": 278.329,
+            "source": "subtitle/manual",
+            "text_sha256": "d166eb2f78903fd4c6ebec00413d90f2772fe7fc7582092e86c1793072f9b8ce",
+            "text_chars": 255
+          },
+          {
+            "start": 711.32,
+            "end": 737.2,
+            "source": "subtitle/manual",
+            "text_sha256": "8185ecbfc4f3cc99ce004614b0a1720957ae8f413a8fae2b489c4f8311a765f1",
+            "text_chars": 130
+          },
+          {
+            "start": 332.07,
+            "end": 357.2,
+            "source": "subtitle/manual",
+            "text_sha256": "e8fc35035d908ab73fecf4fdcbb4b027950b5635236e5248597ade0fb0fc6150",
+            "text_chars": 145
+          },
+          {
+            "start": 163.09,
+            "end": 208.48,
+            "source": "subtitle/manual",
+            "text_sha256": "7abef056945970086e962aa690d71c7eb88fbb30bba13a4bbfb62b87076cb82c",
+            "text_chars": 221
+          },
+          {
+            "start": 921.79,
+            "end": 949.58,
+            "source": "subtitle/manual",
+            "text_sha256": "a27aa036067e93e3884f9d09bf3a523405c9573b1cec736c703861f2efdbf464",
+            "text_chars": 131
+          },
+          {
+            "start": 285.57,
+            "end": 329.359,
+            "source": "subtitle/manual",
+            "text_sha256": "541dee08708bd7fbaa6f6c41905dc1ade3fb849e058f6f652f9611b6fce681b7",
+            "text_chars": 267
+          },
+          {
+            "start": 618.24,
+            "end": 646.6,
+            "source": "subtitle/manual",
+            "text_sha256": "3aebc583178b0d8ff509b2f50a86c4af9320125f89679778a09aedbd5665c21d",
+            "text_chars": 144
+          },
+          {
+            "start": 495.07,
+            "end": 521.8,
+            "source": "subtitle/manual",
+            "text_sha256": "1d39ddccaccfb052c972c2487fc32ee85362f89108c8517a273d80609cabd93e",
+            "text_chars": 142
+          }
+        ],
+        "warnings": [],
+        "speech_scope": "available_platform_or_imported_captions",
+        "source_notes": [
+          "Correction 14:45 - The final index on the bias vector should be \"k\""
+        ],
+        "cache_hit": true,
+        "available_transcript_tokens_estimate": 4842,
+        "elapsed_seconds": 0.001,
+        "transcript_complete": false,
+        "accounting": {
+          "text_tokens_estimate": 1680,
+          "budget": 2500,
+          "method": "o200k_base_estimate",
+          "excludes": "images, model reasoning, transport envelope"
+        },
+        "truncated": false,
+        "available_items": 8
+      }
+    },
+    {
+      "question_id": "architecture_is_illustrative",
+      "question": "为什么演示采用两个隐藏层、每层 16 个神经元？视频把这个结构当作通用设计建议了吗？",
+      "budget": 2500,
+      "mode": "warm_process_cached_source",
+      "repetition": 1,
+      "wall_seconds": 0.002325,
+      "worker_timings": {},
+      "payload_text_tokens_estimate": 1680,
+      "payload_utf8_bytes": 5234,
+      "reported_text_tokens_estimate": 1680,
+      "within_requested_budget": true,
+      "payload_to_full_transcript_token_ratio": 0.3469640644361834,
+      "saved_vs_full_transcript_text_fraction": 0.6530359355638167,
+      "windows": [
+        {
+          "label": "visual layout choice and practical architecture variation",
+          "start": 253.74,
+          "end": 272.2,
+          "temporal_coverage_fraction": 1.0,
+          "window_hit": true,
+          "any_anchor_found": true,
+          "overlapping_text_was_truncated": false
+        }
+      ],
+      "window_hits": 1,
+      "required_window_count": 1,
+      "target_window_recall": 1.0,
+      "all_target_windows_hit": true,
+      "evidence_passage_count": 8,
+      "payload": {
+        "video_id": "youtube:aircAruvnKk",
+        "title": "But what is a neural network? | Deep learning chapter 1",
+        "source_url": "https://www.youtube.com/watch?v=aircAruvnKk",
+        "timestamp_parameter": "t",
+        "duration": 1120.0,
+        "mode": "question_evidence",
+        "evidence": [
+          {
+            "start": 236.88,
+            "end": 278.329,
+            "source": "subtitle/manual",
+            "text_sha256": "d166eb2f78903fd4c6ebec00413d90f2772fe7fc7582092e86c1793072f9b8ce",
+            "text_chars": 255
+          },
+          {
+            "start": 711.32,
+            "end": 737.2,
+            "source": "subtitle/manual",
+            "text_sha256": "8185ecbfc4f3cc99ce004614b0a1720957ae8f413a8fae2b489c4f8311a765f1",
+            "text_chars": 130
+          },
+          {
+            "start": 332.07,
+            "end": 357.2,
+            "source": "subtitle/manual",
+            "text_sha256": "e8fc35035d908ab73fecf4fdcbb4b027950b5635236e5248597ade0fb0fc6150",
+            "text_chars": 145
+          },
+          {
+            "start": 163.09,
+            "end": 208.48,
+            "source": "subtitle/manual",
+            "text_sha256": "7abef056945970086e962aa690d71c7eb88fbb30bba13a4bbfb62b87076cb82c",
+            "text_chars": 221
+          },
+          {
+            "start": 921.79,
+            "end": 949.58,
+            "source": "subtitle/manual",
+            "text_sha256": "a27aa036067e93e3884f9d09bf3a523405c9573b1cec736c703861f2efdbf464",
+            "text_chars": 131
+          },
+          {
+            "start": 285.57,
+            "end": 329.359,
+            "source": "subtitle/manual",
+            "text_sha256": "541dee08708bd7fbaa6f6c41905dc1ade3fb849e058f6f652f9611b6fce681b7",
+            "text_chars": 267
+          },
+          {
+            "start": 618.24,
+            "end": 646.6,
+            "source": "subtitle/manual",
+            "text_sha256": "3aebc583178b0d8ff509b2f50a86c4af9320125f89679778a09aedbd5665c21d",
+            "text_chars": 144
+          },
+          {
+            "start": 495.07,
+            "end": 521.8,
+            "source": "subtitle/manual",
+            "text_sha256": "1d39ddccaccfb052c972c2487fc32ee85362f89108c8517a273d80609cabd93e",
+            "text_chars": 142
+          }
+        ],
+        "warnings": [],
+        "speech_scope": "available_platform_or_imported_captions",
+        "source_notes": [
+          "Correction 14:45 - The final index on the bias vector should be \"k\""
+        ],
+        "cache_hit": true,
+        "available_transcript_tokens_estimate": 4842,
+        "elapsed_seconds": 0.001,
+        "transcript_complete": false,
+        "accounting": {
+          "text_tokens_estimate": 1680,
+          "budget": 2500,
+          "method": "o200k_base_estimate",
+          "excludes": "images, model reasoning, transport envelope"
+        },
+        "truncated": false,
+        "available_items": 8
+      }
+    },
+    {
+      "question_id": "architecture_is_illustrative",
+      "question": "为什么演示采用两个隐藏层、每层 16 个神经元？视频把这个结构当作通用设计建议了吗？",
+      "budget": 2500,
+      "mode": "warm_process_cached_source",
+      "repetition": 2,
+      "wall_seconds": 0.00198,
+      "worker_timings": {},
+      "payload_text_tokens_estimate": 1680,
+      "payload_utf8_bytes": 5234,
+      "reported_text_tokens_estimate": 1680,
+      "within_requested_budget": true,
+      "payload_to_full_transcript_token_ratio": 0.3469640644361834,
+      "saved_vs_full_transcript_text_fraction": 0.6530359355638167,
+      "windows": [
+        {
+          "label": "visual layout choice and practical architecture variation",
+          "start": 253.74,
+          "end": 272.2,
+          "temporal_coverage_fraction": 1.0,
+          "window_hit": true,
+          "any_anchor_found": true,
+          "overlapping_text_was_truncated": false
+        }
+      ],
+      "window_hits": 1,
+      "required_window_count": 1,
+      "target_window_recall": 1.0,
+      "all_target_windows_hit": true,
+      "evidence_passage_count": 8,
+      "payload": {
+        "video_id": "youtube:aircAruvnKk",
+        "title": "But what is a neural network? | Deep learning chapter 1",
+        "source_url": "https://www.youtube.com/watch?v=aircAruvnKk",
+        "timestamp_parameter": "t",
+        "duration": 1120.0,
+        "mode": "question_evidence",
+        "evidence": [
+          {
+            "start": 236.88,
+            "end": 278.329,
+            "source": "subtitle/manual",
+            "text_sha256": "d166eb2f78903fd4c6ebec00413d90f2772fe7fc7582092e86c1793072f9b8ce",
+            "text_chars": 255
+          },
+          {
+            "start": 711.32,
+            "end": 737.2,
+            "source": "subtitle/manual",
+            "text_sha256": "8185ecbfc4f3cc99ce004614b0a1720957ae8f413a8fae2b489c4f8311a765f1",
+            "text_chars": 130
+          },
+          {
+            "start": 332.07,
+            "end": 357.2,
+            "source": "subtitle/manual",
+            "text_sha256": "e8fc35035d908ab73fecf4fdcbb4b027950b5635236e5248597ade0fb0fc6150",
+            "text_chars": 145
+          },
+          {
+            "start": 163.09,
+            "end": 208.48,
+            "source": "subtitle/manual",
+            "text_sha256": "7abef056945970086e962aa690d71c7eb88fbb30bba13a4bbfb62b87076cb82c",
+            "text_chars": 221
+          },
+          {
+            "start": 921.79,
+            "end": 949.58,
+            "source": "subtitle/manual",
+            "text_sha256": "a27aa036067e93e3884f9d09bf3a523405c9573b1cec736c703861f2efdbf464",
+            "text_chars": 131
+          },
+          {
+            "start": 285.57,
+            "end": 329.359,
+            "source": "subtitle/manual",
+            "text_sha256": "541dee08708bd7fbaa6f6c41905dc1ade3fb849e058f6f652f9611b6fce681b7",
+            "text_chars": 267
+          },
+          {
+            "start": 618.24,
+            "end": 646.6,
+            "source": "subtitle/manual",
+            "text_sha256": "3aebc583178b0d8ff509b2f50a86c4af9320125f89679778a09aedbd5665c21d",
+            "text_chars": 144
+          },
+          {
+            "start": 495.07,
+            "end": 521.8,
+            "source": "subtitle/manual",
+            "text_sha256": "1d39ddccaccfb052c972c2487fc32ee85362f89108c8517a273d80609cabd93e",
+            "text_chars": 142
+          }
+        ],
+        "warnings": [],
+        "speech_scope": "available_platform_or_imported_captions",
+        "source_notes": [
+          "Correction 14:45 - The final index on the bias vector should be \"k\""
+        ],
+        "cache_hit": true,
+        "available_transcript_tokens_estimate": 4842,
+        "elapsed_seconds": 0.001,
+        "transcript_complete": false,
+        "accounting": {
+          "text_tokens_estimate": 1680,
+          "budget": 2500,
+          "method": "o200k_base_estimate",
+          "excludes": "images, model reasoning, transport envelope"
+        },
+        "truncated": false,
+        "available_items": 8
+      }
+    },
+    {
+      "question_id": "relu_cross_section_qualification",
+      "question": "前面说神经元激活值介于 0 和 1，是否意味着所有神经网络都必须如此？结合开头的限定、Sigmoid 示例与结尾 ReLU 讨论解释。",
+      "budget": 2500,
+      "mode": "fresh_process_cached_source",
+      "repetition": 0,
+      "wall_seconds": 0.172618,
+      "worker_timings": {
+        "initialization_seconds": 0.09886945800099056,
+        "call_seconds": 0.030006250002770685,
+        "initialization_and_call_seconds": 0.12887570800376125
+      },
+      "payload_text_tokens_estimate": 1854,
+      "payload_utf8_bytes": 5695,
+      "reported_text_tokens_estimate": 1854,
+      "within_requested_budget": true,
+      "payload_to_full_transcript_token_ratio": 0.3828996282527881,
+      "saved_vs_full_transcript_text_fraction": 0.6171003717472119,
+      "windows": [
+        {
+          "label": "early caveat",
+          "start": 178.2,
+          "end": 182.12,
+          "temporal_coverage_fraction": 1.0,
+          "window_hit": true,
+          "any_anchor_found": true,
+          "overlapping_text_was_truncated": false
+        },
+        {
+          "label": "weighted sum and example-specific Sigmoid range",
+          "start": 614.279,
+          "end": 643.339,
+          "temporal_coverage_fraction": 1.0,
+          "window_hit": true,
+          "any_anchor_found": true,
+          "overlapping_text_was_truncated": false
+        },
+        {
+          "label": "ReLU training qualification and max definition",
+          "start": 1056.12,
+          "end": 1068.84,
+          "temporal_coverage_fraction": 1.0,
+          "window_hit": true,
+          "any_anchor_found": true,
+          "overlapping_text_was_truncated": false
+        }
+      ],
+      "window_hits": 3,
+      "required_window_count": 3,
+      "target_window_recall": 1.0,
+      "all_target_windows_hit": true,
+      "evidence_passage_count": 8,
+      "payload": {
+        "video_id": "youtube:aircAruvnKk",
+        "title": "But what is a neural network? | Deep learning chapter 1",
+        "source_url": "https://www.youtube.com/watch?v=aircAruvnKk",
+        "timestamp_parameter": "t",
+        "duration": 1120.0,
+        "mode": "question_evidence",
+        "evidence": [
+          {
+            "start": 1032.029,
+            "end": 1076.6,
+            "source": "subtitle/manual",
+            "text_sha256": "c695dcd2925aade7a849819baecb1bebd38b26bd70bb24a59479b4d2b1dc7f78",
+            "text_chars": 268
+          },
+          {
+            "start": 172.08,
+            "end": 213.96,
+            "source": "subtitle/manual",
+            "text_sha256": "e2e6d5ac241ed223c0b1587497a6acb6b1042c99453c6ea0216da28d7ad0de03",
+            "text_chars": 195
+          },
+          {
+            "start": 907.92,
+            "end": 947.08,
+            "source": "subtitle/manual",
+            "text_sha256": "3c9592d0e694fc4035ce87e24d5b66b2cdd058d86b8f08f054f00cc10c341587",
+            "text_chars": 184
+          },
+          {
+            "start": 1076.62,
+            "end": 1106.06,
+            "source": "subtitle/manual",
+            "text_sha256": "7e887744cbcee46b5024ce000c0369f45000675b06d34ce2131bf9f767159e4c",
+            "text_chars": 138
+          },
+          {
+            "start": 614.279,
+            "end": 646.6,
+            "source": "subtitle/manual",
+            "text_sha256": "9a815ededa2e399686ee00ec5d6008113124d6aca876d6843372c3c89f5efa58",
+            "text_chars": 165
+          },
+          {
+            "start": 374.88,
+            "end": 422.55,
+            "source": "subtitle/manual",
+            "text_sha256": "b32640b7dc23cbe4847daf127b4d8c0e7e501cee47cce2b5b9d10f0ce9e35c47",
+            "text_chars": 237
+          },
+          {
+            "start": 216.26,
+            "end": 264.88,
+            "source": "subtitle/manual",
+            "text_sha256": "6b25a60fa48c323ff805b50ab01c0f89fe87cb7a0c318575519098abae6a0ae6",
+            "text_chars": 257
+          },
+          {
+            "start": 66.75,
+            "end": 105.94,
+            "source": "subtitle/manual",
+            "text_sha256": "2f97321b466e528ea35d6b2b42bc28a1d67dfc98c47938507a7f403b1d875be8",
+            "text_chars": 211
+          }
+        ],
+        "warnings": [],
+        "speech_scope": "available_platform_or_imported_captions",
+        "source_notes": [
+          "Correction 14:45 - The final index on the bias vector should be \"k\""
+        ],
+        "cache_hit": true,
+        "available_transcript_tokens_estimate": 4842,
+        "elapsed_seconds": 0.028,
+        "transcript_complete": false,
+        "accounting": {
+          "text_tokens_estimate": 1854,
+          "budget": 2500,
+          "method": "o200k_base_estimate",
+          "excludes": "images, model reasoning, transport envelope"
+        },
+        "truncated": false,
+        "available_items": 8
+      }
+    },
+    {
+      "question_id": "relu_cross_section_qualification",
+      "question": "前面说神经元激活值介于 0 和 1，是否意味着所有神经网络都必须如此？结合开头的限定、Sigmoid 示例与结尾 ReLU 讨论解释。",
+      "budget": 2500,
+      "mode": "warm_process_cached_source",
+      "repetition": 0,
+      "wall_seconds": 0.002394,
+      "worker_timings": {},
+      "payload_text_tokens_estimate": 1854,
+      "payload_utf8_bytes": 5695,
+      "reported_text_tokens_estimate": 1854,
+      "within_requested_budget": true,
+      "payload_to_full_transcript_token_ratio": 0.3828996282527881,
+      "saved_vs_full_transcript_text_fraction": 0.6171003717472119,
+      "windows": [
+        {
+          "label": "early caveat",
+          "start": 178.2,
+          "end": 182.12,
+          "temporal_coverage_fraction": 1.0,
+          "window_hit": true,
+          "any_anchor_found": true,
+          "overlapping_text_was_truncated": false
+        },
+        {
+          "label": "weighted sum and example-specific Sigmoid range",
+          "start": 614.279,
+          "end": 643.339,
+          "temporal_coverage_fraction": 1.0,
+          "window_hit": true,
+          "any_anchor_found": true,
+          "overlapping_text_was_truncated": false
+        },
+        {
+          "label": "ReLU training qualification and max definition",
+          "start": 1056.12,
+          "end": 1068.84,
+          "temporal_coverage_fraction": 1.0,
+          "window_hit": true,
+          "any_anchor_found": true,
+          "overlapping_text_was_truncated": false
+        }
+      ],
+      "window_hits": 3,
+      "required_window_count": 3,
+      "target_window_recall": 1.0,
+      "all_target_windows_hit": true,
+      "evidence_passage_count": 8,
+      "payload": {
+        "video_id": "youtube:aircAruvnKk",
+        "title": "But what is a neural network? | Deep learning chapter 1",
+        "source_url": "https://www.youtube.com/watch?v=aircAruvnKk",
+        "timestamp_parameter": "t",
+        "duration": 1120.0,
+        "mode": "question_evidence",
+        "evidence": [
+          {
+            "start": 1032.029,
+            "end": 1076.6,
+            "source": "subtitle/manual",
+            "text_sha256": "c695dcd2925aade7a849819baecb1bebd38b26bd70bb24a59479b4d2b1dc7f78",
+            "text_chars": 268
+          },
+          {
+            "start": 172.08,
+            "end": 213.96,
+            "source": "subtitle/manual",
+            "text_sha256": "e2e6d5ac241ed223c0b1587497a6acb6b1042c99453c6ea0216da28d7ad0de03",
+            "text_chars": 195
+          },
+          {
+            "start": 907.92,
+            "end": 947.08,
+            "source": "subtitle/manual",
+            "text_sha256": "3c9592d0e694fc4035ce87e24d5b66b2cdd058d86b8f08f054f00cc10c341587",
+            "text_chars": 184
+          },
+          {
+            "start": 1076.62,
+            "end": 1106.06,
+            "source": "subtitle/manual",
+            "text_sha256": "7e887744cbcee46b5024ce000c0369f45000675b06d34ce2131bf9f767159e4c",
+            "text_chars": 138
+          },
+          {
+            "start": 614.279,
+            "end": 646.6,
+            "source": "subtitle/manual",
+            "text_sha256": "9a815ededa2e399686ee00ec5d6008113124d6aca876d6843372c3c89f5efa58",
+            "text_chars": 165
+          },
+          {
+            "start": 374.88,
+            "end": 422.55,
+            "source": "subtitle/manual",
+            "text_sha256": "b32640b7dc23cbe4847daf127b4d8c0e7e501cee47cce2b5b9d10f0ce9e35c47",
+            "text_chars": 237
+          },
+          {
+            "start": 216.26,
+            "end": 264.88,
+            "source": "subtitle/manual",
+            "text_sha256": "6b25a60fa48c323ff805b50ab01c0f89fe87cb7a0c318575519098abae6a0ae6",
+            "text_chars": 257
+          },
+          {
+            "start": 66.75,
+            "end": 105.94,
+            "source": "subtitle/manual",
+            "text_sha256": "2f97321b466e528ea35d6b2b42bc28a1d67dfc98c47938507a7f403b1d875be8",
+            "text_chars": 211
+          }
+        ],
+        "warnings": [],
+        "speech_scope": "available_platform_or_imported_captions",
+        "source_notes": [
+          "Correction 14:45 - The final index on the bias vector should be \"k\""
+        ],
+        "cache_hit": true,
+        "available_transcript_tokens_estimate": 4842,
+        "elapsed_seconds": 0.001,
+        "transcript_complete": false,
+        "accounting": {
+          "text_tokens_estimate": 1854,
+          "budget": 2500,
+          "method": "o200k_base_estimate",
+          "excludes": "images, model reasoning, transport envelope"
+        },
+        "truncated": false,
+        "available_items": 8
+      }
+    },
+    {
+      "question_id": "relu_cross_section_qualification",
+      "question": "前面说神经元激活值介于 0 和 1，是否意味着所有神经网络都必须如此？结合开头的限定、Sigmoid 示例与结尾 ReLU 讨论解释。",
+      "budget": 2500,
+      "mode": "warm_process_cached_source",
+      "repetition": 1,
+      "wall_seconds": 0.002467,
+      "worker_timings": {},
+      "payload_text_tokens_estimate": 1854,
+      "payload_utf8_bytes": 5695,
+      "reported_text_tokens_estimate": 1854,
+      "within_requested_budget": true,
+      "payload_to_full_transcript_token_ratio": 0.3828996282527881,
+      "saved_vs_full_transcript_text_fraction": 0.6171003717472119,
+      "windows": [
+        {
+          "label": "early caveat",
+          "start": 178.2,
+          "end": 182.12,
+          "temporal_coverage_fraction": 1.0,
+          "window_hit": true,
+          "any_anchor_found": true,
+          "overlapping_text_was_truncated": false
+        },
+        {
+          "label": "weighted sum and example-specific Sigmoid range",
+          "start": 614.279,
+          "end": 643.339,
+          "temporal_coverage_fraction": 1.0,
+          "window_hit": true,
+          "any_anchor_found": true,
+          "overlapping_text_was_truncated": false
+        },
+        {
+          "label": "ReLU training qualification and max definition",
+          "start": 1056.12,
+          "end": 1068.84,
+          "temporal_coverage_fraction": 1.0,
+          "window_hit": true,
+          "any_anchor_found": true,
+          "overlapping_text_was_truncated": false
+        }
+      ],
+      "window_hits": 3,
+      "required_window_count": 3,
+      "target_window_recall": 1.0,
+      "all_target_windows_hit": true,
+      "evidence_passage_count": 8,
+      "payload": {
+        "video_id": "youtube:aircAruvnKk",
+        "title": "But what is a neural network? | Deep learning chapter 1",
+        "source_url": "https://www.youtube.com/watch?v=aircAruvnKk",
+        "timestamp_parameter": "t",
+        "duration": 1120.0,
+        "mode": "question_evidence",
+        "evidence": [
+          {
+            "start": 1032.029,
+            "end": 1076.6,
+            "source": "subtitle/manual",
+            "text_sha256": "c695dcd2925aade7a849819baecb1bebd38b26bd70bb24a59479b4d2b1dc7f78",
+            "text_chars": 268
+          },
+          {
+            "start": 172.08,
+            "end": 213.96,
+            "source": "subtitle/manual",
+            "text_sha256": "e2e6d5ac241ed223c0b1587497a6acb6b1042c99453c6ea0216da28d7ad0de03",
+            "text_chars": 195
+          },
+          {
+            "start": 907.92,
+            "end": 947.08,
+            "source": "subtitle/manual",
+            "text_sha256": "3c9592d0e694fc4035ce87e24d5b66b2cdd058d86b8f08f054f00cc10c341587",
+            "text_chars": 184
+          },
+          {
+            "start": 1076.62,
+            "end": 1106.06,
+            "source": "subtitle/manual",
+            "text_sha256": "7e887744cbcee46b5024ce000c0369f45000675b06d34ce2131bf9f767159e4c",
+            "text_chars": 138
+          },
+          {
+            "start": 614.279,
+            "end": 646.6,
+            "source": "subtitle/manual",
+            "text_sha256": "9a815ededa2e399686ee00ec5d6008113124d6aca876d6843372c3c89f5efa58",
+            "text_chars": 165
+          },
+          {
+            "start": 374.88,
+            "end": 422.55,
+            "source": "subtitle/manual",
+            "text_sha256": "b32640b7dc23cbe4847daf127b4d8c0e7e501cee47cce2b5b9d10f0ce9e35c47",
+            "text_chars": 237
+          },
+          {
+            "start": 216.26,
+            "end": 264.88,
+            "source": "subtitle/manual",
+            "text_sha256": "6b25a60fa48c323ff805b50ab01c0f89fe87cb7a0c318575519098abae6a0ae6",
+            "text_chars": 257
+          },
+          {
+            "start": 66.75,
+            "end": 105.94,
+            "source": "subtitle/manual",
+            "text_sha256": "2f97321b466e528ea35d6b2b42bc28a1d67dfc98c47938507a7f403b1d875be8",
+            "text_chars": 211
+          }
+        ],
+        "warnings": [],
+        "speech_scope": "available_platform_or_imported_captions",
+        "source_notes": [
+          "Correction 14:45 - The final index on the bias vector should be \"k\""
+        ],
+        "cache_hit": true,
+        "available_transcript_tokens_estimate": 4842,
+        "elapsed_seconds": 0.001,
+        "transcript_complete": false,
+        "accounting": {
+          "text_tokens_estimate": 1854,
+          "budget": 2500,
+          "method": "o200k_base_estimate",
+          "excludes": "images, model reasoning, transport envelope"
+        },
+        "truncated": false,
+        "available_items": 8
+      }
+    },
+    {
+      "question_id": "relu_cross_section_qualification",
+      "question": "前面说神经元激活值介于 0 和 1，是否意味着所有神经网络都必须如此？结合开头的限定、Sigmoid 示例与结尾 ReLU 讨论解释。",
+      "budget": 2500,
+      "mode": "warm_process_cached_source",
+      "repetition": 2,
+      "wall_seconds": 0.002283,
+      "worker_timings": {},
+      "payload_text_tokens_estimate": 1854,
+      "payload_utf8_bytes": 5695,
+      "reported_text_tokens_estimate": 1854,
+      "within_requested_budget": true,
+      "payload_to_full_transcript_token_ratio": 0.3828996282527881,
+      "saved_vs_full_transcript_text_fraction": 0.6171003717472119,
+      "windows": [
+        {
+          "label": "early caveat",
+          "start": 178.2,
+          "end": 182.12,
+          "temporal_coverage_fraction": 1.0,
+          "window_hit": true,
+          "any_anchor_found": true,
+          "overlapping_text_was_truncated": false
+        },
+        {
+          "label": "weighted sum and example-specific Sigmoid range",
+          "start": 614.279,
+          "end": 643.339,
+          "temporal_coverage_fraction": 1.0,
+          "window_hit": true,
+          "any_anchor_found": true,
+          "overlapping_text_was_truncated": false
+        },
+        {
+          "label": "ReLU training qualification and max definition",
+          "start": 1056.12,
+          "end": 1068.84,
+          "temporal_coverage_fraction": 1.0,
+          "window_hit": true,
+          "any_anchor_found": true,
+          "overlapping_text_was_truncated": false
+        }
+      ],
+      "window_hits": 3,
+      "required_window_count": 3,
+      "target_window_recall": 1.0,
+      "all_target_windows_hit": true,
+      "evidence_passage_count": 8,
+      "payload": {
+        "video_id": "youtube:aircAruvnKk",
+        "title": "But what is a neural network? | Deep learning chapter 1",
+        "source_url": "https://www.youtube.com/watch?v=aircAruvnKk",
+        "timestamp_parameter": "t",
+        "duration": 1120.0,
+        "mode": "question_evidence",
+        "evidence": [
+          {
+            "start": 1032.029,
+            "end": 1076.6,
+            "source": "subtitle/manual",
+            "text_sha256": "c695dcd2925aade7a849819baecb1bebd38b26bd70bb24a59479b4d2b1dc7f78",
+            "text_chars": 268
+          },
+          {
+            "start": 172.08,
+            "end": 213.96,
+            "source": "subtitle/manual",
+            "text_sha256": "e2e6d5ac241ed223c0b1587497a6acb6b1042c99453c6ea0216da28d7ad0de03",
+            "text_chars": 195
+          },
+          {
+            "start": 907.92,
+            "end": 947.08,
+            "source": "subtitle/manual",
+            "text_sha256": "3c9592d0e694fc4035ce87e24d5b66b2cdd058d86b8f08f054f00cc10c341587",
+            "text_chars": 184
+          },
+          {
+            "start": 1076.62,
+            "end": 1106.06,
+            "source": "subtitle/manual",
+            "text_sha256": "7e887744cbcee46b5024ce000c0369f45000675b06d34ce2131bf9f767159e4c",
+            "text_chars": 138
+          },
+          {
+            "start": 614.279,
+            "end": 646.6,
+            "source": "subtitle/manual",
+            "text_sha256": "9a815ededa2e399686ee00ec5d6008113124d6aca876d6843372c3c89f5efa58",
+            "text_chars": 165
+          },
+          {
+            "start": 374.88,
+            "end": 422.55,
+            "source": "subtitle/manual",
+            "text_sha256": "b32640b7dc23cbe4847daf127b4d8c0e7e501cee47cce2b5b9d10f0ce9e35c47",
+            "text_chars": 237
+          },
+          {
+            "start": 216.26,
+            "end": 264.88,
+            "source": "subtitle/manual",
+            "text_sha256": "6b25a60fa48c323ff805b50ab01c0f89fe87cb7a0c318575519098abae6a0ae6",
+            "text_chars": 257
+          },
+          {
+            "start": 66.75,
+            "end": 105.94,
+            "source": "subtitle/manual",
+            "text_sha256": "2f97321b466e528ea35d6b2b42bc28a1d67dfc98c47938507a7f403b1d875be8",
+            "text_chars": 211
+          }
+        ],
+        "warnings": [],
+        "speech_scope": "available_platform_or_imported_captions",
+        "source_notes": [
+          "Correction 14:45 - The final index on the bias vector should be \"k\""
+        ],
+        "cache_hit": true,
+        "available_transcript_tokens_estimate": 4842,
+        "elapsed_seconds": 0.001,
+        "transcript_complete": false,
+        "accounting": {
+          "text_tokens_estimate": 1854,
+          "budget": 2500,
+          "method": "o200k_base_estimate",
+          "excludes": "images, model reasoning, transport envelope"
+        },
+        "truncated": false,
+        "available_items": 8
+      }
+    },
+    {
+      "question_id": "activation_range_unassisted",
+      "question": "视频里的神经元激活值是不是一定不能超过 1？",
+      "budget": 2500,
+      "mode": "fresh_process_cached_source",
+      "repetition": 0,
+      "wall_seconds": 0.191741,
+      "worker_timings": {
+        "initialization_seconds": 0.11395012499997392,
+        "call_seconds": 0.031578666996210814,
+        "initialization_and_call_seconds": 0.14552879199618474
+      },
+      "payload_text_tokens_estimate": 1798,
+      "payload_utf8_bytes": 5584,
+      "reported_text_tokens_estimate": 1798,
+      "within_requested_budget": true,
+      "payload_to_full_transcript_token_ratio": 0.37133415943824866,
+      "saved_vs_full_transcript_text_fraction": 0.6286658405617513,
+      "windows": [
+        {
+          "label": "early caveat",
+          "start": 178.2,
+          "end": 182.12,
+          "temporal_coverage_fraction": 1.0,
+          "window_hit": true,
+          "any_anchor_found": true,
+          "overlapping_text_was_truncated": false
+        },
+        {
+          "label": "example-specific Sigmoid range",
+          "start": 614.279,
+          "end": 643.339,
+          "temporal_coverage_fraction": 1.0,
+          "window_hit": true,
+          "any_anchor_found": true,
+          "overlapping_text_was_truncated": false
+        },
+        {
+          "label": "ReLU training qualification and max definition",
+          "start": 1056.12,
+          "end": 1068.84,
+          "temporal_coverage_fraction": 1.0,
+          "window_hit": true,
+          "any_anchor_found": true,
+          "overlapping_text_was_truncated": false
+        }
+      ],
+      "window_hits": 3,
+      "required_window_count": 3,
+      "target_window_recall": 1.0,
+      "all_target_windows_hit": true,
+      "evidence_passage_count": 8,
+      "payload": {
+        "video_id": "youtube:aircAruvnKk",
+        "title": "But what is a neural network? | Deep learning chapter 1",
+        "source_url": "https://www.youtube.com/watch?v=aircAruvnKk",
+        "timestamp_parameter": "t",
+        "duration": 1120.0,
+        "mode": "question_evidence",
+        "evidence": [
+          {
+            "start": 827.46,
+            "end": 868.839,
+            "source": "subtitle/manual",
+            "text_sha256": "0ae613265d4cb78d681e8a1ef428a4bc0de11d57745309e45f2e744b4d017d95",
+            "text_chars": 166
+          },
+          {
+            "start": 451.93,
+            "end": 494.66,
+            "source": "subtitle/manual",
+            "text_sha256": "3cc9127f40f4d63e77c42639efc79d33c15dac8fbb488532be8be2c6f59e399b",
+            "text_chars": 233
+          },
+          {
+            "start": 649.08,
+            "end": 710.72,
+            "source": "subtitle/manual",
+            "text_sha256": "1562cd789a851fcd1bfc3268ea3cbddfb24a8ea481c58bb50ccb2c5e1a7a1abc",
+            "text_chars": 256
+          },
+          {
+            "start": 591.5,
+            "end": 646.6,
+            "source": "subtitle/manual",
+            "text_sha256": "9b3e9577824b569c8cd49bc35756f31c93196c9978e9ae82ef8403e4d4e7016e",
+            "text_chars": 248
+          },
+          {
+            "start": 172.08,
+            "end": 213.96,
+            "source": "subtitle/manual",
+            "text_sha256": "e2e6d5ac241ed223c0b1587497a6acb6b1042c99453c6ea0216da28d7ad0de03",
+            "text_chars": 195
+          },
+          {
+            "start": 374.88,
+            "end": 402.8,
+            "source": "subtitle/manual",
+            "text_sha256": "f7385ce45663b667a4cf26a9fc4ca92c4d7f0679a9a75951f33ca0f01a348886",
+            "text_chars": 127
+          },
+          {
+            "start": 1035.38,
+            "end": 1076.6,
+            "source": "subtitle/manual",
+            "text_sha256": "8ad825b3cdaeaf72e60b417c565eca584e12d8e8f8d47b4306fbc12c26133f30",
+            "text_chars": 255
+          },
+          {
+            "start": 1076.62,
+            "end": 1102.14,
+            "source": "subtitle/manual",
+            "text_sha256": "c6a249c729efc9c6f723c8b384ca315d2c0e13b06961c3d03f46349e8a92df2e",
+            "text_chars": 121
+          }
+        ],
+        "warnings": [],
+        "speech_scope": "available_platform_or_imported_captions",
+        "source_notes": [
+          "Correction 14:45 - The final index on the bias vector should be \"k\""
+        ],
+        "cache_hit": true,
+        "available_transcript_tokens_estimate": 4842,
+        "elapsed_seconds": 0.03,
+        "transcript_complete": false,
+        "accounting": {
+          "text_tokens_estimate": 1798,
+          "budget": 2500,
+          "method": "o200k_base_estimate",
+          "excludes": "images, model reasoning, transport envelope"
+        },
+        "truncated": false,
+        "available_items": 8
+      }
+    },
+    {
+      "question_id": "activation_range_unassisted",
+      "question": "视频里的神经元激活值是不是一定不能超过 1？",
+      "budget": 2500,
+      "mode": "warm_process_cached_source",
+      "repetition": 0,
+      "wall_seconds": 0.002552,
+      "worker_timings": {},
+      "payload_text_tokens_estimate": 1798,
+      "payload_utf8_bytes": 5585,
+      "reported_text_tokens_estimate": 1798,
+      "within_requested_budget": true,
+      "payload_to_full_transcript_token_ratio": 0.37133415943824866,
+      "saved_vs_full_transcript_text_fraction": 0.6286658405617513,
+      "windows": [
+        {
+          "label": "early caveat",
+          "start": 178.2,
+          "end": 182.12,
+          "temporal_coverage_fraction": 1.0,
+          "window_hit": true,
+          "any_anchor_found": true,
+          "overlapping_text_was_truncated": false
+        },
+        {
+          "label": "example-specific Sigmoid range",
+          "start": 614.279,
+          "end": 643.339,
+          "temporal_coverage_fraction": 1.0,
+          "window_hit": true,
+          "any_anchor_found": true,
+          "overlapping_text_was_truncated": false
+        },
+        {
+          "label": "ReLU training qualification and max definition",
+          "start": 1056.12,
+          "end": 1068.84,
+          "temporal_coverage_fraction": 1.0,
+          "window_hit": true,
+          "any_anchor_found": true,
+          "overlapping_text_was_truncated": false
+        }
+      ],
+      "window_hits": 3,
+      "required_window_count": 3,
+      "target_window_recall": 1.0,
+      "all_target_windows_hit": true,
+      "evidence_passage_count": 8,
+      "payload": {
+        "video_id": "youtube:aircAruvnKk",
+        "title": "But what is a neural network? | Deep learning chapter 1",
+        "source_url": "https://www.youtube.com/watch?v=aircAruvnKk",
+        "timestamp_parameter": "t",
+        "duration": 1120.0,
+        "mode": "question_evidence",
+        "evidence": [
+          {
+            "start": 827.46,
+            "end": 868.839,
+            "source": "subtitle/manual",
+            "text_sha256": "0ae613265d4cb78d681e8a1ef428a4bc0de11d57745309e45f2e744b4d017d95",
+            "text_chars": 166
+          },
+          {
+            "start": 451.93,
+            "end": 494.66,
+            "source": "subtitle/manual",
+            "text_sha256": "3cc9127f40f4d63e77c42639efc79d33c15dac8fbb488532be8be2c6f59e399b",
+            "text_chars": 233
+          },
+          {
+            "start": 649.08,
+            "end": 710.72,
+            "source": "subtitle/manual",
+            "text_sha256": "1562cd789a851fcd1bfc3268ea3cbddfb24a8ea481c58bb50ccb2c5e1a7a1abc",
+            "text_chars": 256
+          },
+          {
+            "start": 591.5,
+            "end": 646.6,
+            "source": "subtitle/manual",
+            "text_sha256": "9b3e9577824b569c8cd49bc35756f31c93196c9978e9ae82ef8403e4d4e7016e",
+            "text_chars": 248
+          },
+          {
+            "start": 172.08,
+            "end": 213.96,
+            "source": "subtitle/manual",
+            "text_sha256": "e2e6d5ac241ed223c0b1587497a6acb6b1042c99453c6ea0216da28d7ad0de03",
+            "text_chars": 195
+          },
+          {
+            "start": 374.88,
+            "end": 402.8,
+            "source": "subtitle/manual",
+            "text_sha256": "f7385ce45663b667a4cf26a9fc4ca92c4d7f0679a9a75951f33ca0f01a348886",
+            "text_chars": 127
+          },
+          {
+            "start": 1035.38,
+            "end": 1076.6,
+            "source": "subtitle/manual",
+            "text_sha256": "8ad825b3cdaeaf72e60b417c565eca584e12d8e8f8d47b4306fbc12c26133f30",
+            "text_chars": 255
+          },
+          {
+            "start": 1076.62,
+            "end": 1102.14,
+            "source": "subtitle/manual",
+            "text_sha256": "c6a249c729efc9c6f723c8b384ca315d2c0e13b06961c3d03f46349e8a92df2e",
+            "text_chars": 121
+          }
+        ],
+        "warnings": [],
+        "speech_scope": "available_platform_or_imported_captions",
+        "source_notes": [
+          "Correction 14:45 - The final index on the bias vector should be \"k\""
+        ],
+        "cache_hit": true,
+        "available_transcript_tokens_estimate": 4842,
+        "elapsed_seconds": 0.001,
+        "transcript_complete": false,
+        "accounting": {
+          "text_tokens_estimate": 1798,
+          "budget": 2500,
+          "method": "o200k_base_estimate",
+          "excludes": "images, model reasoning, transport envelope"
+        },
+        "truncated": false,
+        "available_items": 8
+      }
+    },
+    {
+      "question_id": "activation_range_unassisted",
+      "question": "视频里的神经元激活值是不是一定不能超过 1？",
+      "budget": 2500,
+      "mode": "warm_process_cached_source",
+      "repetition": 1,
+      "wall_seconds": 0.002663,
+      "worker_timings": {},
+      "payload_text_tokens_estimate": 1798,
+      "payload_utf8_bytes": 5585,
+      "reported_text_tokens_estimate": 1798,
+      "within_requested_budget": true,
+      "payload_to_full_transcript_token_ratio": 0.37133415943824866,
+      "saved_vs_full_transcript_text_fraction": 0.6286658405617513,
+      "windows": [
+        {
+          "label": "early caveat",
+          "start": 178.2,
+          "end": 182.12,
+          "temporal_coverage_fraction": 1.0,
+          "window_hit": true,
+          "any_anchor_found": true,
+          "overlapping_text_was_truncated": false
+        },
+        {
+          "label": "example-specific Sigmoid range",
+          "start": 614.279,
+          "end": 643.339,
+          "temporal_coverage_fraction": 1.0,
+          "window_hit": true,
+          "any_anchor_found": true,
+          "overlapping_text_was_truncated": false
+        },
+        {
+          "label": "ReLU training qualification and max definition",
+          "start": 1056.12,
+          "end": 1068.84,
+          "temporal_coverage_fraction": 1.0,
+          "window_hit": true,
+          "any_anchor_found": true,
+          "overlapping_text_was_truncated": false
+        }
+      ],
+      "window_hits": 3,
+      "required_window_count": 3,
+      "target_window_recall": 1.0,
+      "all_target_windows_hit": true,
+      "evidence_passage_count": 8,
+      "payload": {
+        "video_id": "youtube:aircAruvnKk",
+        "title": "But what is a neural network? | Deep learning chapter 1",
+        "source_url": "https://www.youtube.com/watch?v=aircAruvnKk",
+        "timestamp_parameter": "t",
+        "duration": 1120.0,
+        "mode": "question_evidence",
+        "evidence": [
+          {
+            "start": 827.46,
+            "end": 868.839,
+            "source": "subtitle/manual",
+            "text_sha256": "0ae613265d4cb78d681e8a1ef428a4bc0de11d57745309e45f2e744b4d017d95",
+            "text_chars": 166
+          },
+          {
+            "start": 451.93,
+            "end": 494.66,
+            "source": "subtitle/manual",
+            "text_sha256": "3cc9127f40f4d63e77c42639efc79d33c15dac8fbb488532be8be2c6f59e399b",
+            "text_chars": 233
+          },
+          {
+            "start": 649.08,
+            "end": 710.72,
+            "source": "subtitle/manual",
+            "text_sha256": "1562cd789a851fcd1bfc3268ea3cbddfb24a8ea481c58bb50ccb2c5e1a7a1abc",
+            "text_chars": 256
+          },
+          {
+            "start": 591.5,
+            "end": 646.6,
+            "source": "subtitle/manual",
+            "text_sha256": "9b3e9577824b569c8cd49bc35756f31c93196c9978e9ae82ef8403e4d4e7016e",
+            "text_chars": 248
+          },
+          {
+            "start": 172.08,
+            "end": 213.96,
+            "source": "subtitle/manual",
+            "text_sha256": "e2e6d5ac241ed223c0b1587497a6acb6b1042c99453c6ea0216da28d7ad0de03",
+            "text_chars": 195
+          },
+          {
+            "start": 374.88,
+            "end": 402.8,
+            "source": "subtitle/manual",
+            "text_sha256": "f7385ce45663b667a4cf26a9fc4ca92c4d7f0679a9a75951f33ca0f01a348886",
+            "text_chars": 127
+          },
+          {
+            "start": 1035.38,
+            "end": 1076.6,
+            "source": "subtitle/manual",
+            "text_sha256": "8ad825b3cdaeaf72e60b417c565eca584e12d8e8f8d47b4306fbc12c26133f30",
+            "text_chars": 255
+          },
+          {
+            "start": 1076.62,
+            "end": 1102.14,
+            "source": "subtitle/manual",
+            "text_sha256": "c6a249c729efc9c6f723c8b384ca315d2c0e13b06961c3d03f46349e8a92df2e",
+            "text_chars": 121
+          }
+        ],
+        "warnings": [],
+        "speech_scope": "available_platform_or_imported_captions",
+        "source_notes": [
+          "Correction 14:45 - The final index on the bias vector should be \"k\""
+        ],
+        "cache_hit": true,
+        "available_transcript_tokens_estimate": 4842,
+        "elapsed_seconds": 0.001,
+        "transcript_complete": false,
+        "accounting": {
+          "text_tokens_estimate": 1798,
+          "budget": 2500,
+          "method": "o200k_base_estimate",
+          "excludes": "images, model reasoning, transport envelope"
+        },
+        "truncated": false,
+        "available_items": 8
+      }
+    },
+    {
+      "question_id": "activation_range_unassisted",
+      "question": "视频里的神经元激活值是不是一定不能超过 1？",
+      "budget": 2500,
+      "mode": "warm_process_cached_source",
+      "repetition": 2,
+      "wall_seconds": 0.002353,
+      "worker_timings": {},
+      "payload_text_tokens_estimate": 1798,
+      "payload_utf8_bytes": 5585,
+      "reported_text_tokens_estimate": 1798,
+      "within_requested_budget": true,
+      "payload_to_full_transcript_token_ratio": 0.37133415943824866,
+      "saved_vs_full_transcript_text_fraction": 0.6286658405617513,
+      "windows": [
+        {
+          "label": "early caveat",
+          "start": 178.2,
+          "end": 182.12,
+          "temporal_coverage_fraction": 1.0,
+          "window_hit": true,
+          "any_anchor_found": true,
+          "overlapping_text_was_truncated": false
+        },
+        {
+          "label": "example-specific Sigmoid range",
+          "start": 614.279,
+          "end": 643.339,
+          "temporal_coverage_fraction": 1.0,
+          "window_hit": true,
+          "any_anchor_found": true,
+          "overlapping_text_was_truncated": false
+        },
+        {
+          "label": "ReLU training qualification and max definition",
+          "start": 1056.12,
+          "end": 1068.84,
+          "temporal_coverage_fraction": 1.0,
+          "window_hit": true,
+          "any_anchor_found": true,
+          "overlapping_text_was_truncated": false
+        }
+      ],
+      "window_hits": 3,
+      "required_window_count": 3,
+      "target_window_recall": 1.0,
+      "all_target_windows_hit": true,
+      "evidence_passage_count": 8,
+      "payload": {
+        "video_id": "youtube:aircAruvnKk",
+        "title": "But what is a neural network? | Deep learning chapter 1",
+        "source_url": "https://www.youtube.com/watch?v=aircAruvnKk",
+        "timestamp_parameter": "t",
+        "duration": 1120.0,
+        "mode": "question_evidence",
+        "evidence": [
+          {
+            "start": 827.46,
+            "end": 868.839,
+            "source": "subtitle/manual",
+            "text_sha256": "0ae613265d4cb78d681e8a1ef428a4bc0de11d57745309e45f2e744b4d017d95",
+            "text_chars": 166
+          },
+          {
+            "start": 451.93,
+            "end": 494.66,
+            "source": "subtitle/manual",
+            "text_sha256": "3cc9127f40f4d63e77c42639efc79d33c15dac8fbb488532be8be2c6f59e399b",
+            "text_chars": 233
+          },
+          {
+            "start": 649.08,
+            "end": 710.72,
+            "source": "subtitle/manual",
+            "text_sha256": "1562cd789a851fcd1bfc3268ea3cbddfb24a8ea481c58bb50ccb2c5e1a7a1abc",
+            "text_chars": 256
+          },
+          {
+            "start": 591.5,
+            "end": 646.6,
+            "source": "subtitle/manual",
+            "text_sha256": "9b3e9577824b569c8cd49bc35756f31c93196c9978e9ae82ef8403e4d4e7016e",
+            "text_chars": 248
+          },
+          {
+            "start": 172.08,
+            "end": 213.96,
+            "source": "subtitle/manual",
+            "text_sha256": "e2e6d5ac241ed223c0b1587497a6acb6b1042c99453c6ea0216da28d7ad0de03",
+            "text_chars": 195
+          },
+          {
+            "start": 374.88,
+            "end": 402.8,
+            "source": "subtitle/manual",
+            "text_sha256": "f7385ce45663b667a4cf26a9fc4ca92c4d7f0679a9a75951f33ca0f01a348886",
+            "text_chars": 127
+          },
+          {
+            "start": 1035.38,
+            "end": 1076.6,
+            "source": "subtitle/manual",
+            "text_sha256": "8ad825b3cdaeaf72e60b417c565eca584e12d8e8f8d47b4306fbc12c26133f30",
+            "text_chars": 255
+          },
+          {
+            "start": 1076.62,
+            "end": 1102.14,
+            "source": "subtitle/manual",
+            "text_sha256": "c6a249c729efc9c6f723c8b384ca315d2c0e13b06961c3d03f46349e8a92df2e",
+            "text_chars": 121
+          }
+        ],
+        "warnings": [],
+        "speech_scope": "available_platform_or_imported_captions",
+        "source_notes": [
+          "Correction 14:45 - The final index on the bias vector should be \"k\""
+        ],
+        "cache_hit": true,
+        "available_transcript_tokens_estimate": 4842,
+        "elapsed_seconds": 0.001,
+        "transcript_complete": false,
+        "accounting": {
+          "text_tokens_estimate": 1798,
+          "budget": 2500,
+          "method": "o200k_base_estimate",
+          "excludes": "images, model reasoning, transport envelope"
+        },
+        "truncated": false,
+        "available_items": 8
+      }
+    },
+    {
+      "question_id": "input_encoding",
+      "question": "视频示例的输入层有多少个神经元？输入数字 0 和 1 分别代表什么？",
+      "budget": 4000,
+      "mode": "fresh_process_cached_source",
+      "repetition": 0,
+      "wall_seconds": 0.226939,
+      "worker_timings": {
+        "initialization_seconds": 0.1480950830009533,
+        "call_seconds": 0.03762241699587321,
+        "initialization_and_call_seconds": 0.18571749999682652
+      },
+      "payload_text_tokens_estimate": 1666,
+      "payload_utf8_bytes": 5137,
+      "reported_text_tokens_estimate": 1666,
+      "within_requested_budget": true,
+      "payload_to_full_transcript_token_ratio": 0.3440726972325485,
+      "saved_vs_full_transcript_text_fraction": 0.6559273027674515,
+      "windows": [
+        {
+          "label": "784 input neurons and grayscale encoding",
+          "start": 191.72,
+          "end": 204.3,
+          "temporal_coverage_fraction": 1.0,
+          "window_hit": true,
+          "any_anchor_found": true,
+          "overlapping_text_was_truncated": false
+        }
+      ],
+      "window_hits": 1,
+      "required_window_count": 1,
+      "target_window_recall": 1.0,
+      "all_target_windows_hit": true,
+      "evidence_passage_count": 8,
+      "payload": {
+        "video_id": "youtube:aircAruvnKk",
+        "title": "But what is a neural network? | Deep learning chapter 1",
+        "source_url": "https://www.youtube.com/watch?v=aircAruvnKk",
+        "timestamp_parameter": "t",
+        "duration": 1120.0,
+        "mode": "question_evidence",
+        "evidence": [
+          {
+            "start": 172.08,
+            "end": 208.48,
+            "source": "subtitle/manual",
+            "text_sha256": "8cedee03dd31157f2906c030e0fac351f5757d4d74638cf1f40019804e9b6e7c",
+            "text_chars": 167
+          },
+          {
+            "start": 216.26,
+            "end": 253.54,
+            "source": "subtitle/manual",
+            "text_sha256": "58a3aa24c45a32f5a61afe0bfdeef70180057b11d1896b289a5453aa0e169e1c",
+            "text_chars": 179
+          },
+          {
+            "start": 927.78,
+            "end": 956.24,
+            "source": "subtitle/manual",
+            "text_sha256": "2d1eb3e98f07ef0b49c74834abe2c5678f8a3fccddcdc3032126f5d2057240ee",
+            "text_chars": 137
+          },
+          {
+            "start": 542.38,
+            "end": 602.62,
+            "source": "subtitle/manual",
+            "text_sha256": "cb75228dbb8fdbf69a345089b9c0a978b38fc6d935a9a07a924a7c46127fd1f4",
+            "text_chars": 217
+          },
+          {
+            "start": 643.34,
+            "end": 670.279,
+            "source": "subtitle/manual",
+            "text_sha256": "48550ad8e02189b7a705fd26366abd5c324b3d2ca9ceefdc727f327f0150f5c8",
+            "text_chars": 108
+          },
+          {
+            "start": 374.88,
+            "end": 416.34,
+            "source": "subtitle/manual",
+            "text_sha256": "42221b6ceee358ddd929950724211c614ff70bff33eb2543058de686b8135be9",
+            "text_chars": 216
+          },
+          {
+            "start": 288.9,
+            "end": 329.359,
+            "source": "subtitle/manual",
+            "text_sha256": "d06ae821f92e8381ea92f288207e6eb7cd3ecdc0ebe3ac1e8fb3bf947c11bd6b",
+            "text_chars": 242
+          },
+          {
+            "start": 614.279,
+            "end": 643.339,
+            "source": "subtitle/manual",
+            "text_sha256": "c3afc86d68fb85f61a9335507af1099ae7560bd7e09ed257d1f4d8bdbb784c02",
+            "text_chars": 149
+          }
+        ],
+        "warnings": [],
+        "speech_scope": "available_platform_or_imported_captions",
+        "source_notes": [
+          "Correction 14:45 - The final index on the bias vector should be \"k\""
+        ],
+        "cache_hit": true,
+        "available_transcript_tokens_estimate": 4842,
+        "elapsed_seconds": 0.036,
+        "transcript_complete": false,
+        "accounting": {
+          "text_tokens_estimate": 1666,
+          "budget": 4000,
+          "method": "o200k_base_estimate",
+          "excludes": "images, model reasoning, transport envelope"
+        },
+        "truncated": false,
+        "available_items": 8
+      }
+    },
+    {
+      "question_id": "input_encoding",
+      "question": "视频示例的输入层有多少个神经元？输入数字 0 和 1 分别代表什么？",
+      "budget": 4000,
+      "mode": "warm_process_cached_source",
+      "repetition": 0,
+      "wall_seconds": 0.001821,
+      "worker_timings": {},
+      "payload_text_tokens_estimate": 1666,
+      "payload_utf8_bytes": 5137,
+      "reported_text_tokens_estimate": 1666,
+      "within_requested_budget": true,
+      "payload_to_full_transcript_token_ratio": 0.3440726972325485,
+      "saved_vs_full_transcript_text_fraction": 0.6559273027674515,
+      "windows": [
+        {
+          "label": "784 input neurons and grayscale encoding",
+          "start": 191.72,
+          "end": 204.3,
+          "temporal_coverage_fraction": 1.0,
+          "window_hit": true,
+          "any_anchor_found": true,
+          "overlapping_text_was_truncated": false
+        }
+      ],
+      "window_hits": 1,
+      "required_window_count": 1,
+      "target_window_recall": 1.0,
+      "all_target_windows_hit": true,
+      "evidence_passage_count": 8,
+      "payload": {
+        "video_id": "youtube:aircAruvnKk",
+        "title": "But what is a neural network? | Deep learning chapter 1",
+        "source_url": "https://www.youtube.com/watch?v=aircAruvnKk",
+        "timestamp_parameter": "t",
+        "duration": 1120.0,
+        "mode": "question_evidence",
+        "evidence": [
+          {
+            "start": 172.08,
+            "end": 208.48,
+            "source": "subtitle/manual",
+            "text_sha256": "8cedee03dd31157f2906c030e0fac351f5757d4d74638cf1f40019804e9b6e7c",
+            "text_chars": 167
+          },
+          {
+            "start": 216.26,
+            "end": 253.54,
+            "source": "subtitle/manual",
+            "text_sha256": "58a3aa24c45a32f5a61afe0bfdeef70180057b11d1896b289a5453aa0e169e1c",
+            "text_chars": 179
+          },
+          {
+            "start": 927.78,
+            "end": 956.24,
+            "source": "subtitle/manual",
+            "text_sha256": "2d1eb3e98f07ef0b49c74834abe2c5678f8a3fccddcdc3032126f5d2057240ee",
+            "text_chars": 137
+          },
+          {
+            "start": 542.38,
+            "end": 602.62,
+            "source": "subtitle/manual",
+            "text_sha256": "cb75228dbb8fdbf69a345089b9c0a978b38fc6d935a9a07a924a7c46127fd1f4",
+            "text_chars": 217
+          },
+          {
+            "start": 643.34,
+            "end": 670.279,
+            "source": "subtitle/manual",
+            "text_sha256": "48550ad8e02189b7a705fd26366abd5c324b3d2ca9ceefdc727f327f0150f5c8",
+            "text_chars": 108
+          },
+          {
+            "start": 374.88,
+            "end": 416.34,
+            "source": "subtitle/manual",
+            "text_sha256": "42221b6ceee358ddd929950724211c614ff70bff33eb2543058de686b8135be9",
+            "text_chars": 216
+          },
+          {
+            "start": 288.9,
+            "end": 329.359,
+            "source": "subtitle/manual",
+            "text_sha256": "d06ae821f92e8381ea92f288207e6eb7cd3ecdc0ebe3ac1e8fb3bf947c11bd6b",
+            "text_chars": 242
+          },
+          {
+            "start": 614.279,
+            "end": 643.339,
+            "source": "subtitle/manual",
+            "text_sha256": "c3afc86d68fb85f61a9335507af1099ae7560bd7e09ed257d1f4d8bdbb784c02",
+            "text_chars": 149
+          }
+        ],
+        "warnings": [],
+        "speech_scope": "available_platform_or_imported_captions",
+        "source_notes": [
+          "Correction 14:45 - The final index on the bias vector should be \"k\""
+        ],
+        "cache_hit": true,
+        "available_transcript_tokens_estimate": 4842,
+        "elapsed_seconds": 0.001,
+        "transcript_complete": false,
+        "accounting": {
+          "text_tokens_estimate": 1666,
+          "budget": 4000,
+          "method": "o200k_base_estimate",
+          "excludes": "images, model reasoning, transport envelope"
+        },
+        "truncated": false,
+        "available_items": 8
+      }
+    },
+    {
+      "question_id": "input_encoding",
+      "question": "视频示例的输入层有多少个神经元？输入数字 0 和 1 分别代表什么？",
+      "budget": 4000,
+      "mode": "warm_process_cached_source",
+      "repetition": 1,
+      "wall_seconds": 0.002372,
+      "worker_timings": {},
+      "payload_text_tokens_estimate": 1666,
+      "payload_utf8_bytes": 5137,
+      "reported_text_tokens_estimate": 1666,
+      "within_requested_budget": true,
+      "payload_to_full_transcript_token_ratio": 0.3440726972325485,
+      "saved_vs_full_transcript_text_fraction": 0.6559273027674515,
+      "windows": [
+        {
+          "label": "784 input neurons and grayscale encoding",
+          "start": 191.72,
+          "end": 204.3,
+          "temporal_coverage_fraction": 1.0,
+          "window_hit": true,
+          "any_anchor_found": true,
+          "overlapping_text_was_truncated": false
+        }
+      ],
+      "window_hits": 1,
+      "required_window_count": 1,
+      "target_window_recall": 1.0,
+      "all_target_windows_hit": true,
+      "evidence_passage_count": 8,
+      "payload": {
+        "video_id": "youtube:aircAruvnKk",
+        "title": "But what is a neural network? | Deep learning chapter 1",
+        "source_url": "https://www.youtube.com/watch?v=aircAruvnKk",
+        "timestamp_parameter": "t",
+        "duration": 1120.0,
+        "mode": "question_evidence",
+        "evidence": [
+          {
+            "start": 172.08,
+            "end": 208.48,
+            "source": "subtitle/manual",
+            "text_sha256": "8cedee03dd31157f2906c030e0fac351f5757d4d74638cf1f40019804e9b6e7c",
+            "text_chars": 167
+          },
+          {
+            "start": 216.26,
+            "end": 253.54,
+            "source": "subtitle/manual",
+            "text_sha256": "58a3aa24c45a32f5a61afe0bfdeef70180057b11d1896b289a5453aa0e169e1c",
+            "text_chars": 179
+          },
+          {
+            "start": 927.78,
+            "end": 956.24,
+            "source": "subtitle/manual",
+            "text_sha256": "2d1eb3e98f07ef0b49c74834abe2c5678f8a3fccddcdc3032126f5d2057240ee",
+            "text_chars": 137
+          },
+          {
+            "start": 542.38,
+            "end": 602.62,
+            "source": "subtitle/manual",
+            "text_sha256": "cb75228dbb8fdbf69a345089b9c0a978b38fc6d935a9a07a924a7c46127fd1f4",
+            "text_chars": 217
+          },
+          {
+            "start": 643.34,
+            "end": 670.279,
+            "source": "subtitle/manual",
+            "text_sha256": "48550ad8e02189b7a705fd26366abd5c324b3d2ca9ceefdc727f327f0150f5c8",
+            "text_chars": 108
+          },
+          {
+            "start": 374.88,
+            "end": 416.34,
+            "source": "subtitle/manual",
+            "text_sha256": "42221b6ceee358ddd929950724211c614ff70bff33eb2543058de686b8135be9",
+            "text_chars": 216
+          },
+          {
+            "start": 288.9,
+            "end": 329.359,
+            "source": "subtitle/manual",
+            "text_sha256": "d06ae821f92e8381ea92f288207e6eb7cd3ecdc0ebe3ac1e8fb3bf947c11bd6b",
+            "text_chars": 242
+          },
+          {
+            "start": 614.279,
+            "end": 643.339,
+            "source": "subtitle/manual",
+            "text_sha256": "c3afc86d68fb85f61a9335507af1099ae7560bd7e09ed257d1f4d8bdbb784c02",
+            "text_chars": 149
+          }
+        ],
+        "warnings": [],
+        "speech_scope": "available_platform_or_imported_captions",
+        "source_notes": [
+          "Correction 14:45 - The final index on the bias vector should be \"k\""
+        ],
+        "cache_hit": true,
+        "available_transcript_tokens_estimate": 4842,
+        "elapsed_seconds": 0.001,
+        "transcript_complete": false,
+        "accounting": {
+          "text_tokens_estimate": 1666,
+          "budget": 4000,
+          "method": "o200k_base_estimate",
+          "excludes": "images, model reasoning, transport envelope"
+        },
+        "truncated": false,
+        "available_items": 8
+      }
+    },
+    {
+      "question_id": "input_encoding",
+      "question": "视频示例的输入层有多少个神经元？输入数字 0 和 1 分别代表什么？",
+      "budget": 4000,
+      "mode": "warm_process_cached_source",
+      "repetition": 2,
+      "wall_seconds": 0.001718,
+      "worker_timings": {},
+      "payload_text_tokens_estimate": 1666,
+      "payload_utf8_bytes": 5137,
+      "reported_text_tokens_estimate": 1666,
+      "within_requested_budget": true,
+      "payload_to_full_transcript_token_ratio": 0.3440726972325485,
+      "saved_vs_full_transcript_text_fraction": 0.6559273027674515,
+      "windows": [
+        {
+          "label": "784 input neurons and grayscale encoding",
+          "start": 191.72,
+          "end": 204.3,
+          "temporal_coverage_fraction": 1.0,
+          "window_hit": true,
+          "any_anchor_found": true,
+          "overlapping_text_was_truncated": false
+        }
+      ],
+      "window_hits": 1,
+      "required_window_count": 1,
+      "target_window_recall": 1.0,
+      "all_target_windows_hit": true,
+      "evidence_passage_count": 8,
+      "payload": {
+        "video_id": "youtube:aircAruvnKk",
+        "title": "But what is a neural network? | Deep learning chapter 1",
+        "source_url": "https://www.youtube.com/watch?v=aircAruvnKk",
+        "timestamp_parameter": "t",
+        "duration": 1120.0,
+        "mode": "question_evidence",
+        "evidence": [
+          {
+            "start": 172.08,
+            "end": 208.48,
+            "source": "subtitle/manual",
+            "text_sha256": "8cedee03dd31157f2906c030e0fac351f5757d4d74638cf1f40019804e9b6e7c",
+            "text_chars": 167
+          },
+          {
+            "start": 216.26,
+            "end": 253.54,
+            "source": "subtitle/manual",
+            "text_sha256": "58a3aa24c45a32f5a61afe0bfdeef70180057b11d1896b289a5453aa0e169e1c",
+            "text_chars": 179
+          },
+          {
+            "start": 927.78,
+            "end": 956.24,
+            "source": "subtitle/manual",
+            "text_sha256": "2d1eb3e98f07ef0b49c74834abe2c5678f8a3fccddcdc3032126f5d2057240ee",
+            "text_chars": 137
+          },
+          {
+            "start": 542.38,
+            "end": 602.62,
+            "source": "subtitle/manual",
+            "text_sha256": "cb75228dbb8fdbf69a345089b9c0a978b38fc6d935a9a07a924a7c46127fd1f4",
+            "text_chars": 217
+          },
+          {
+            "start": 643.34,
+            "end": 670.279,
+            "source": "subtitle/manual",
+            "text_sha256": "48550ad8e02189b7a705fd26366abd5c324b3d2ca9ceefdc727f327f0150f5c8",
+            "text_chars": 108
+          },
+          {
+            "start": 374.88,
+            "end": 416.34,
+            "source": "subtitle/manual",
+            "text_sha256": "42221b6ceee358ddd929950724211c614ff70bff33eb2543058de686b8135be9",
+            "text_chars": 216
+          },
+          {
+            "start": 288.9,
+            "end": 329.359,
+            "source": "subtitle/manual",
+            "text_sha256": "d06ae821f92e8381ea92f288207e6eb7cd3ecdc0ebe3ac1e8fb3bf947c11bd6b",
+            "text_chars": 242
+          },
+          {
+            "start": 614.279,
+            "end": 643.339,
+            "source": "subtitle/manual",
+            "text_sha256": "c3afc86d68fb85f61a9335507af1099ae7560bd7e09ed257d1f4d8bdbb784c02",
+            "text_chars": 149
+          }
+        ],
+        "warnings": [],
+        "speech_scope": "available_platform_or_imported_captions",
+        "source_notes": [
+          "Correction 14:45 - The final index on the bias vector should be \"k\""
+        ],
+        "cache_hit": true,
+        "available_transcript_tokens_estimate": 4842,
+        "elapsed_seconds": 0.001,
+        "transcript_complete": false,
+        "accounting": {
+          "text_tokens_estimate": 1666,
+          "budget": 4000,
+          "method": "o200k_base_estimate",
+          "excludes": "images, model reasoning, transport envelope"
+        },
+        "truncated": false,
+        "available_items": 8
+      }
+    },
+    {
+      "question_id": "parameter_count_and_learning",
+      "question": "视频说这个示例网络大约有多少个可调整的权重和偏置参数？这里的学习是在寻找什么？",
+      "budget": 4000,
+      "mode": "fresh_process_cached_source",
+      "repetition": 0,
+      "wall_seconds": 0.161105,
+      "worker_timings": {
+        "initialization_seconds": 0.09065679200284649,
+        "call_seconds": 0.029806625003402587,
+        "initialization_and_call_seconds": 0.12046341700624907
+      },
+      "payload_text_tokens_estimate": 1703,
+      "payload_utf8_bytes": 5381,
+      "reported_text_tokens_estimate": 1703,
+      "within_requested_budget": true,
+      "payload_to_full_transcript_token_ratio": 0.3517141676992978,
+      "saved_vs_full_transcript_text_fraction": 0.6482858323007021,
+      "windows": [
+        {
+          "label": "approximately 13,000 adjustable parameters",
+          "start": 741.28,
+          "end": 749.54,
+          "temporal_coverage_fraction": 1.0,
+          "window_hit": true,
+          "any_anchor_found": true,
+          "overlapping_text_was_truncated": false
+        },
+        {
+          "label": "learning searches for suitable parameters",
+          "start": 750.52,
+          "end": 761.7,
+          "temporal_coverage_fraction": 1.0,
+          "window_hit": true,
+          "any_anchor_found": true,
+          "overlapping_text_was_truncated": false
+        }
+      ],
+      "window_hits": 2,
+      "required_window_count": 2,
+      "target_window_recall": 1.0,
+      "all_target_windows_hit": true,
+      "evidence_passage_count": 8,
+      "payload": {
+        "video_id": "youtube:aircAruvnKk",
+        "title": "But what is a neural network? | Deep learning chapter 1",
+        "source_url": "https://www.youtube.com/watch?v=aircAruvnKk",
+        "timestamp_parameter": "t",
+        "duration": 1120.0,
+        "mode": "question_evidence",
+        "evidence": [
+          {
+            "start": 718.02,
+            "end": 761.7,
+            "source": "subtitle/manual",
+            "text_sha256": "a1851b42012e9b86c8b04c25265a1dc6c52a81a784b479fe70168a21f72ef170",
+            "text_chars": 188
+          },
+          {
+            "start": 931.96,
+            "end": 966.39,
+            "source": "subtitle/manual",
+            "text_sha256": "23bb6ec290f54622688ff440560dc022bc4cf5408fc00211bd9c0367fb91870d",
+            "text_chars": 155
+          },
+          {
+            "start": 762.38,
+            "end": 820.46,
+            "source": "subtitle/manual",
+            "text_sha256": "6a4753443c7ca195b2324c11ee18c341872013ff73c3b837d4a720e59b409731",
+            "text_chars": 270
+          },
+          {
+            "start": 535.26,
+            "end": 585.84,
+            "source": "subtitle/manual",
+            "text_sha256": "7786b4e48ce4a21c87c5a3fd734fb46f0d1cf63acfcfd4fa18bc78356f1251a3",
+            "text_chars": 176
+          },
+          {
+            "start": 443.22,
+            "end": 494.66,
+            "source": "subtitle/manual",
+            "text_sha256": "a19475ec6a4637ca4e0a6aef9ff208aa889fca9bf7720c43088da27ca53d337f",
+            "text_chars": 274
+          },
+          {
+            "start": 966.39,
+            "end": 997.56,
+            "source": "subtitle/manual",
+            "text_sha256": "293e2a26ab00e3b965e0d843d3fcdcdb7b5508a3a395e10ac38993df3868ee48",
+            "text_chars": 160
+          },
+          {
+            "start": 821.11,
+            "end": 849.33,
+            "source": "subtitle/manual",
+            "text_sha256": "91b7c5242c2d4e87b6306e1f0cd4097dd2ee97466c382e858cf71fdb010fbdcd",
+            "text_chars": 111
+          },
+          {
+            "start": 598.86,
+            "end": 632.0,
+            "source": "subtitle/manual",
+            "text_sha256": "ceb2fe77296a229c5966c355a3fe19ecdfb19792cd695d3f889d9a9a291ad828",
+            "text_chars": 152
+          }
+        ],
+        "warnings": [],
+        "speech_scope": "available_platform_or_imported_captions",
+        "source_notes": [
+          "Correction 14:45 - The final index on the bias vector should be \"k\""
+        ],
+        "cache_hit": true,
+        "available_transcript_tokens_estimate": 4842,
+        "elapsed_seconds": 0.028,
+        "transcript_complete": false,
+        "accounting": {
+          "text_tokens_estimate": 1703,
+          "budget": 4000,
+          "method": "o200k_base_estimate",
+          "excludes": "images, model reasoning, transport envelope"
+        },
+        "truncated": false,
+        "available_items": 8
+      }
+    },
+    {
+      "question_id": "parameter_count_and_learning",
+      "question": "视频说这个示例网络大约有多少个可调整的权重和偏置参数？这里的学习是在寻找什么？",
+      "budget": 4000,
+      "mode": "warm_process_cached_source",
+      "repetition": 0,
+      "wall_seconds": 0.001778,
+      "worker_timings": {},
+      "payload_text_tokens_estimate": 1703,
+      "payload_utf8_bytes": 5381,
+      "reported_text_tokens_estimate": 1703,
+      "within_requested_budget": true,
+      "payload_to_full_transcript_token_ratio": 0.3517141676992978,
+      "saved_vs_full_transcript_text_fraction": 0.6482858323007021,
+      "windows": [
+        {
+          "label": "approximately 13,000 adjustable parameters",
+          "start": 741.28,
+          "end": 749.54,
+          "temporal_coverage_fraction": 1.0,
+          "window_hit": true,
+          "any_anchor_found": true,
+          "overlapping_text_was_truncated": false
+        },
+        {
+          "label": "learning searches for suitable parameters",
+          "start": 750.52,
+          "end": 761.7,
+          "temporal_coverage_fraction": 1.0,
+          "window_hit": true,
+          "any_anchor_found": true,
+          "overlapping_text_was_truncated": false
+        }
+      ],
+      "window_hits": 2,
+      "required_window_count": 2,
+      "target_window_recall": 1.0,
+      "all_target_windows_hit": true,
+      "evidence_passage_count": 8,
+      "payload": {
+        "video_id": "youtube:aircAruvnKk",
+        "title": "But what is a neural network? | Deep learning chapter 1",
+        "source_url": "https://www.youtube.com/watch?v=aircAruvnKk",
+        "timestamp_parameter": "t",
+        "duration": 1120.0,
+        "mode": "question_evidence",
+        "evidence": [
+          {
+            "start": 718.02,
+            "end": 761.7,
+            "source": "subtitle/manual",
+            "text_sha256": "a1851b42012e9b86c8b04c25265a1dc6c52a81a784b479fe70168a21f72ef170",
+            "text_chars": 188
+          },
+          {
+            "start": 931.96,
+            "end": 966.39,
+            "source": "subtitle/manual",
+            "text_sha256": "23bb6ec290f54622688ff440560dc022bc4cf5408fc00211bd9c0367fb91870d",
+            "text_chars": 155
+          },
+          {
+            "start": 762.38,
+            "end": 820.46,
+            "source": "subtitle/manual",
+            "text_sha256": "6a4753443c7ca195b2324c11ee18c341872013ff73c3b837d4a720e59b409731",
+            "text_chars": 270
+          },
+          {
+            "start": 535.26,
+            "end": 585.84,
+            "source": "subtitle/manual",
+            "text_sha256": "7786b4e48ce4a21c87c5a3fd734fb46f0d1cf63acfcfd4fa18bc78356f1251a3",
+            "text_chars": 176
+          },
+          {
+            "start": 443.22,
+            "end": 494.66,
+            "source": "subtitle/manual",
+            "text_sha256": "a19475ec6a4637ca4e0a6aef9ff208aa889fca9bf7720c43088da27ca53d337f",
+            "text_chars": 274
+          },
+          {
+            "start": 966.39,
+            "end": 997.56,
+            "source": "subtitle/manual",
+            "text_sha256": "293e2a26ab00e3b965e0d843d3fcdcdb7b5508a3a395e10ac38993df3868ee48",
+            "text_chars": 160
+          },
+          {
+            "start": 821.11,
+            "end": 849.33,
+            "source": "subtitle/manual",
+            "text_sha256": "91b7c5242c2d4e87b6306e1f0cd4097dd2ee97466c382e858cf71fdb010fbdcd",
+            "text_chars": 111
+          },
+          {
+            "start": 598.86,
+            "end": 632.0,
+            "source": "subtitle/manual",
+            "text_sha256": "ceb2fe77296a229c5966c355a3fe19ecdfb19792cd695d3f889d9a9a291ad828",
+            "text_chars": 152
+          }
+        ],
+        "warnings": [],
+        "speech_scope": "available_platform_or_imported_captions",
+        "source_notes": [
+          "Correction 14:45 - The final index on the bias vector should be \"k\""
+        ],
+        "cache_hit": true,
+        "available_transcript_tokens_estimate": 4842,
+        "elapsed_seconds": 0.001,
+        "transcript_complete": false,
+        "accounting": {
+          "text_tokens_estimate": 1703,
+          "budget": 4000,
+          "method": "o200k_base_estimate",
+          "excludes": "images, model reasoning, transport envelope"
+        },
+        "truncated": false,
+        "available_items": 8
+      }
+    },
+    {
+      "question_id": "parameter_count_and_learning",
+      "question": "视频说这个示例网络大约有多少个可调整的权重和偏置参数？这里的学习是在寻找什么？",
+      "budget": 4000,
+      "mode": "warm_process_cached_source",
+      "repetition": 1,
+      "wall_seconds": 0.001649,
+      "worker_timings": {},
+      "payload_text_tokens_estimate": 1703,
+      "payload_utf8_bytes": 5381,
+      "reported_text_tokens_estimate": 1703,
+      "within_requested_budget": true,
+      "payload_to_full_transcript_token_ratio": 0.3517141676992978,
+      "saved_vs_full_transcript_text_fraction": 0.6482858323007021,
+      "windows": [
+        {
+          "label": "approximately 13,000 adjustable parameters",
+          "start": 741.28,
+          "end": 749.54,
+          "temporal_coverage_fraction": 1.0,
+          "window_hit": true,
+          "any_anchor_found": true,
+          "overlapping_text_was_truncated": false
+        },
+        {
+          "label": "learning searches for suitable parameters",
+          "start": 750.52,
+          "end": 761.7,
+          "temporal_coverage_fraction": 1.0,
+          "window_hit": true,
+          "any_anchor_found": true,
+          "overlapping_text_was_truncated": false
+        }
+      ],
+      "window_hits": 2,
+      "required_window_count": 2,
+      "target_window_recall": 1.0,
+      "all_target_windows_hit": true,
+      "evidence_passage_count": 8,
+      "payload": {
+        "video_id": "youtube:aircAruvnKk",
+        "title": "But what is a neural network? | Deep learning chapter 1",
+        "source_url": "https://www.youtube.com/watch?v=aircAruvnKk",
+        "timestamp_parameter": "t",
+        "duration": 1120.0,
+        "mode": "question_evidence",
+        "evidence": [
+          {
+            "start": 718.02,
+            "end": 761.7,
+            "source": "subtitle/manual",
+            "text_sha256": "a1851b42012e9b86c8b04c25265a1dc6c52a81a784b479fe70168a21f72ef170",
+            "text_chars": 188
+          },
+          {
+            "start": 931.96,
+            "end": 966.39,
+            "source": "subtitle/manual",
+            "text_sha256": "23bb6ec290f54622688ff440560dc022bc4cf5408fc00211bd9c0367fb91870d",
+            "text_chars": 155
+          },
+          {
+            "start": 762.38,
+            "end": 820.46,
+            "source": "subtitle/manual",
+            "text_sha256": "6a4753443c7ca195b2324c11ee18c341872013ff73c3b837d4a720e59b409731",
+            "text_chars": 270
+          },
+          {
+            "start": 535.26,
+            "end": 585.84,
+            "source": "subtitle/manual",
+            "text_sha256": "7786b4e48ce4a21c87c5a3fd734fb46f0d1cf63acfcfd4fa18bc78356f1251a3",
+            "text_chars": 176
+          },
+          {
+            "start": 443.22,
+            "end": 494.66,
+            "source": "subtitle/manual",
+            "text_sha256": "a19475ec6a4637ca4e0a6aef9ff208aa889fca9bf7720c43088da27ca53d337f",
+            "text_chars": 274
+          },
+          {
+            "start": 966.39,
+            "end": 997.56,
+            "source": "subtitle/manual",
+            "text_sha256": "293e2a26ab00e3b965e0d843d3fcdcdb7b5508a3a395e10ac38993df3868ee48",
+            "text_chars": 160
+          },
+          {
+            "start": 821.11,
+            "end": 849.33,
+            "source": "subtitle/manual",
+            "text_sha256": "91b7c5242c2d4e87b6306e1f0cd4097dd2ee97466c382e858cf71fdb010fbdcd",
+            "text_chars": 111
+          },
+          {
+            "start": 598.86,
+            "end": 632.0,
+            "source": "subtitle/manual",
+            "text_sha256": "ceb2fe77296a229c5966c355a3fe19ecdfb19792cd695d3f889d9a9a291ad828",
+            "text_chars": 152
+          }
+        ],
+        "warnings": [],
+        "speech_scope": "available_platform_or_imported_captions",
+        "source_notes": [
+          "Correction 14:45 - The final index on the bias vector should be \"k\""
+        ],
+        "cache_hit": true,
+        "available_transcript_tokens_estimate": 4842,
+        "elapsed_seconds": 0.001,
+        "transcript_complete": false,
+        "accounting": {
+          "text_tokens_estimate": 1703,
+          "budget": 4000,
+          "method": "o200k_base_estimate",
+          "excludes": "images, model reasoning, transport envelope"
+        },
+        "truncated": false,
+        "available_items": 8
+      }
+    },
+    {
+      "question_id": "parameter_count_and_learning",
+      "question": "视频说这个示例网络大约有多少个可调整的权重和偏置参数？这里的学习是在寻找什么？",
+      "budget": 4000,
+      "mode": "warm_process_cached_source",
+      "repetition": 2,
+      "wall_seconds": 0.00211,
+      "worker_timings": {},
+      "payload_text_tokens_estimate": 1703,
+      "payload_utf8_bytes": 5381,
+      "reported_text_tokens_estimate": 1703,
+      "within_requested_budget": true,
+      "payload_to_full_transcript_token_ratio": 0.3517141676992978,
+      "saved_vs_full_transcript_text_fraction": 0.6482858323007021,
+      "windows": [
+        {
+          "label": "approximately 13,000 adjustable parameters",
+          "start": 741.28,
+          "end": 749.54,
+          "temporal_coverage_fraction": 1.0,
+          "window_hit": true,
+          "any_anchor_found": true,
+          "overlapping_text_was_truncated": false
+        },
+        {
+          "label": "learning searches for suitable parameters",
+          "start": 750.52,
+          "end": 761.7,
+          "temporal_coverage_fraction": 1.0,
+          "window_hit": true,
+          "any_anchor_found": true,
+          "overlapping_text_was_truncated": false
+        }
+      ],
+      "window_hits": 2,
+      "required_window_count": 2,
+      "target_window_recall": 1.0,
+      "all_target_windows_hit": true,
+      "evidence_passage_count": 8,
+      "payload": {
+        "video_id": "youtube:aircAruvnKk",
+        "title": "But what is a neural network? | Deep learning chapter 1",
+        "source_url": "https://www.youtube.com/watch?v=aircAruvnKk",
+        "timestamp_parameter": "t",
+        "duration": 1120.0,
+        "mode": "question_evidence",
+        "evidence": [
+          {
+            "start": 718.02,
+            "end": 761.7,
+            "source": "subtitle/manual",
+            "text_sha256": "a1851b42012e9b86c8b04c25265a1dc6c52a81a784b479fe70168a21f72ef170",
+            "text_chars": 188
+          },
+          {
+            "start": 931.96,
+            "end": 966.39,
+            "source": "subtitle/manual",
+            "text_sha256": "23bb6ec290f54622688ff440560dc022bc4cf5408fc00211bd9c0367fb91870d",
+            "text_chars": 155
+          },
+          {
+            "start": 762.38,
+            "end": 820.46,
+            "source": "subtitle/manual",
+            "text_sha256": "6a4753443c7ca195b2324c11ee18c341872013ff73c3b837d4a720e59b409731",
+            "text_chars": 270
+          },
+          {
+            "start": 535.26,
+            "end": 585.84,
+            "source": "subtitle/manual",
+            "text_sha256": "7786b4e48ce4a21c87c5a3fd734fb46f0d1cf63acfcfd4fa18bc78356f1251a3",
+            "text_chars": 176
+          },
+          {
+            "start": 443.22,
+            "end": 494.66,
+            "source": "subtitle/manual",
+            "text_sha256": "a19475ec6a4637ca4e0a6aef9ff208aa889fca9bf7720c43088da27ca53d337f",
+            "text_chars": 274
+          },
+          {
+            "start": 966.39,
+            "end": 997.56,
+            "source": "subtitle/manual",
+            "text_sha256": "293e2a26ab00e3b965e0d843d3fcdcdb7b5508a3a395e10ac38993df3868ee48",
+            "text_chars": 160
+          },
+          {
+            "start": 821.11,
+            "end": 849.33,
+            "source": "subtitle/manual",
+            "text_sha256": "91b7c5242c2d4e87b6306e1f0cd4097dd2ee97466c382e858cf71fdb010fbdcd",
+            "text_chars": 111
+          },
+          {
+            "start": 598.86,
+            "end": 632.0,
+            "source": "subtitle/manual",
+            "text_sha256": "ceb2fe77296a229c5966c355a3fe19ecdfb19792cd695d3f889d9a9a291ad828",
+            "text_chars": 152
+          }
+        ],
+        "warnings": [],
+        "speech_scope": "available_platform_or_imported_captions",
+        "source_notes": [
+          "Correction 14:45 - The final index on the bias vector should be \"k\""
+        ],
+        "cache_hit": true,
+        "available_transcript_tokens_estimate": 4842,
+        "elapsed_seconds": 0.001,
+        "transcript_complete": false,
+        "accounting": {
+          "text_tokens_estimate": 1703,
+          "budget": 4000,
+          "method": "o200k_base_estimate",
+          "excludes": "images, model reasoning, transport envelope"
+        },
+        "truncated": false,
+        "available_items": 8
+      }
+    },
+    {
+      "question_id": "architecture_is_illustrative",
+      "question": "为什么演示采用两个隐藏层、每层 16 个神经元？视频把这个结构当作通用设计建议了吗？",
+      "budget": 4000,
+      "mode": "fresh_process_cached_source",
+      "repetition": 0,
+      "wall_seconds": 0.15434,
+      "worker_timings": {
+        "initialization_seconds": 0.0906873749991064,
+        "call_seconds": 0.02582879200053867,
+        "initialization_and_call_seconds": 0.11651616699964507
+      },
+      "payload_text_tokens_estimate": 1680,
+      "payload_utf8_bytes": 5234,
+      "reported_text_tokens_estimate": 1680,
+      "within_requested_budget": true,
+      "payload_to_full_transcript_token_ratio": 0.3469640644361834,
+      "saved_vs_full_transcript_text_fraction": 0.6530359355638167,
+      "windows": [
+        {
+          "label": "visual layout choice and practical architecture variation",
+          "start": 253.74,
+          "end": 272.2,
+          "temporal_coverage_fraction": 1.0,
+          "window_hit": true,
+          "any_anchor_found": true,
+          "overlapping_text_was_truncated": false
+        }
+      ],
+      "window_hits": 1,
+      "required_window_count": 1,
+      "target_window_recall": 1.0,
+      "all_target_windows_hit": true,
+      "evidence_passage_count": 8,
+      "payload": {
+        "video_id": "youtube:aircAruvnKk",
+        "title": "But what is a neural network? | Deep learning chapter 1",
+        "source_url": "https://www.youtube.com/watch?v=aircAruvnKk",
+        "timestamp_parameter": "t",
+        "duration": 1120.0,
+        "mode": "question_evidence",
+        "evidence": [
+          {
+            "start": 236.88,
+            "end": 278.329,
+            "source": "subtitle/manual",
+            "text_sha256": "d166eb2f78903fd4c6ebec00413d90f2772fe7fc7582092e86c1793072f9b8ce",
+            "text_chars": 255
+          },
+          {
+            "start": 711.32,
+            "end": 737.2,
+            "source": "subtitle/manual",
+            "text_sha256": "8185ecbfc4f3cc99ce004614b0a1720957ae8f413a8fae2b489c4f8311a765f1",
+            "text_chars": 130
+          },
+          {
+            "start": 332.07,
+            "end": 357.2,
+            "source": "subtitle/manual",
+            "text_sha256": "e8fc35035d908ab73fecf4fdcbb4b027950b5635236e5248597ade0fb0fc6150",
+            "text_chars": 145
+          },
+          {
+            "start": 163.09,
+            "end": 208.48,
+            "source": "subtitle/manual",
+            "text_sha256": "7abef056945970086e962aa690d71c7eb88fbb30bba13a4bbfb62b87076cb82c",
+            "text_chars": 221
+          },
+          {
+            "start": 921.79,
+            "end": 949.58,
+            "source": "subtitle/manual",
+            "text_sha256": "a27aa036067e93e3884f9d09bf3a523405c9573b1cec736c703861f2efdbf464",
+            "text_chars": 131
+          },
+          {
+            "start": 285.57,
+            "end": 329.359,
+            "source": "subtitle/manual",
+            "text_sha256": "541dee08708bd7fbaa6f6c41905dc1ade3fb849e058f6f652f9611b6fce681b7",
+            "text_chars": 267
+          },
+          {
+            "start": 618.24,
+            "end": 646.6,
+            "source": "subtitle/manual",
+            "text_sha256": "3aebc583178b0d8ff509b2f50a86c4af9320125f89679778a09aedbd5665c21d",
+            "text_chars": 144
+          },
+          {
+            "start": 495.07,
+            "end": 521.8,
+            "source": "subtitle/manual",
+            "text_sha256": "1d39ddccaccfb052c972c2487fc32ee85362f89108c8517a273d80609cabd93e",
+            "text_chars": 142
+          }
+        ],
+        "warnings": [],
+        "speech_scope": "available_platform_or_imported_captions",
+        "source_notes": [
+          "Correction 14:45 - The final index on the bias vector should be \"k\""
+        ],
+        "cache_hit": true,
+        "available_transcript_tokens_estimate": 4842,
+        "elapsed_seconds": 0.025,
+        "transcript_complete": false,
+        "accounting": {
+          "text_tokens_estimate": 1680,
+          "budget": 4000,
+          "method": "o200k_base_estimate",
+          "excludes": "images, model reasoning, transport envelope"
+        },
+        "truncated": false,
+        "available_items": 8
+      }
+    },
+    {
+      "question_id": "architecture_is_illustrative",
+      "question": "为什么演示采用两个隐藏层、每层 16 个神经元？视频把这个结构当作通用设计建议了吗？",
+      "budget": 4000,
+      "mode": "warm_process_cached_source",
+      "repetition": 0,
+      "wall_seconds": 0.001948,
+      "worker_timings": {},
+      "payload_text_tokens_estimate": 1680,
+      "payload_utf8_bytes": 5234,
+      "reported_text_tokens_estimate": 1680,
+      "within_requested_budget": true,
+      "payload_to_full_transcript_token_ratio": 0.3469640644361834,
+      "saved_vs_full_transcript_text_fraction": 0.6530359355638167,
+      "windows": [
+        {
+          "label": "visual layout choice and practical architecture variation",
+          "start": 253.74,
+          "end": 272.2,
+          "temporal_coverage_fraction": 1.0,
+          "window_hit": true,
+          "any_anchor_found": true,
+          "overlapping_text_was_truncated": false
+        }
+      ],
+      "window_hits": 1,
+      "required_window_count": 1,
+      "target_window_recall": 1.0,
+      "all_target_windows_hit": true,
+      "evidence_passage_count": 8,
+      "payload": {
+        "video_id": "youtube:aircAruvnKk",
+        "title": "But what is a neural network? | Deep learning chapter 1",
+        "source_url": "https://www.youtube.com/watch?v=aircAruvnKk",
+        "timestamp_parameter": "t",
+        "duration": 1120.0,
+        "mode": "question_evidence",
+        "evidence": [
+          {
+            "start": 236.88,
+            "end": 278.329,
+            "source": "subtitle/manual",
+            "text_sha256": "d166eb2f78903fd4c6ebec00413d90f2772fe7fc7582092e86c1793072f9b8ce",
+            "text_chars": 255
+          },
+          {
+            "start": 711.32,
+            "end": 737.2,
+            "source": "subtitle/manual",
+            "text_sha256": "8185ecbfc4f3cc99ce004614b0a1720957ae8f413a8fae2b489c4f8311a765f1",
+            "text_chars": 130
+          },
+          {
+            "start": 332.07,
+            "end": 357.2,
+            "source": "subtitle/manual",
+            "text_sha256": "e8fc35035d908ab73fecf4fdcbb4b027950b5635236e5248597ade0fb0fc6150",
+            "text_chars": 145
+          },
+          {
+            "start": 163.09,
+            "end": 208.48,
+            "source": "subtitle/manual",
+            "text_sha256": "7abef056945970086e962aa690d71c7eb88fbb30bba13a4bbfb62b87076cb82c",
+            "text_chars": 221
+          },
+          {
+            "start": 921.79,
+            "end": 949.58,
+            "source": "subtitle/manual",
+            "text_sha256": "a27aa036067e93e3884f9d09bf3a523405c9573b1cec736c703861f2efdbf464",
+            "text_chars": 131
+          },
+          {
+            "start": 285.57,
+            "end": 329.359,
+            "source": "subtitle/manual",
+            "text_sha256": "541dee08708bd7fbaa6f6c41905dc1ade3fb849e058f6f652f9611b6fce681b7",
+            "text_chars": 267
+          },
+          {
+            "start": 618.24,
+            "end": 646.6,
+            "source": "subtitle/manual",
+            "text_sha256": "3aebc583178b0d8ff509b2f50a86c4af9320125f89679778a09aedbd5665c21d",
+            "text_chars": 144
+          },
+          {
+            "start": 495.07,
+            "end": 521.8,
+            "source": "subtitle/manual",
+            "text_sha256": "1d39ddccaccfb052c972c2487fc32ee85362f89108c8517a273d80609cabd93e",
+            "text_chars": 142
+          }
+        ],
+        "warnings": [],
+        "speech_scope": "available_platform_or_imported_captions",
+        "source_notes": [
+          "Correction 14:45 - The final index on the bias vector should be \"k\""
+        ],
+        "cache_hit": true,
+        "available_transcript_tokens_estimate": 4842,
+        "elapsed_seconds": 0.001,
+        "transcript_complete": false,
+        "accounting": {
+          "text_tokens_estimate": 1680,
+          "budget": 4000,
+          "method": "o200k_base_estimate",
+          "excludes": "images, model reasoning, transport envelope"
+        },
+        "truncated": false,
+        "available_items": 8
+      }
+    },
+    {
+      "question_id": "architecture_is_illustrative",
+      "question": "为什么演示采用两个隐藏层、每层 16 个神经元？视频把这个结构当作通用设计建议了吗？",
+      "budget": 4000,
+      "mode": "warm_process_cached_source",
+      "repetition": 1,
+      "wall_seconds": 0.001658,
+      "worker_timings": {},
+      "payload_text_tokens_estimate": 1680,
+      "payload_utf8_bytes": 5234,
+      "reported_text_tokens_estimate": 1680,
+      "within_requested_budget": true,
+      "payload_to_full_transcript_token_ratio": 0.3469640644361834,
+      "saved_vs_full_transcript_text_fraction": 0.6530359355638167,
+      "windows": [
+        {
+          "label": "visual layout choice and practical architecture variation",
+          "start": 253.74,
+          "end": 272.2,
+          "temporal_coverage_fraction": 1.0,
+          "window_hit": true,
+          "any_anchor_found": true,
+          "overlapping_text_was_truncated": false
+        }
+      ],
+      "window_hits": 1,
+      "required_window_count": 1,
+      "target_window_recall": 1.0,
+      "all_target_windows_hit": true,
+      "evidence_passage_count": 8,
+      "payload": {
+        "video_id": "youtube:aircAruvnKk",
+        "title": "But what is a neural network? | Deep learning chapter 1",
+        "source_url": "https://www.youtube.com/watch?v=aircAruvnKk",
+        "timestamp_parameter": "t",
+        "duration": 1120.0,
+        "mode": "question_evidence",
+        "evidence": [
+          {
+            "start": 236.88,
+            "end": 278.329,
+            "source": "subtitle/manual",
+            "text_sha256": "d166eb2f78903fd4c6ebec00413d90f2772fe7fc7582092e86c1793072f9b8ce",
+            "text_chars": 255
+          },
+          {
+            "start": 711.32,
+            "end": 737.2,
+            "source": "subtitle/manual",
+            "text_sha256": "8185ecbfc4f3cc99ce004614b0a1720957ae8f413a8fae2b489c4f8311a765f1",
+            "text_chars": 130
+          },
+          {
+            "start": 332.07,
+            "end": 357.2,
+            "source": "subtitle/manual",
+            "text_sha256": "e8fc35035d908ab73fecf4fdcbb4b027950b5635236e5248597ade0fb0fc6150",
+            "text_chars": 145
+          },
+          {
+            "start": 163.09,
+            "end": 208.48,
+            "source": "subtitle/manual",
+            "text_sha256": "7abef056945970086e962aa690d71c7eb88fbb30bba13a4bbfb62b87076cb82c",
+            "text_chars": 221
+          },
+          {
+            "start": 921.79,
+            "end": 949.58,
+            "source": "subtitle/manual",
+            "text_sha256": "a27aa036067e93e3884f9d09bf3a523405c9573b1cec736c703861f2efdbf464",
+            "text_chars": 131
+          },
+          {
+            "start": 285.57,
+            "end": 329.359,
+            "source": "subtitle/manual",
+            "text_sha256": "541dee08708bd7fbaa6f6c41905dc1ade3fb849e058f6f652f9611b6fce681b7",
+            "text_chars": 267
+          },
+          {
+            "start": 618.24,
+            "end": 646.6,
+            "source": "subtitle/manual",
+            "text_sha256": "3aebc583178b0d8ff509b2f50a86c4af9320125f89679778a09aedbd5665c21d",
+            "text_chars": 144
+          },
+          {
+            "start": 495.07,
+            "end": 521.8,
+            "source": "subtitle/manual",
+            "text_sha256": "1d39ddccaccfb052c972c2487fc32ee85362f89108c8517a273d80609cabd93e",
+            "text_chars": 142
+          }
+        ],
+        "warnings": [],
+        "speech_scope": "available_platform_or_imported_captions",
+        "source_notes": [
+          "Correction 14:45 - The final index on the bias vector should be \"k\""
+        ],
+        "cache_hit": true,
+        "available_transcript_tokens_estimate": 4842,
+        "elapsed_seconds": 0.001,
+        "transcript_complete": false,
+        "accounting": {
+          "text_tokens_estimate": 1680,
+          "budget": 4000,
+          "method": "o200k_base_estimate",
+          "excludes": "images, model reasoning, transport envelope"
+        },
+        "truncated": false,
+        "available_items": 8
+      }
+    },
+    {
+      "question_id": "architecture_is_illustrative",
+      "question": "为什么演示采用两个隐藏层、每层 16 个神经元？视频把这个结构当作通用设计建议了吗？",
+      "budget": 4000,
+      "mode": "warm_process_cached_source",
+      "repetition": 2,
+      "wall_seconds": 0.001569,
+      "worker_timings": {},
+      "payload_text_tokens_estimate": 1680,
+      "payload_utf8_bytes": 5234,
+      "reported_text_tokens_estimate": 1680,
+      "within_requested_budget": true,
+      "payload_to_full_transcript_token_ratio": 0.3469640644361834,
+      "saved_vs_full_transcript_text_fraction": 0.6530359355638167,
+      "windows": [
+        {
+          "label": "visual layout choice and practical architecture variation",
+          "start": 253.74,
+          "end": 272.2,
+          "temporal_coverage_fraction": 1.0,
+          "window_hit": true,
+          "any_anchor_found": true,
+          "overlapping_text_was_truncated": false
+        }
+      ],
+      "window_hits": 1,
+      "required_window_count": 1,
+      "target_window_recall": 1.0,
+      "all_target_windows_hit": true,
+      "evidence_passage_count": 8,
+      "payload": {
+        "video_id": "youtube:aircAruvnKk",
+        "title": "But what is a neural network? | Deep learning chapter 1",
+        "source_url": "https://www.youtube.com/watch?v=aircAruvnKk",
+        "timestamp_parameter": "t",
+        "duration": 1120.0,
+        "mode": "question_evidence",
+        "evidence": [
+          {
+            "start": 236.88,
+            "end": 278.329,
+            "source": "subtitle/manual",
+            "text_sha256": "d166eb2f78903fd4c6ebec00413d90f2772fe7fc7582092e86c1793072f9b8ce",
+            "text_chars": 255
+          },
+          {
+            "start": 711.32,
+            "end": 737.2,
+            "source": "subtitle/manual",
+            "text_sha256": "8185ecbfc4f3cc99ce004614b0a1720957ae8f413a8fae2b489c4f8311a765f1",
+            "text_chars": 130
+          },
+          {
+            "start": 332.07,
+            "end": 357.2,
+            "source": "subtitle/manual",
+            "text_sha256": "e8fc35035d908ab73fecf4fdcbb4b027950b5635236e5248597ade0fb0fc6150",
+            "text_chars": 145
+          },
+          {
+            "start": 163.09,
+            "end": 208.48,
+            "source": "subtitle/manual",
+            "text_sha256": "7abef056945970086e962aa690d71c7eb88fbb30bba13a4bbfb62b87076cb82c",
+            "text_chars": 221
+          },
+          {
+            "start": 921.79,
+            "end": 949.58,
+            "source": "subtitle/manual",
+            "text_sha256": "a27aa036067e93e3884f9d09bf3a523405c9573b1cec736c703861f2efdbf464",
+            "text_chars": 131
+          },
+          {
+            "start": 285.57,
+            "end": 329.359,
+            "source": "subtitle/manual",
+            "text_sha256": "541dee08708bd7fbaa6f6c41905dc1ade3fb849e058f6f652f9611b6fce681b7",
+            "text_chars": 267
+          },
+          {
+            "start": 618.24,
+            "end": 646.6,
+            "source": "subtitle/manual",
+            "text_sha256": "3aebc583178b0d8ff509b2f50a86c4af9320125f89679778a09aedbd5665c21d",
+            "text_chars": 144
+          },
+          {
+            "start": 495.07,
+            "end": 521.8,
+            "source": "subtitle/manual",
+            "text_sha256": "1d39ddccaccfb052c972c2487fc32ee85362f89108c8517a273d80609cabd93e",
+            "text_chars": 142
+          }
+        ],
+        "warnings": [],
+        "speech_scope": "available_platform_or_imported_captions",
+        "source_notes": [
+          "Correction 14:45 - The final index on the bias vector should be \"k\""
+        ],
+        "cache_hit": true,
+        "available_transcript_tokens_estimate": 4842,
+        "elapsed_seconds": 0.001,
+        "transcript_complete": false,
+        "accounting": {
+          "text_tokens_estimate": 1680,
+          "budget": 4000,
+          "method": "o200k_base_estimate",
+          "excludes": "images, model reasoning, transport envelope"
+        },
+        "truncated": false,
+        "available_items": 8
+      }
+    },
+    {
+      "question_id": "relu_cross_section_qualification",
+      "question": "前面说神经元激活值介于 0 和 1，是否意味着所有神经网络都必须如此？结合开头的限定、Sigmoid 示例与结尾 ReLU 讨论解释。",
+      "budget": 4000,
+      "mode": "fresh_process_cached_source",
+      "repetition": 0,
+      "wall_seconds": 0.148516,
+      "worker_timings": {
+        "initialization_seconds": 0.08651858299708692,
+        "call_seconds": 0.02527475000533741,
+        "initialization_and_call_seconds": 0.11179333300242433
+      },
+      "payload_text_tokens_estimate": 1854,
+      "payload_utf8_bytes": 5695,
+      "reported_text_tokens_estimate": 1854,
+      "within_requested_budget": true,
+      "payload_to_full_transcript_token_ratio": 0.3828996282527881,
+      "saved_vs_full_transcript_text_fraction": 0.6171003717472119,
+      "windows": [
+        {
+          "label": "early caveat",
+          "start": 178.2,
+          "end": 182.12,
+          "temporal_coverage_fraction": 1.0,
+          "window_hit": true,
+          "any_anchor_found": true,
+          "overlapping_text_was_truncated": false
+        },
+        {
+          "label": "weighted sum and example-specific Sigmoid range",
+          "start": 614.279,
+          "end": 643.339,
+          "temporal_coverage_fraction": 1.0,
+          "window_hit": true,
+          "any_anchor_found": true,
+          "overlapping_text_was_truncated": false
+        },
+        {
+          "label": "ReLU training qualification and max definition",
+          "start": 1056.12,
+          "end": 1068.84,
+          "temporal_coverage_fraction": 1.0,
+          "window_hit": true,
+          "any_anchor_found": true,
+          "overlapping_text_was_truncated": false
+        }
+      ],
+      "window_hits": 3,
+      "required_window_count": 3,
+      "target_window_recall": 1.0,
+      "all_target_windows_hit": true,
+      "evidence_passage_count": 8,
+      "payload": {
+        "video_id": "youtube:aircAruvnKk",
+        "title": "But what is a neural network? | Deep learning chapter 1",
+        "source_url": "https://www.youtube.com/watch?v=aircAruvnKk",
+        "timestamp_parameter": "t",
+        "duration": 1120.0,
+        "mode": "question_evidence",
+        "evidence": [
+          {
+            "start": 1032.029,
+            "end": 1076.6,
+            "source": "subtitle/manual",
+            "text_sha256": "c695dcd2925aade7a849819baecb1bebd38b26bd70bb24a59479b4d2b1dc7f78",
+            "text_chars": 268
+          },
+          {
+            "start": 172.08,
+            "end": 213.96,
+            "source": "subtitle/manual",
+            "text_sha256": "e2e6d5ac241ed223c0b1587497a6acb6b1042c99453c6ea0216da28d7ad0de03",
+            "text_chars": 195
+          },
+          {
+            "start": 907.92,
+            "end": 947.08,
+            "source": "subtitle/manual",
+            "text_sha256": "3c9592d0e694fc4035ce87e24d5b66b2cdd058d86b8f08f054f00cc10c341587",
+            "text_chars": 184
+          },
+          {
+            "start": 1076.62,
+            "end": 1106.06,
+            "source": "subtitle/manual",
+            "text_sha256": "7e887744cbcee46b5024ce000c0369f45000675b06d34ce2131bf9f767159e4c",
+            "text_chars": 138
+          },
+          {
+            "start": 614.279,
+            "end": 646.6,
+            "source": "subtitle/manual",
+            "text_sha256": "9a815ededa2e399686ee00ec5d6008113124d6aca876d6843372c3c89f5efa58",
+            "text_chars": 165
+          },
+          {
+            "start": 374.88,
+            "end": 422.55,
+            "source": "subtitle/manual",
+            "text_sha256": "b32640b7dc23cbe4847daf127b4d8c0e7e501cee47cce2b5b9d10f0ce9e35c47",
+            "text_chars": 237
+          },
+          {
+            "start": 216.26,
+            "end": 264.88,
+            "source": "subtitle/manual",
+            "text_sha256": "6b25a60fa48c323ff805b50ab01c0f89fe87cb7a0c318575519098abae6a0ae6",
+            "text_chars": 257
+          },
+          {
+            "start": 66.75,
+            "end": 105.94,
+            "source": "subtitle/manual",
+            "text_sha256": "2f97321b466e528ea35d6b2b42bc28a1d67dfc98c47938507a7f403b1d875be8",
+            "text_chars": 211
+          }
+        ],
+        "warnings": [],
+        "speech_scope": "available_platform_or_imported_captions",
+        "source_notes": [
+          "Correction 14:45 - The final index on the bias vector should be \"k\""
+        ],
+        "cache_hit": true,
+        "available_transcript_tokens_estimate": 4842,
+        "elapsed_seconds": 0.024,
+        "transcript_complete": false,
+        "accounting": {
+          "text_tokens_estimate": 1854,
+          "budget": 4000,
+          "method": "o200k_base_estimate",
+          "excludes": "images, model reasoning, transport envelope"
+        },
+        "truncated": false,
+        "available_items": 8
+      }
+    },
+    {
+      "question_id": "relu_cross_section_qualification",
+      "question": "前面说神经元激活值介于 0 和 1，是否意味着所有神经网络都必须如此？结合开头的限定、Sigmoid 示例与结尾 ReLU 讨论解释。",
+      "budget": 4000,
+      "mode": "warm_process_cached_source",
+      "repetition": 0,
+      "wall_seconds": 0.001825,
+      "worker_timings": {},
+      "payload_text_tokens_estimate": 1854,
+      "payload_utf8_bytes": 5695,
+      "reported_text_tokens_estimate": 1854,
+      "within_requested_budget": true,
+      "payload_to_full_transcript_token_ratio": 0.3828996282527881,
+      "saved_vs_full_transcript_text_fraction": 0.6171003717472119,
+      "windows": [
+        {
+          "label": "early caveat",
+          "start": 178.2,
+          "end": 182.12,
+          "temporal_coverage_fraction": 1.0,
+          "window_hit": true,
+          "any_anchor_found": true,
+          "overlapping_text_was_truncated": false
+        },
+        {
+          "label": "weighted sum and example-specific Sigmoid range",
+          "start": 614.279,
+          "end": 643.339,
+          "temporal_coverage_fraction": 1.0,
+          "window_hit": true,
+          "any_anchor_found": true,
+          "overlapping_text_was_truncated": false
+        },
+        {
+          "label": "ReLU training qualification and max definition",
+          "start": 1056.12,
+          "end": 1068.84,
+          "temporal_coverage_fraction": 1.0,
+          "window_hit": true,
+          "any_anchor_found": true,
+          "overlapping_text_was_truncated": false
+        }
+      ],
+      "window_hits": 3,
+      "required_window_count": 3,
+      "target_window_recall": 1.0,
+      "all_target_windows_hit": true,
+      "evidence_passage_count": 8,
+      "payload": {
+        "video_id": "youtube:aircAruvnKk",
+        "title": "But what is a neural network? | Deep learning chapter 1",
+        "source_url": "https://www.youtube.com/watch?v=aircAruvnKk",
+        "timestamp_parameter": "t",
+        "duration": 1120.0,
+        "mode": "question_evidence",
+        "evidence": [
+          {
+            "start": 1032.029,
+            "end": 1076.6,
+            "source": "subtitle/manual",
+            "text_sha256": "c695dcd2925aade7a849819baecb1bebd38b26bd70bb24a59479b4d2b1dc7f78",
+            "text_chars": 268
+          },
+          {
+            "start": 172.08,
+            "end": 213.96,
+            "source": "subtitle/manual",
+            "text_sha256": "e2e6d5ac241ed223c0b1587497a6acb6b1042c99453c6ea0216da28d7ad0de03",
+            "text_chars": 195
+          },
+          {
+            "start": 907.92,
+            "end": 947.08,
+            "source": "subtitle/manual",
+            "text_sha256": "3c9592d0e694fc4035ce87e24d5b66b2cdd058d86b8f08f054f00cc10c341587",
+            "text_chars": 184
+          },
+          {
+            "start": 1076.62,
+            "end": 1106.06,
+            "source": "subtitle/manual",
+            "text_sha256": "7e887744cbcee46b5024ce000c0369f45000675b06d34ce2131bf9f767159e4c",
+            "text_chars": 138
+          },
+          {
+            "start": 614.279,
+            "end": 646.6,
+            "source": "subtitle/manual",
+            "text_sha256": "9a815ededa2e399686ee00ec5d6008113124d6aca876d6843372c3c89f5efa58",
+            "text_chars": 165
+          },
+          {
+            "start": 374.88,
+            "end": 422.55,
+            "source": "subtitle/manual",
+            "text_sha256": "b32640b7dc23cbe4847daf127b4d8c0e7e501cee47cce2b5b9d10f0ce9e35c47",
+            "text_chars": 237
+          },
+          {
+            "start": 216.26,
+            "end": 264.88,
+            "source": "subtitle/manual",
+            "text_sha256": "6b25a60fa48c323ff805b50ab01c0f89fe87cb7a0c318575519098abae6a0ae6",
+            "text_chars": 257
+          },
+          {
+            "start": 66.75,
+            "end": 105.94,
+            "source": "subtitle/manual",
+            "text_sha256": "2f97321b466e528ea35d6b2b42bc28a1d67dfc98c47938507a7f403b1d875be8",
+            "text_chars": 211
+          }
+        ],
+        "warnings": [],
+        "speech_scope": "available_platform_or_imported_captions",
+        "source_notes": [
+          "Correction 14:45 - The final index on the bias vector should be \"k\""
+        ],
+        "cache_hit": true,
+        "available_transcript_tokens_estimate": 4842,
+        "elapsed_seconds": 0.001,
+        "transcript_complete": false,
+        "accounting": {
+          "text_tokens_estimate": 1854,
+          "budget": 4000,
+          "method": "o200k_base_estimate",
+          "excludes": "images, model reasoning, transport envelope"
+        },
+        "truncated": false,
+        "available_items": 8
+      }
+    },
+    {
+      "question_id": "relu_cross_section_qualification",
+      "question": "前面说神经元激活值介于 0 和 1，是否意味着所有神经网络都必须如此？结合开头的限定、Sigmoid 示例与结尾 ReLU 讨论解释。",
+      "budget": 4000,
+      "mode": "warm_process_cached_source",
+      "repetition": 1,
+      "wall_seconds": 0.001676,
+      "worker_timings": {},
+      "payload_text_tokens_estimate": 1854,
+      "payload_utf8_bytes": 5695,
+      "reported_text_tokens_estimate": 1854,
+      "within_requested_budget": true,
+      "payload_to_full_transcript_token_ratio": 0.3828996282527881,
+      "saved_vs_full_transcript_text_fraction": 0.6171003717472119,
+      "windows": [
+        {
+          "label": "early caveat",
+          "start": 178.2,
+          "end": 182.12,
+          "temporal_coverage_fraction": 1.0,
+          "window_hit": true,
+          "any_anchor_found": true,
+          "overlapping_text_was_truncated": false
+        },
+        {
+          "label": "weighted sum and example-specific Sigmoid range",
+          "start": 614.279,
+          "end": 643.339,
+          "temporal_coverage_fraction": 1.0,
+          "window_hit": true,
+          "any_anchor_found": true,
+          "overlapping_text_was_truncated": false
+        },
+        {
+          "label": "ReLU training qualification and max definition",
+          "start": 1056.12,
+          "end": 1068.84,
+          "temporal_coverage_fraction": 1.0,
+          "window_hit": true,
+          "any_anchor_found": true,
+          "overlapping_text_was_truncated": false
+        }
+      ],
+      "window_hits": 3,
+      "required_window_count": 3,
+      "target_window_recall": 1.0,
+      "all_target_windows_hit": true,
+      "evidence_passage_count": 8,
+      "payload": {
+        "video_id": "youtube:aircAruvnKk",
+        "title": "But what is a neural network? | Deep learning chapter 1",
+        "source_url": "https://www.youtube.com/watch?v=aircAruvnKk",
+        "timestamp_parameter": "t",
+        "duration": 1120.0,
+        "mode": "question_evidence",
+        "evidence": [
+          {
+            "start": 1032.029,
+            "end": 1076.6,
+            "source": "subtitle/manual",
+            "text_sha256": "c695dcd2925aade7a849819baecb1bebd38b26bd70bb24a59479b4d2b1dc7f78",
+            "text_chars": 268
+          },
+          {
+            "start": 172.08,
+            "end": 213.96,
+            "source": "subtitle/manual",
+            "text_sha256": "e2e6d5ac241ed223c0b1587497a6acb6b1042c99453c6ea0216da28d7ad0de03",
+            "text_chars": 195
+          },
+          {
+            "start": 907.92,
+            "end": 947.08,
+            "source": "subtitle/manual",
+            "text_sha256": "3c9592d0e694fc4035ce87e24d5b66b2cdd058d86b8f08f054f00cc10c341587",
+            "text_chars": 184
+          },
+          {
+            "start": 1076.62,
+            "end": 1106.06,
+            "source": "subtitle/manual",
+            "text_sha256": "7e887744cbcee46b5024ce000c0369f45000675b06d34ce2131bf9f767159e4c",
+            "text_chars": 138
+          },
+          {
+            "start": 614.279,
+            "end": 646.6,
+            "source": "subtitle/manual",
+            "text_sha256": "9a815ededa2e399686ee00ec5d6008113124d6aca876d6843372c3c89f5efa58",
+            "text_chars": 165
+          },
+          {
+            "start": 374.88,
+            "end": 422.55,
+            "source": "subtitle/manual",
+            "text_sha256": "b32640b7dc23cbe4847daf127b4d8c0e7e501cee47cce2b5b9d10f0ce9e35c47",
+            "text_chars": 237
+          },
+          {
+            "start": 216.26,
+            "end": 264.88,
+            "source": "subtitle/manual",
+            "text_sha256": "6b25a60fa48c323ff805b50ab01c0f89fe87cb7a0c318575519098abae6a0ae6",
+            "text_chars": 257
+          },
+          {
+            "start": 66.75,
+            "end": 105.94,
+            "source": "subtitle/manual",
+            "text_sha256": "2f97321b466e528ea35d6b2b42bc28a1d67dfc98c47938507a7f403b1d875be8",
+            "text_chars": 211
+          }
+        ],
+        "warnings": [],
+        "speech_scope": "available_platform_or_imported_captions",
+        "source_notes": [
+          "Correction 14:45 - The final index on the bias vector should be \"k\""
+        ],
+        "cache_hit": true,
+        "available_transcript_tokens_estimate": 4842,
+        "elapsed_seconds": 0.001,
+        "transcript_complete": false,
+        "accounting": {
+          "text_tokens_estimate": 1854,
+          "budget": 4000,
+          "method": "o200k_base_estimate",
+          "excludes": "images, model reasoning, transport envelope"
+        },
+        "truncated": false,
+        "available_items": 8
+      }
+    },
+    {
+      "question_id": "relu_cross_section_qualification",
+      "question": "前面说神经元激活值介于 0 和 1，是否意味着所有神经网络都必须如此？结合开头的限定、Sigmoid 示例与结尾 ReLU 讨论解释。",
+      "budget": 4000,
+      "mode": "warm_process_cached_source",
+      "repetition": 2,
+      "wall_seconds": 0.001988,
+      "worker_timings": {},
+      "payload_text_tokens_estimate": 1854,
+      "payload_utf8_bytes": 5695,
+      "reported_text_tokens_estimate": 1854,
+      "within_requested_budget": true,
+      "payload_to_full_transcript_token_ratio": 0.3828996282527881,
+      "saved_vs_full_transcript_text_fraction": 0.6171003717472119,
+      "windows": [
+        {
+          "label": "early caveat",
+          "start": 178.2,
+          "end": 182.12,
+          "temporal_coverage_fraction": 1.0,
+          "window_hit": true,
+          "any_anchor_found": true,
+          "overlapping_text_was_truncated": false
+        },
+        {
+          "label": "weighted sum and example-specific Sigmoid range",
+          "start": 614.279,
+          "end": 643.339,
+          "temporal_coverage_fraction": 1.0,
+          "window_hit": true,
+          "any_anchor_found": true,
+          "overlapping_text_was_truncated": false
+        },
+        {
+          "label": "ReLU training qualification and max definition",
+          "start": 1056.12,
+          "end": 1068.84,
+          "temporal_coverage_fraction": 1.0,
+          "window_hit": true,
+          "any_anchor_found": true,
+          "overlapping_text_was_truncated": false
+        }
+      ],
+      "window_hits": 3,
+      "required_window_count": 3,
+      "target_window_recall": 1.0,
+      "all_target_windows_hit": true,
+      "evidence_passage_count": 8,
+      "payload": {
+        "video_id": "youtube:aircAruvnKk",
+        "title": "But what is a neural network? | Deep learning chapter 1",
+        "source_url": "https://www.youtube.com/watch?v=aircAruvnKk",
+        "timestamp_parameter": "t",
+        "duration": 1120.0,
+        "mode": "question_evidence",
+        "evidence": [
+          {
+            "start": 1032.029,
+            "end": 1076.6,
+            "source": "subtitle/manual",
+            "text_sha256": "c695dcd2925aade7a849819baecb1bebd38b26bd70bb24a59479b4d2b1dc7f78",
+            "text_chars": 268
+          },
+          {
+            "start": 172.08,
+            "end": 213.96,
+            "source": "subtitle/manual",
+            "text_sha256": "e2e6d5ac241ed223c0b1587497a6acb6b1042c99453c6ea0216da28d7ad0de03",
+            "text_chars": 195
+          },
+          {
+            "start": 907.92,
+            "end": 947.08,
+            "source": "subtitle/manual",
+            "text_sha256": "3c9592d0e694fc4035ce87e24d5b66b2cdd058d86b8f08f054f00cc10c341587",
+            "text_chars": 184
+          },
+          {
+            "start": 1076.62,
+            "end": 1106.06,
+            "source": "subtitle/manual",
+            "text_sha256": "7e887744cbcee46b5024ce000c0369f45000675b06d34ce2131bf9f767159e4c",
+            "text_chars": 138
+          },
+          {
+            "start": 614.279,
+            "end": 646.6,
+            "source": "subtitle/manual",
+            "text_sha256": "9a815ededa2e399686ee00ec5d6008113124d6aca876d6843372c3c89f5efa58",
+            "text_chars": 165
+          },
+          {
+            "start": 374.88,
+            "end": 422.55,
+            "source": "subtitle/manual",
+            "text_sha256": "b32640b7dc23cbe4847daf127b4d8c0e7e501cee47cce2b5b9d10f0ce9e35c47",
+            "text_chars": 237
+          },
+          {
+            "start": 216.26,
+            "end": 264.88,
+            "source": "subtitle/manual",
+            "text_sha256": "6b25a60fa48c323ff805b50ab01c0f89fe87cb7a0c318575519098abae6a0ae6",
+            "text_chars": 257
+          },
+          {
+            "start": 66.75,
+            "end": 105.94,
+            "source": "subtitle/manual",
+            "text_sha256": "2f97321b466e528ea35d6b2b42bc28a1d67dfc98c47938507a7f403b1d875be8",
+            "text_chars": 211
+          }
+        ],
+        "warnings": [],
+        "speech_scope": "available_platform_or_imported_captions",
+        "source_notes": [
+          "Correction 14:45 - The final index on the bias vector should be \"k\""
+        ],
+        "cache_hit": true,
+        "available_transcript_tokens_estimate": 4842,
+        "elapsed_seconds": 0.001,
+        "transcript_complete": false,
+        "accounting": {
+          "text_tokens_estimate": 1854,
+          "budget": 4000,
+          "method": "o200k_base_estimate",
+          "excludes": "images, model reasoning, transport envelope"
+        },
+        "truncated": false,
+        "available_items": 8
+      }
+    },
+    {
+      "question_id": "activation_range_unassisted",
+      "question": "视频里的神经元激活值是不是一定不能超过 1？",
+      "budget": 4000,
+      "mode": "fresh_process_cached_source",
+      "repetition": 0,
+      "wall_seconds": 0.151804,
+      "worker_timings": {
+        "initialization_seconds": 0.09105883300071582,
+        "call_seconds": 0.024854457995388657,
+        "initialization_and_call_seconds": 0.11591329099610448
+      },
+      "payload_text_tokens_estimate": 1798,
+      "payload_utf8_bytes": 5585,
+      "reported_text_tokens_estimate": 1798,
+      "within_requested_budget": true,
+      "payload_to_full_transcript_token_ratio": 0.37133415943824866,
+      "saved_vs_full_transcript_text_fraction": 0.6286658405617513,
+      "windows": [
+        {
+          "label": "early caveat",
+          "start": 178.2,
+          "end": 182.12,
+          "temporal_coverage_fraction": 1.0,
+          "window_hit": true,
+          "any_anchor_found": true,
+          "overlapping_text_was_truncated": false
+        },
+        {
+          "label": "example-specific Sigmoid range",
+          "start": 614.279,
+          "end": 643.339,
+          "temporal_coverage_fraction": 1.0,
+          "window_hit": true,
+          "any_anchor_found": true,
+          "overlapping_text_was_truncated": false
+        },
+        {
+          "label": "ReLU training qualification and max definition",
+          "start": 1056.12,
+          "end": 1068.84,
+          "temporal_coverage_fraction": 1.0,
+          "window_hit": true,
+          "any_anchor_found": true,
+          "overlapping_text_was_truncated": false
+        }
+      ],
+      "window_hits": 3,
+      "required_window_count": 3,
+      "target_window_recall": 1.0,
+      "all_target_windows_hit": true,
+      "evidence_passage_count": 8,
+      "payload": {
+        "video_id": "youtube:aircAruvnKk",
+        "title": "But what is a neural network? | Deep learning chapter 1",
+        "source_url": "https://www.youtube.com/watch?v=aircAruvnKk",
+        "timestamp_parameter": "t",
+        "duration": 1120.0,
+        "mode": "question_evidence",
+        "evidence": [
+          {
+            "start": 827.46,
+            "end": 868.839,
+            "source": "subtitle/manual",
+            "text_sha256": "0ae613265d4cb78d681e8a1ef428a4bc0de11d57745309e45f2e744b4d017d95",
+            "text_chars": 166
+          },
+          {
+            "start": 451.93,
+            "end": 494.66,
+            "source": "subtitle/manual",
+            "text_sha256": "3cc9127f40f4d63e77c42639efc79d33c15dac8fbb488532be8be2c6f59e399b",
+            "text_chars": 233
+          },
+          {
+            "start": 649.08,
+            "end": 710.72,
+            "source": "subtitle/manual",
+            "text_sha256": "1562cd789a851fcd1bfc3268ea3cbddfb24a8ea481c58bb50ccb2c5e1a7a1abc",
+            "text_chars": 256
+          },
+          {
+            "start": 591.5,
+            "end": 646.6,
+            "source": "subtitle/manual",
+            "text_sha256": "9b3e9577824b569c8cd49bc35756f31c93196c9978e9ae82ef8403e4d4e7016e",
+            "text_chars": 248
+          },
+          {
+            "start": 172.08,
+            "end": 213.96,
+            "source": "subtitle/manual",
+            "text_sha256": "e2e6d5ac241ed223c0b1587497a6acb6b1042c99453c6ea0216da28d7ad0de03",
+            "text_chars": 195
+          },
+          {
+            "start": 374.88,
+            "end": 402.8,
+            "source": "subtitle/manual",
+            "text_sha256": "f7385ce45663b667a4cf26a9fc4ca92c4d7f0679a9a75951f33ca0f01a348886",
+            "text_chars": 127
+          },
+          {
+            "start": 1035.38,
+            "end": 1076.6,
+            "source": "subtitle/manual",
+            "text_sha256": "8ad825b3cdaeaf72e60b417c565eca584e12d8e8f8d47b4306fbc12c26133f30",
+            "text_chars": 255
+          },
+          {
+            "start": 1076.62,
+            "end": 1102.14,
+            "source": "subtitle/manual",
+            "text_sha256": "c6a249c729efc9c6f723c8b384ca315d2c0e13b06961c3d03f46349e8a92df2e",
+            "text_chars": 121
+          }
+        ],
+        "warnings": [],
+        "speech_scope": "available_platform_or_imported_captions",
+        "source_notes": [
+          "Correction 14:45 - The final index on the bias vector should be \"k\""
+        ],
+        "cache_hit": true,
+        "available_transcript_tokens_estimate": 4842,
+        "elapsed_seconds": 0.024,
+        "transcript_complete": false,
+        "accounting": {
+          "text_tokens_estimate": 1798,
+          "budget": 4000,
+          "method": "o200k_base_estimate",
+          "excludes": "images, model reasoning, transport envelope"
+        },
+        "truncated": false,
+        "available_items": 8
+      }
+    },
+    {
+      "question_id": "activation_range_unassisted",
+      "question": "视频里的神经元激活值是不是一定不能超过 1？",
+      "budget": 4000,
+      "mode": "warm_process_cached_source",
+      "repetition": 0,
+      "wall_seconds": 0.002137,
+      "worker_timings": {},
+      "payload_text_tokens_estimate": 1798,
+      "payload_utf8_bytes": 5585,
+      "reported_text_tokens_estimate": 1798,
+      "within_requested_budget": true,
+      "payload_to_full_transcript_token_ratio": 0.37133415943824866,
+      "saved_vs_full_transcript_text_fraction": 0.6286658405617513,
+      "windows": [
+        {
+          "label": "early caveat",
+          "start": 178.2,
+          "end": 182.12,
+          "temporal_coverage_fraction": 1.0,
+          "window_hit": true,
+          "any_anchor_found": true,
+          "overlapping_text_was_truncated": false
+        },
+        {
+          "label": "example-specific Sigmoid range",
+          "start": 614.279,
+          "end": 643.339,
+          "temporal_coverage_fraction": 1.0,
+          "window_hit": true,
+          "any_anchor_found": true,
+          "overlapping_text_was_truncated": false
+        },
+        {
+          "label": "ReLU training qualification and max definition",
+          "start": 1056.12,
+          "end": 1068.84,
+          "temporal_coverage_fraction": 1.0,
+          "window_hit": true,
+          "any_anchor_found": true,
+          "overlapping_text_was_truncated": false
+        }
+      ],
+      "window_hits": 3,
+      "required_window_count": 3,
+      "target_window_recall": 1.0,
+      "all_target_windows_hit": true,
+      "evidence_passage_count": 8,
+      "payload": {
+        "video_id": "youtube:aircAruvnKk",
+        "title": "But what is a neural network? | Deep learning chapter 1",
+        "source_url": "https://www.youtube.com/watch?v=aircAruvnKk",
+        "timestamp_parameter": "t",
+        "duration": 1120.0,
+        "mode": "question_evidence",
+        "evidence": [
+          {
+            "start": 827.46,
+            "end": 868.839,
+            "source": "subtitle/manual",
+            "text_sha256": "0ae613265d4cb78d681e8a1ef428a4bc0de11d57745309e45f2e744b4d017d95",
+            "text_chars": 166
+          },
+          {
+            "start": 451.93,
+            "end": 494.66,
+            "source": "subtitle/manual",
+            "text_sha256": "3cc9127f40f4d63e77c42639efc79d33c15dac8fbb488532be8be2c6f59e399b",
+            "text_chars": 233
+          },
+          {
+            "start": 649.08,
+            "end": 710.72,
+            "source": "subtitle/manual",
+            "text_sha256": "1562cd789a851fcd1bfc3268ea3cbddfb24a8ea481c58bb50ccb2c5e1a7a1abc",
+            "text_chars": 256
+          },
+          {
+            "start": 591.5,
+            "end": 646.6,
+            "source": "subtitle/manual",
+            "text_sha256": "9b3e9577824b569c8cd49bc35756f31c93196c9978e9ae82ef8403e4d4e7016e",
+            "text_chars": 248
+          },
+          {
+            "start": 172.08,
+            "end": 213.96,
+            "source": "subtitle/manual",
+            "text_sha256": "e2e6d5ac241ed223c0b1587497a6acb6b1042c99453c6ea0216da28d7ad0de03",
+            "text_chars": 195
+          },
+          {
+            "start": 374.88,
+            "end": 402.8,
+            "source": "subtitle/manual",
+            "text_sha256": "f7385ce45663b667a4cf26a9fc4ca92c4d7f0679a9a75951f33ca0f01a348886",
+            "text_chars": 127
+          },
+          {
+            "start": 1035.38,
+            "end": 1076.6,
+            "source": "subtitle/manual",
+            "text_sha256": "8ad825b3cdaeaf72e60b417c565eca584e12d8e8f8d47b4306fbc12c26133f30",
+            "text_chars": 255
+          },
+          {
+            "start": 1076.62,
+            "end": 1102.14,
+            "source": "subtitle/manual",
+            "text_sha256": "c6a249c729efc9c6f723c8b384ca315d2c0e13b06961c3d03f46349e8a92df2e",
+            "text_chars": 121
+          }
+        ],
+        "warnings": [],
+        "speech_scope": "available_platform_or_imported_captions",
+        "source_notes": [
+          "Correction 14:45 - The final index on the bias vector should be \"k\""
+        ],
+        "cache_hit": true,
+        "available_transcript_tokens_estimate": 4842,
+        "elapsed_seconds": 0.001,
+        "transcript_complete": false,
+        "accounting": {
+          "text_tokens_estimate": 1798,
+          "budget": 4000,
+          "method": "o200k_base_estimate",
+          "excludes": "images, model reasoning, transport envelope"
+        },
+        "truncated": false,
+        "available_items": 8
+      }
+    },
+    {
+      "question_id": "activation_range_unassisted",
+      "question": "视频里的神经元激活值是不是一定不能超过 1？",
+      "budget": 4000,
+      "mode": "warm_process_cached_source",
+      "repetition": 1,
+      "wall_seconds": 0.001767,
+      "worker_timings": {},
+      "payload_text_tokens_estimate": 1798,
+      "payload_utf8_bytes": 5585,
+      "reported_text_tokens_estimate": 1798,
+      "within_requested_budget": true,
+      "payload_to_full_transcript_token_ratio": 0.37133415943824866,
+      "saved_vs_full_transcript_text_fraction": 0.6286658405617513,
+      "windows": [
+        {
+          "label": "early caveat",
+          "start": 178.2,
+          "end": 182.12,
+          "temporal_coverage_fraction": 1.0,
+          "window_hit": true,
+          "any_anchor_found": true,
+          "overlapping_text_was_truncated": false
+        },
+        {
+          "label": "example-specific Sigmoid range",
+          "start": 614.279,
+          "end": 643.339,
+          "temporal_coverage_fraction": 1.0,
+          "window_hit": true,
+          "any_anchor_found": true,
+          "overlapping_text_was_truncated": false
+        },
+        {
+          "label": "ReLU training qualification and max definition",
+          "start": 1056.12,
+          "end": 1068.84,
+          "temporal_coverage_fraction": 1.0,
+          "window_hit": true,
+          "any_anchor_found": true,
+          "overlapping_text_was_truncated": false
+        }
+      ],
+      "window_hits": 3,
+      "required_window_count": 3,
+      "target_window_recall": 1.0,
+      "all_target_windows_hit": true,
+      "evidence_passage_count": 8,
+      "payload": {
+        "video_id": "youtube:aircAruvnKk",
+        "title": "But what is a neural network? | Deep learning chapter 1",
+        "source_url": "https://www.youtube.com/watch?v=aircAruvnKk",
+        "timestamp_parameter": "t",
+        "duration": 1120.0,
+        "mode": "question_evidence",
+        "evidence": [
+          {
+            "start": 827.46,
+            "end": 868.839,
+            "source": "subtitle/manual",
+            "text_sha256": "0ae613265d4cb78d681e8a1ef428a4bc0de11d57745309e45f2e744b4d017d95",
+            "text_chars": 166
+          },
+          {
+            "start": 451.93,
+            "end": 494.66,
+            "source": "subtitle/manual",
+            "text_sha256": "3cc9127f40f4d63e77c42639efc79d33c15dac8fbb488532be8be2c6f59e399b",
+            "text_chars": 233
+          },
+          {
+            "start": 649.08,
+            "end": 710.72,
+            "source": "subtitle/manual",
+            "text_sha256": "1562cd789a851fcd1bfc3268ea3cbddfb24a8ea481c58bb50ccb2c5e1a7a1abc",
+            "text_chars": 256
+          },
+          {
+            "start": 591.5,
+            "end": 646.6,
+            "source": "subtitle/manual",
+            "text_sha256": "9b3e9577824b569c8cd49bc35756f31c93196c9978e9ae82ef8403e4d4e7016e",
+            "text_chars": 248
+          },
+          {
+            "start": 172.08,
+            "end": 213.96,
+            "source": "subtitle/manual",
+            "text_sha256": "e2e6d5ac241ed223c0b1587497a6acb6b1042c99453c6ea0216da28d7ad0de03",
+            "text_chars": 195
+          },
+          {
+            "start": 374.88,
+            "end": 402.8,
+            "source": "subtitle/manual",
+            "text_sha256": "f7385ce45663b667a4cf26a9fc4ca92c4d7f0679a9a75951f33ca0f01a348886",
+            "text_chars": 127
+          },
+          {
+            "start": 1035.38,
+            "end": 1076.6,
+            "source": "subtitle/manual",
+            "text_sha256": "8ad825b3cdaeaf72e60b417c565eca584e12d8e8f8d47b4306fbc12c26133f30",
+            "text_chars": 255
+          },
+          {
+            "start": 1076.62,
+            "end": 1102.14,
+            "source": "subtitle/manual",
+            "text_sha256": "c6a249c729efc9c6f723c8b384ca315d2c0e13b06961c3d03f46349e8a92df2e",
+            "text_chars": 121
+          }
+        ],
+        "warnings": [],
+        "speech_scope": "available_platform_or_imported_captions",
+        "source_notes": [
+          "Correction 14:45 - The final index on the bias vector should be \"k\""
+        ],
+        "cache_hit": true,
+        "available_transcript_tokens_estimate": 4842,
+        "elapsed_seconds": 0.001,
+        "transcript_complete": false,
+        "accounting": {
+          "text_tokens_estimate": 1798,
+          "budget": 4000,
+          "method": "o200k_base_estimate",
+          "excludes": "images, model reasoning, transport envelope"
+        },
+        "truncated": false,
+        "available_items": 8
+      }
+    },
+    {
+      "question_id": "activation_range_unassisted",
+      "question": "视频里的神经元激活值是不是一定不能超过 1？",
+      "budget": 4000,
+      "mode": "warm_process_cached_source",
+      "repetition": 2,
+      "wall_seconds": 0.001664,
+      "worker_timings": {},
+      "payload_text_tokens_estimate": 1798,
+      "payload_utf8_bytes": 5585,
+      "reported_text_tokens_estimate": 1798,
+      "within_requested_budget": true,
+      "payload_to_full_transcript_token_ratio": 0.37133415943824866,
+      "saved_vs_full_transcript_text_fraction": 0.6286658405617513,
+      "windows": [
+        {
+          "label": "early caveat",
+          "start": 178.2,
+          "end": 182.12,
+          "temporal_coverage_fraction": 1.0,
+          "window_hit": true,
+          "any_anchor_found": true,
+          "overlapping_text_was_truncated": false
+        },
+        {
+          "label": "example-specific Sigmoid range",
+          "start": 614.279,
+          "end": 643.339,
+          "temporal_coverage_fraction": 1.0,
+          "window_hit": true,
+          "any_anchor_found": true,
+          "overlapping_text_was_truncated": false
+        },
+        {
+          "label": "ReLU training qualification and max definition",
+          "start": 1056.12,
+          "end": 1068.84,
+          "temporal_coverage_fraction": 1.0,
+          "window_hit": true,
+          "any_anchor_found": true,
+          "overlapping_text_was_truncated": false
+        }
+      ],
+      "window_hits": 3,
+      "required_window_count": 3,
+      "target_window_recall": 1.0,
+      "all_target_windows_hit": true,
+      "evidence_passage_count": 8,
+      "payload": {
+        "video_id": "youtube:aircAruvnKk",
+        "title": "But what is a neural network? | Deep learning chapter 1",
+        "source_url": "https://www.youtube.com/watch?v=aircAruvnKk",
+        "timestamp_parameter": "t",
+        "duration": 1120.0,
+        "mode": "question_evidence",
+        "evidence": [
+          {
+            "start": 827.46,
+            "end": 868.839,
+            "source": "subtitle/manual",
+            "text_sha256": "0ae613265d4cb78d681e8a1ef428a4bc0de11d57745309e45f2e744b4d017d95",
+            "text_chars": 166
+          },
+          {
+            "start": 451.93,
+            "end": 494.66,
+            "source": "subtitle/manual",
+            "text_sha256": "3cc9127f40f4d63e77c42639efc79d33c15dac8fbb488532be8be2c6f59e399b",
+            "text_chars": 233
+          },
+          {
+            "start": 649.08,
+            "end": 710.72,
+            "source": "subtitle/manual",
+            "text_sha256": "1562cd789a851fcd1bfc3268ea3cbddfb24a8ea481c58bb50ccb2c5e1a7a1abc",
+            "text_chars": 256
+          },
+          {
+            "start": 591.5,
+            "end": 646.6,
+            "source": "subtitle/manual",
+            "text_sha256": "9b3e9577824b569c8cd49bc35756f31c93196c9978e9ae82ef8403e4d4e7016e",
+            "text_chars": 248
+          },
+          {
+            "start": 172.08,
+            "end": 213.96,
+            "source": "subtitle/manual",
+            "text_sha256": "e2e6d5ac241ed223c0b1587497a6acb6b1042c99453c6ea0216da28d7ad0de03",
+            "text_chars": 195
+          },
+          {
+            "start": 374.88,
+            "end": 402.8,
+            "source": "subtitle/manual",
+            "text_sha256": "f7385ce45663b667a4cf26a9fc4ca92c4d7f0679a9a75951f33ca0f01a348886",
+            "text_chars": 127
+          },
+          {
+            "start": 1035.38,
+            "end": 1076.6,
+            "source": "subtitle/manual",
+            "text_sha256": "8ad825b3cdaeaf72e60b417c565eca584e12d8e8f8d47b4306fbc12c26133f30",
+            "text_chars": 255
+          },
+          {
+            "start": 1076.62,
+            "end": 1102.14,
+            "source": "subtitle/manual",
+            "text_sha256": "c6a249c729efc9c6f723c8b384ca315d2c0e13b06961c3d03f46349e8a92df2e",
+            "text_chars": 121
+          }
+        ],
+        "warnings": [],
+        "speech_scope": "available_platform_or_imported_captions",
+        "source_notes": [
+          "Correction 14:45 - The final index on the bias vector should be \"k\""
+        ],
+        "cache_hit": true,
+        "available_transcript_tokens_estimate": 4842,
+        "elapsed_seconds": 0.001,
+        "transcript_complete": false,
+        "accounting": {
+          "text_tokens_estimate": 1798,
+          "budget": 4000,
+          "method": "o200k_base_estimate",
+          "excludes": "images, model reasoning, transport envelope"
+        },
+        "truncated": false,
+        "available_items": 8
+      }
+    }
+  ],
+  "manual_review": {
+    "model_answer_accuracy_measured": false,
+    "status": "Reference answers describe the development annotations. This run measures retrieval.",
+    "reference_answers": [
+      {
+        "id": "input_encoding",
+        "question": "视频示例的输入层有多少个神经元？输入数字 0 和 1 分别代表什么？",
+        "reference_answer": "输入层有 784 个神经元，每个对应一个像素的灰度值；0 表示黑色，1 表示白色。这里描述的是该示例的输入编码。",
+        "manual_review_notes": "Check that the answer distinguishes input pixel encoding from every hidden neuron's possible activation range. No independent audio or image verification was performed for this annotation."
+      },
+      {
+        "id": "parameter_count_and_learning",
+        "question": "视频说这个示例网络大约有多少个可调整的权重和偏置参数？这里的学习是在寻找什么？",
+        "reference_answer": "视频将总数概括为大约 13,000 个权重和偏置，即可调整参数；学习是让计算机找到能解决问题的合适参数。13,000 是视频的近似表述。",
+        "manual_review_notes": "Do not present the rounded spoken 13,000 as an exact independently counted total. The subtitle around 12:02 has ambiguous wording about per-neuron versus per-layer biases; this question does not rely on it."
+      },
+      {
+        "id": "architecture_is_illustrative",
+        "question": "为什么演示采用两个隐藏层、每层 16 个神经元？视频把这个结构当作通用设计建议了吗？",
+        "reference_answer": "两个隐藏层和每层 16 个神经元是为了可视化、版面和看得清楚；讲者接着说明实际结构会根据实验调整，因此不能将演示布局理解为通用推荐。最后一句是结合上下文的判断。",
+        "manual_review_notes": "The answer should retain the limitation that the demonstrated size was selected for explanation rather than claiming an optimized architecture."
+      },
+      {
+        "id": "relu_cross_section_qualification",
+        "question": "前面说神经元激活值介于 0 和 1，是否意味着所有神经网络都必须如此？结合开头的限定、Sigmoid 示例与结尾 ReLU 讨论解释。",
+        "reference_answer": "不是。开头已经说实际不止于此；中段说明本例用 Sigmoid 把任意实数的加权总和压到 0 和 1 之间；结尾介绍 ReLU 返回 0 与输入值的最大值。因此 ReLU 没有 1 的上界是从其定义得到的数学推论。",
+        "manual_review_notes": "This question deliberately names Sigmoid and ReLU, so it supplies useful retrieval terms; see the unassisted paraphrase for a less directed query. At 17:19 the Chinese subtitle says weights are between 0 and 1, which conflicts with the preceding description of weighted sums and activations. Original audio and the relevant visual frames have not been verified."
+      },
+      {
+        "id": "activation_range_unassisted",
+        "question": "视频里的神经元激活值是不是一定不能超过 1？",
+        "reference_answer": "不是普遍规则。开头就有实际不止于此的限定，中段的 0 到 1 是本例 Sigmoid 的输出范围，结尾 ReLU 定义允许大于 1 的输入直接成为输出。后一项是数学推论。",
+        "manual_review_notes": "This natural paraphrase supplies no activation-function names, chapter names or timestamps. It is a diagnostic for lexical retrieval missing a later exception, not an additional independent topic. Retain misses rather than rewriting the query after observing retrieval."
+      }
+    ]
+  }
+}

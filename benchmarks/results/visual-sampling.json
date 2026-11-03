@@ -1,0 +1,632 @@
+{
+  "date": "2026-11-03",
+  "scope": "Local frame extraction only; no platform fetch, OCR, ASR or model inference. Three fresh per-call frame caches, each followed by an identical read; OS file cache is not flushed. Seconds measured with perf_counter. Concurrent machine load can vary.",
+  "method": "changes, four frames per eight-second clip. Both paths retain actual presentation timestamps. The preview uses 96x54 RGB; selected times may change within a bucket.",
+  "python": "3.12.16",
+  "platform": "macOS-26.6-arm64-arm-64bit",
+  "pillow": "13.0.0",
+  "ffmpeg": "ffmpeg version 9.0 Copyright (c) 2000-2026 the FFmpeg developers",
+  "before_source_sha256": "8c5ec064531aebf507f8da9d334553982677c6b8d99adfdf7d5fa6b2cda97f90",
+  "after_source_sha256": "920fc049479761fbd148bca19323f2bd2c282d245985d066d3feb227eeafd435",
+  "reproduce": [
+    ".venv/bin/python benchmarks/measure_visual.py",
+    ".venv/bin/python benchmarks/measure_visual.py --media .vidlens/live-media/youtube-proxy-fixed.mp4 --offset 694",
+    ".venv/bin/python benchmarks/measure_visual.py --media .vidlens/live-media/bilibili-sample.mp4 --offset 60",
+    "To measure a saved previous checkout of visual.py, append --reader-file PATH. This workspace kept the measured snapshot privately in .vidlens/visual-compare/before.py."
+  ],
+  "references": [
+    "https://github.com/FFmpeg/FFmpeg/blob/master/libavfilter/f_select.c",
+    "https://github.com/thatsrajan/vidlens-mcp/blob/main/src/lib/thumbnail-extractor.ts"
+  ],
+  "results": {
+    "youtube": {
+      "input": "https://www.youtube.com/watch?v=aircAruvnKk",
+      "before": {
+        "media_sha256": "ab071eade8479d9d373eb0eea3b6a43f811e7232725e61001cb82df7a1ec76ff",
+        "offset": 694.0,
+        "duration": 8,
+        "returned_frame_limit": 4,
+        "trials": [
+          {
+            "cold": {
+              "seconds": 0.57869,
+              "ffmpeg_processes": 12
+            },
+            "warm": {
+              "seconds": 0.03463,
+              "ffmpeg_processes": 0
+            },
+            "cached_bytes": 1862685,
+            "cached_jpegs": 24,
+            "frames": [
+              {
+                "timestamp": 695.0,
+                "duplicate_of": null
+              },
+              {
+                "timestamp": 697.666667,
+                "duplicate_of": null
+              },
+              {
+                "timestamp": 699.666667,
+                "duplicate_of": null
+              },
+              {
+                "timestamp": 701.666667,
+                "duplicate_of": null
+              }
+            ]
+          },
+          {
+            "cold": {
+              "seconds": 0.48368,
+              "ffmpeg_processes": 12
+            },
+            "warm": {
+              "seconds": 0.03132,
+              "ffmpeg_processes": 0
+            },
+            "cached_bytes": 1862685,
+            "cached_jpegs": 24,
+            "frames": [
+              {
+                "timestamp": 695.0,
+                "duplicate_of": null
+              },
+              {
+                "timestamp": 697.666667,
+                "duplicate_of": null
+              },
+              {
+                "timestamp": 699.666667,
+                "duplicate_of": null
+              },
+              {
+                "timestamp": 701.666667,
+                "duplicate_of": null
+              }
+            ]
+          },
+          {
+            "cold": {
+              "seconds": 0.47495,
+              "ffmpeg_processes": 12
+            },
+            "warm": {
+              "seconds": 0.03139,
+              "ffmpeg_processes": 0
+            },
+            "cached_bytes": 1862685,
+            "cached_jpegs": 24,
+            "frames": [
+              {
+                "timestamp": 695.0,
+                "duplicate_of": null
+              },
+              {
+                "timestamp": 697.666667,
+                "duplicate_of": null
+              },
+              {
+                "timestamp": 699.666667,
+                "duplicate_of": null
+              },
+              {
+                "timestamp": 701.666667,
+                "duplicate_of": null
+              }
+            ]
+          }
+        ],
+        "median_cold_seconds": 0.48368,
+        "median_warm_seconds": 0.03139
+      },
+      "after": {
+        "media_sha256": "ab071eade8479d9d373eb0eea3b6a43f811e7232725e61001cb82df7a1ec76ff",
+        "offset": 694.0,
+        "duration": 8,
+        "returned_frame_limit": 4,
+        "trials": [
+          {
+            "cold": {
+              "seconds": 0.20038,
+              "ffmpeg_processes": 5
+            },
+            "warm": {
+              "seconds": 0.00042,
+              "ffmpeg_processes": 0
+            },
+            "cached_bytes": 321250,
+            "cached_jpegs": 4,
+            "frames": [
+              {
+                "timestamp": 695.0,
+                "duplicate_of": null
+              },
+              {
+                "timestamp": 697.666667,
+                "duplicate_of": null
+              },
+              {
+                "timestamp": 699.0,
+                "duplicate_of": null
+              },
+              {
+                "timestamp": 701.666667,
+                "duplicate_of": null
+              }
+            ]
+          },
+          {
+            "cold": {
+              "seconds": 0.18741,
+              "ffmpeg_processes": 5
+            },
+            "warm": {
+              "seconds": 0.0004,
+              "ffmpeg_processes": 0
+            },
+            "cached_bytes": 321250,
+            "cached_jpegs": 4,
+            "frames": [
+              {
+                "timestamp": 695.0,
+                "duplicate_of": null
+              },
+              {
+                "timestamp": 697.666667,
+                "duplicate_of": null
+              },
+              {
+                "timestamp": 699.0,
+                "duplicate_of": null
+              },
+              {
+                "timestamp": 701.666667,
+                "duplicate_of": null
+              }
+            ]
+          },
+          {
+            "cold": {
+              "seconds": 0.19056,
+              "ffmpeg_processes": 5
+            },
+            "warm": {
+              "seconds": 0.00039,
+              "ffmpeg_processes": 0
+            },
+            "cached_bytes": 321250,
+            "cached_jpegs": 4,
+            "frames": [
+              {
+                "timestamp": 695.0,
+                "duplicate_of": null
+              },
+              {
+                "timestamp": 697.666667,
+                "duplicate_of": null
+              },
+              {
+                "timestamp": 699.0,
+                "duplicate_of": null
+              },
+              {
+                "timestamp": 701.666667,
+                "duplicate_of": null
+              }
+            ]
+          }
+        ],
+        "median_cold_seconds": 0.19056,
+        "median_warm_seconds": 0.0004
+      }
+    },
+    "bilibili": {
+      "input": "https://www.bilibili.com/video/BV1SmrSBfEg6/",
+      "before": {
+        "media_sha256": "c25ddf9b8bdd81ba260c1873aba2cf2e3d72971b6314a64f0b2388a2e2962bfb",
+        "offset": 60.0,
+        "duration": 8,
+        "returned_frame_limit": 4,
+        "trials": [
+          {
+            "cold": {
+              "seconds": 0.44233,
+              "ffmpeg_processes": 12
+            },
+            "warm": {
+              "seconds": 0.02883,
+              "ffmpeg_processes": 0
+            },
+            "cached_bytes": 1073892,
+            "cached_jpegs": 24,
+            "frames": [
+              {
+                "timestamp": 61.0,
+                "duplicate_of": null
+              },
+              {
+                "timestamp": 63.666667,
+                "duplicate_of": null
+              },
+              {
+                "timestamp": 65.666667,
+                "duplicate_of": null
+              },
+              {
+                "timestamp": 67.666667,
+                "duplicate_of": null
+              }
+            ]
+          },
+          {
+            "cold": {
+              "seconds": 0.42318,
+              "ffmpeg_processes": 12
+            },
+            "warm": {
+              "seconds": 0.0287,
+              "ffmpeg_processes": 0
+            },
+            "cached_bytes": 1073892,
+            "cached_jpegs": 24,
+            "frames": [
+              {
+                "timestamp": 61.0,
+                "duplicate_of": null
+              },
+              {
+                "timestamp": 63.666667,
+                "duplicate_of": null
+              },
+              {
+                "timestamp": 65.666667,
+                "duplicate_of": null
+              },
+              {
+                "timestamp": 67.666667,
+                "duplicate_of": null
+              }
+            ]
+          },
+          {
+            "cold": {
+              "seconds": 0.42526,
+              "ffmpeg_processes": 12
+            },
+            "warm": {
+              "seconds": 0.02965,
+              "ffmpeg_processes": 0
+            },
+            "cached_bytes": 1073892,
+            "cached_jpegs": 24,
+            "frames": [
+              {
+                "timestamp": 61.0,
+                "duplicate_of": null
+              },
+              {
+                "timestamp": 63.666667,
+                "duplicate_of": null
+              },
+              {
+                "timestamp": 65.666667,
+                "duplicate_of": null
+              },
+              {
+                "timestamp": 67.666667,
+                "duplicate_of": null
+              }
+            ]
+          }
+        ],
+        "median_cold_seconds": 0.42526,
+        "median_warm_seconds": 0.02883
+      },
+      "after": {
+        "media_sha256": "c25ddf9b8bdd81ba260c1873aba2cf2e3d72971b6314a64f0b2388a2e2962bfb",
+        "offset": 60.0,
+        "duration": 8,
+        "returned_frame_limit": 4,
+        "trials": [
+          {
+            "cold": {
+              "seconds": 0.17337,
+              "ffmpeg_processes": 5
+            },
+            "warm": {
+              "seconds": 0.00041,
+              "ffmpeg_processes": 0
+            },
+            "cached_bytes": 160634,
+            "cached_jpegs": 4,
+            "frames": [
+              {
+                "timestamp": 61.0,
+                "duplicate_of": null
+              },
+              {
+                "timestamp": 63.666667,
+                "duplicate_of": null
+              },
+              {
+                "timestamp": 65.0,
+                "duplicate_of": null
+              },
+              {
+                "timestamp": 67.666667,
+                "duplicate_of": null
+              }
+            ]
+          },
+          {
+            "cold": {
+              "seconds": 0.16021,
+              "ffmpeg_processes": 5
+            },
+            "warm": {
+              "seconds": 0.0004,
+              "ffmpeg_processes": 0
+            },
+            "cached_bytes": 160634,
+            "cached_jpegs": 4,
+            "frames": [
+              {
+                "timestamp": 61.0,
+                "duplicate_of": null
+              },
+              {
+                "timestamp": 63.666667,
+                "duplicate_of": null
+              },
+              {
+                "timestamp": 65.0,
+                "duplicate_of": null
+              },
+              {
+                "timestamp": 67.666667,
+                "duplicate_of": null
+              }
+            ]
+          },
+          {
+            "cold": {
+              "seconds": 0.16025,
+              "ffmpeg_processes": 5
+            },
+            "warm": {
+              "seconds": 0.0004,
+              "ffmpeg_processes": 0
+            },
+            "cached_bytes": 160634,
+            "cached_jpegs": 4,
+            "frames": [
+              {
+                "timestamp": 61.0,
+                "duplicate_of": null
+              },
+              {
+                "timestamp": 63.666667,
+                "duplicate_of": null
+              },
+              {
+                "timestamp": 65.0,
+                "duplicate_of": null
+              },
+              {
+                "timestamp": 67.666667,
+                "duplicate_of": null
+              }
+            ]
+          }
+        ],
+        "median_cold_seconds": 0.16025,
+        "median_warm_seconds": 0.0004
+      }
+    },
+    "slides": {
+      "input": "Generated by benchmarks/measure_visual.py fixture()",
+      "before": {
+        "media_sha256": "62cf2d4394021c065c64e93f4f06f7097301cb400c1a712686b86bfaaefa139b",
+        "offset": 0,
+        "duration": 8,
+        "returned_frame_limit": 4,
+        "trials": [
+          {
+            "cold": {
+              "seconds": 0.38813,
+              "ffmpeg_processes": 12
+            },
+            "warm": {
+              "seconds": 0.02657,
+              "ffmpeg_processes": 0
+            },
+            "cached_bytes": 506900,
+            "cached_jpegs": 24,
+            "frames": [
+              {
+                "timestamp": 1.0,
+                "duplicate_of": null
+              },
+              {
+                "timestamp": 2.333333,
+                "duplicate_of": 1.0
+              },
+              {
+                "timestamp": 5.0,
+                "duplicate_of": null
+              },
+              {
+                "timestamp": 6.333333,
+                "duplicate_of": null
+              }
+            ]
+          },
+          {
+            "cold": {
+              "seconds": 0.38746,
+              "ffmpeg_processes": 12
+            },
+            "warm": {
+              "seconds": 0.02696,
+              "ffmpeg_processes": 0
+            },
+            "cached_bytes": 506900,
+            "cached_jpegs": 24,
+            "frames": [
+              {
+                "timestamp": 1.0,
+                "duplicate_of": null
+              },
+              {
+                "timestamp": 2.333333,
+                "duplicate_of": 1.0
+              },
+              {
+                "timestamp": 5.0,
+                "duplicate_of": null
+              },
+              {
+                "timestamp": 6.333333,
+                "duplicate_of": null
+              }
+            ]
+          },
+          {
+            "cold": {
+              "seconds": 0.4085,
+              "ffmpeg_processes": 12
+            },
+            "warm": {
+              "seconds": 0.02644,
+              "ffmpeg_processes": 0
+            },
+            "cached_bytes": 506900,
+            "cached_jpegs": 24,
+            "frames": [
+              {
+                "timestamp": 1.0,
+                "duplicate_of": null
+              },
+              {
+                "timestamp": 2.333333,
+                "duplicate_of": 1.0
+              },
+              {
+                "timestamp": 5.0,
+                "duplicate_of": null
+              },
+              {
+                "timestamp": 6.333333,
+                "duplicate_of": null
+              }
+            ]
+          }
+        ],
+        "median_cold_seconds": 0.38813,
+        "median_warm_seconds": 0.02657
+      },
+      "after": {
+        "media_sha256": "62cf2d4394021c065c64e93f4f06f7097301cb400c1a712686b86bfaaefa139b",
+        "offset": 0,
+        "duration": 8,
+        "returned_frame_limit": 4,
+        "trials": [
+          {
+            "cold": {
+              "seconds": 0.14066,
+              "ffmpeg_processes": 5
+            },
+            "warm": {
+              "seconds": 0.00041,
+              "ffmpeg_processes": 0
+            },
+            "cached_bytes": 66980,
+            "cached_jpegs": 4,
+            "frames": [
+              {
+                "timestamp": 1.0,
+                "duplicate_of": null
+              },
+              {
+                "timestamp": 2.333333,
+                "duplicate_of": 1.0
+              },
+              {
+                "timestamp": 5.0,
+                "duplicate_of": null
+              },
+              {
+                "timestamp": 6.333333,
+                "duplicate_of": null
+              }
+            ]
+          },
+          {
+            "cold": {
+              "seconds": 0.14038,
+              "ffmpeg_processes": 5
+            },
+            "warm": {
+              "seconds": 0.00044,
+              "ffmpeg_processes": 0
+            },
+            "cached_bytes": 66980,
+            "cached_jpegs": 4,
+            "frames": [
+              {
+                "timestamp": 1.0,
+                "duplicate_of": null
+              },
+              {
+                "timestamp": 2.333333,
+                "duplicate_of": 1.0
+              },
+              {
+                "timestamp": 5.0,
+                "duplicate_of": null
+              },
+              {
+                "timestamp": 6.333333,
+                "duplicate_of": null
+              }
+            ]
+          },
+          {
+            "cold": {
+              "seconds": 0.14325,
+              "ffmpeg_processes": 5
+            },
+            "warm": {
+              "seconds": 0.00041,
+              "ffmpeg_processes": 0
+            },
+            "cached_bytes": 66980,
+            "cached_jpegs": 4,
+            "frames": [
+              {
+                "timestamp": 1.0,
+                "duplicate_of": null
+              },
+              {
+                "timestamp": 2.333333,
+                "duplicate_of": 1.0
+              },
+              {
+                "timestamp": 5.0,
+                "duplicate_of": null
+              },
+              {
+                "timestamp": 6.333333,
+                "duplicate_of": null
+              }
+            ]
+          }
+        ],
+        "median_cold_seconds": 0.14066,
+        "median_warm_seconds": 0.00041
+      }
+    }
+  }
+}

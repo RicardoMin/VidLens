@@ -1,0 +1,59 @@
+{
+  "review_type": "Assistant inspection of retrieved subtitle evidence, not a human user sign-off or automatic model-answer benchmark",
+  "skill": "skills/read-video/SKILL.md",
+  "entry_point": "CLI inspect URL --question, one call without automatic open/search/read repetition",
+  "source_url": "https://www.youtube.com/watch?v=aircAruvnKk",
+  "source_hashes": {
+    "service.py": "fa0cdd65481bf8529febc1ee5c4b1706cf68f6de4e692961bd4a6cfc33a87221",
+    "retrieval.py": "a6c481c70cc7e65f49d84c7400ff6bd2db5c751ed7d6ac5b3ff823a261b5730e",
+    "budget.py": "d2bb4800ab156e73ba8aee3b1148ad89e868c27ae9e5c90b17d5ca82dfdeff00",
+    "store.py": "97e1095648ac97807f5fdad4002f0e9c8aa2369d30b691310d901498790df567"
+  },
+  "prompted_relu": {
+    "question": "前面说神经元激活值介于 0 和 1，是否意味着所有神经网络都必须如此？结合开头的限定、Sigmoid 示例与结尾 ReLU 讨论解释。",
+    "returned_text_tokens_estimate": 2216,
+    "evidence_calls": 1,
+    "answerable_from_returned_subtitles": true,
+    "answer": "不是普遍规则。开头已经说明实际不止于此；中段明确在这个例子里用 Sigmoid 把任意实数的加权总和映射到 0 和 1 之间；结尾给出 ReLU 取 0 与输入值最大值的定义。因此 ReLU 没有 1 的上界是根据定义做出的数学推论。",
+    "citations": [
+      {
+        "claim": "开头的限定",
+        "url": "https://www.youtube.com/watch?v=aircAruvnKk&t=178"
+      },
+      {
+        "claim": "示例中的加权总和与 Sigmoid 范围",
+        "url": "https://www.youtube.com/watch?v=aircAruvnKk&t=614"
+      },
+      {
+        "claim": "ReLU 更容易训练及其 max 定义",
+        "url": "https://www.youtube.com/watch?v=aircAruvnKk&t=1056"
+      }
+    ]
+  },
+  "unassisted_paraphrase": {
+    "question": "视频里的神经元激活值是不是一定不能超过 1？",
+    "returned_text_tokens_estimate": 2123,
+    "target_window_recall": 1.0,
+    "observation": "The query supplied neither Sigmoid nor ReLU. All three required source windows were present. The ReLU passages were ranked seventh and eighth of eight, so a good window-recall result does not mean the most useful evidence was ranked first."
+  },
+  "limitations": [
+    "At 17:19 the Chinese manual subtitle says weights are between 0 and 1, inconsistent with the preceding weighted-sum/activation description; the original audio was not checked.",
+    "No ReLU screen frames were inspected; this review supports subtitle-based interpretation only.",
+    "Token counts exclude model reasoning, tool schemas and image tokens and do not claim Astra billing savings.",
+    "This is one development video, five questions covering four topics, not a held-out evaluation or a model answer-accuracy score.",
+    "The input/learning questions still return many extra passages; further relevance work may reduce unnecessary context without weakening coverage."
+  ],
+  "final_export_revalidation": {
+    "at_utc": "2026-11-02T15:52:07.825358+00:00",
+    "evidence_text_fingerprints_unchanged": {
+      "relu_cross_section_qualification": true,
+      "activation_range_unassisted": true
+    },
+    "scope": "Revalidated exact returned evidence text hashes and intervals against the previously inspected results; updated full-payload token counts and owning-source hashes.",
+    "new_payload_metadata": [
+      "speech_scope",
+      "source_notes"
+    ],
+    "model_answer_accuracy_measured": false
+  }
+}

@@ -1,0 +1,44 @@
+[project]
+name = "vidlens-astra"
+version = "0.1.0"
+description = "Evidence-first YouTube and Bilibili reading tools for Astra"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+  "httpx>=0.28,<1",
+  "yt-dlp>=2025.10.22",
+  "youtube-transcript-api>=1.2,<2",
+  "mcp>=1.20,<2",
+  "pillow>=11",
+  "imageio-ffmpeg>=0.6,<1",
+  "tiktoken>=0.8,<1",
+  "opencc-python-reimplemented>=0.1.7,<1",
+  "filelock>=3.16,<5",
+]
+
+[project.optional-dependencies]
+asr = ["faster-whisper>=1.1,<2"]
+
+[dependency-groups]
+dev = ["pytest>=8", "pytest-asyncio>=0.24", "ruff>=0.9", "pyyaml>=6"]
+
+[project.scripts]
+vidlens = "vidlens.cli:main"
+vidlens-mcp = "vidlens.mcp_server:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/vidlens"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_default_fixture_loop_scope = "function"
+markers = ["live: opt-in tests requiring public network access"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+

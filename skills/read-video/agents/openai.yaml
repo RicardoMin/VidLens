@@ -1,0 +1,6 @@
+interface:
+  display_name: "VidLens 视频阅读"
+  short_description: "为 Astra 按需读取技术视频的字幕、代码和图表，并保留时间定位"
+  default_prompt: "用 $read-video 阅读这个视频，解释核心内容，并核对相关代码或图表、附上时间定位。"
+policy:
+  allow_implicit_invocation: true
