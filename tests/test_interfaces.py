@@ -24,7 +24,7 @@ class EvidenceService:
         self.image_path = image_path
         self.read_requests = []
 
-    def read_video(self, url, question, max_tokens, languages, refresh):
+    def read_video(self, url, question, max_tokens, languages, refresh, intent="auto"):
         if url == "missing":
             raise VidLensError("not_found", "Video not cached.", "Provide a valid video URL.")
         self.read_requests.append((url, question, max_tokens, languages, refresh))
@@ -56,7 +56,9 @@ async def test_mcp_protocol_returns_images_without_duplicate_structured_text(tmp
     async with create_connected_server_and_client_session(server) as client:
         tools = await client.list_tools()
         assert {"read_video", "read_interval", "read_frames", "crop_frame",
-                "transcribe_video", "video_coverage"} == {t.name for t in tools.tools}
+                "transcribe_video", "video_coverage", "study_status", "scan_video",
+                "read_section", "save_note", "revise_sections", "add_reference",
+                "search_knowledge", "check_facts", "read_detail"} == {t.name for t in tools.tools}
         result = await client.call_tool("read_frames", {
             "video_id": "lecture", "start": 120.0, "end": 130.0,
         })
@@ -105,7 +107,7 @@ async def test_advanced_mcp_tools_are_opt_in(tmp_path, monkeypatch, advanced):
         tools = await client.list_tools()
         names = {tool.name for tool in tools.tools}
         extra = {"open_video", "video_overview", "find_evidence", "list_videos", "doctor"}
-        assert len(names) == (11 if advanced else 6)
+        assert len(names) == (20 if advanced else 15)
         assert extra <= names if advanced else not names.intersection(extra)
         result = await client.call_tool("video_overview", {"video_id": "lecture"})
         if advanced:

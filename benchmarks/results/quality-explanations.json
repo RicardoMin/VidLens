@@ -1,0 +1,186 @@
+{
+  "schema_version": 1,
+  "reviewed_utc": "2026-11-06T09:21:03.207299+00:00",
+  "reference_sha256": "be03eb5338e3cba65ccb2712c541d44c41e8b0c04584d8ecb5e4e8c5035a1bff",
+  "method": "Independent AI source-based rubric review, not a human user study. All 16 supplied images opened. No new scoring facts were added after outputs were seen.",
+  "conclusion": "All four explanations receive 20/20 for the frozen core facts and 10/10 for readability. KV-R has a one-point local source-time alignment deduction. These two tasks do not establish a material final-answer accuracy/readability gain; better raw transcription can reduce correction work while a strong host AI already recovers the concepts with images.",
+  "blinding": "Reviewed only neutral M/R answer files and matching evidence images; did not read reader_inputs or condition maps. Labels are independent between videos. ASR model comparison is separate and not blind.",
+  "unblinded_by": "root after review was frozen",
+  "production_decision": "Keep improved ASR and compact navigation; retain the stable timeline overview as the default initial image policy. Experimental pixel-ranked four-frame policy did not improve final explanation quality.",
+  "records": [
+    {
+      "case": "kv_cache",
+      "label": "M",
+      "answer_sha256": "45a5c4a2175cd3cf2beca163550c2cecc807c0d2697ebf0d7e96f1cc1c5564a7",
+      "counts": {
+        "raw_markdown_characters": 1678,
+        "characters_excluding_link_targets": 1015,
+        "cjk_characters_excluding_link_targets": 686,
+        "images_embedded_in_answer": 3,
+        "evidence_images_actually_opened": 4
+      },
+      "accuracy_score": 20,
+      "accuracy_max": 20,
+      "readability_score": 10,
+      "readability_max": 10,
+      "total_max": 34,
+      "issues": [
+        {
+          "severity": "format",
+          "type": "timestamp-url-style",
+          "observation": "3处原片URL使用小数t参数，未遵守skill的整数秒约定；未据此判为不可用链接或扣事实分。"
+        }
+      ],
+      "condition": "baseline",
+      "source_score": 4,
+      "source_max": 4,
+      "total": 34,
+      "visual_events": {
+        "matched": 5,
+        "total": 5,
+        "events": {
+          "kv-q-split": true,
+          "kv-k-split": true,
+          "kv-v-split": true,
+          "kv-full-attention": true,
+          "kv-output-light": true
+        },
+        "observation": "M首图显示Q旧三行与月新行分开；R四张没有这一分开状态。两者正文都正确解释不缓存历史Q。"
+      },
+      "unsupported_major_claims": [],
+      "irrelevant_defensive_passages": [],
+      "initial_total": 34
+    },
+    {
+      "case": "kv_cache",
+      "label": "R",
+      "answer_sha256": "7602d6aae33c114dbe77e4fc29b9edf16c845ef24e8b64175de5ae02b1c5baf1",
+      "counts": {
+        "raw_markdown_characters": 1566,
+        "characters_excluding_link_targets": 970,
+        "cjk_characters_excluding_link_targets": 621,
+        "images_embedded_in_answer": 3,
+        "evidence_images_actually_opened": 4
+      },
+      "accuracy_score": 20,
+      "accuracy_max": 20,
+      "readability_score": 10,
+      "readability_max": 10,
+      "total_max": 34,
+      "issues": [
+        {
+          "severity": "minor",
+          "type": "visual-time-alignment",
+          "quote": "到09:04，四行已经合在一起。",
+          "evidence": "配给本条件的544.033333秒原图仍将K旧三行和月的新一行分开摆放；556.366667秒图才清楚显示合并四行。",
+          "impact": "K追加机制本身正确，但精确时间处的可见状态描述提前。",
+          "status": "withdrawn after enlarged original-image inspection confirmed four contiguous K rows"
+        }
+      ],
+      "condition": "improved_asr_and_experimental_pixel_ranked_images",
+      "source_score": 4,
+      "source_max": 4,
+      "total": 34,
+      "visual_events": {
+        "matched": 4,
+        "total": 5,
+        "events": {
+          "kv-q-split": false,
+          "kv-k-split": true,
+          "kv-v-split": true,
+          "kv-full-attention": true,
+          "kv-output-light": true
+        },
+        "observation": "M首图显示Q旧三行与月新行分开；R四张没有这一分开状态。两者正文都正确解释不缓存历史Q。"
+      },
+      "unsupported_major_claims": [],
+      "irrelevant_defensive_passages": [],
+      "initial_total": 33
+    },
+    {
+      "case": "tcp_handshake",
+      "label": "M",
+      "answer_sha256": "1bd8d659096ec814403e274cec005a526e0436a790a038c07ebe0d07e4596eda",
+      "counts": {
+        "raw_markdown_characters": 1558,
+        "characters_excluding_link_targets": 1112,
+        "cjk_characters_excluding_link_targets": 630,
+        "images_embedded_in_answer": 2,
+        "evidence_images_actually_opened": 4
+      },
+      "accuracy_score": 20,
+      "accuracy_max": 20,
+      "readability_score": 10,
+      "readability_max": 10,
+      "total_max": 34,
+      "issues": [],
+      "condition": "improved_asr_and_experimental_pixel_ranked_images",
+      "source_score": 4,
+      "source_max": 4,
+      "total": 34,
+      "visual_events": {
+        "matched": 2,
+        "total": 3,
+        "events": {
+          "tcp-syn": true,
+          "tcp-server-packet": true,
+          "tcp-third-packet": false
+        },
+        "observation": "两组都包含服务端303/8633+1，但都未选到第三次确认号303+1已完整出现的图；正文依据原文与算式正确补齐，未声称该值在所贴图中可见。"
+      },
+      "unsupported_major_claims": [],
+      "irrelevant_defensive_passages": [],
+      "initial_total": 34
+    },
+    {
+      "case": "tcp_handshake",
+      "label": "R",
+      "answer_sha256": "bc257ffcbb45f64b55229bdf5ee504ad0f625c35f88891e2973d1a2206a2d050",
+      "counts": {
+        "raw_markdown_characters": 1818,
+        "characters_excluding_link_targets": 1250,
+        "cjk_characters_excluding_link_targets": 620,
+        "images_embedded_in_answer": 2,
+        "evidence_images_actually_opened": 4
+      },
+      "accuracy_score": 20,
+      "accuracy_max": 20,
+      "readability_score": 10,
+      "readability_max": 10,
+      "total_max": 34,
+      "issues": [
+        {
+          "severity": "format",
+          "type": "timestamp-url-style",
+          "observation": "2处原片URL使用小数t参数，未遵守skill的整数秒约定；未据此判为不可用链接或扣事实分。"
+        }
+      ],
+      "condition": "baseline",
+      "source_score": 4,
+      "source_max": 4,
+      "total": 34,
+      "visual_events": {
+        "matched": 2,
+        "total": 3,
+        "events": {
+          "tcp-syn": true,
+          "tcp-server-packet": true,
+          "tcp-third-packet": false
+        },
+        "observation": "两组都包含服务端303/8633+1，但都未选到第三次确认号303+1已完整出现的图；正文依据原文与算式正确补齐，未声称该值在所贴图中可见。"
+      },
+      "unsupported_major_claims": [],
+      "irrelevant_defensive_passages": [],
+      "initial_total": 34
+    }
+  ],
+  "review_erratum": {
+    "reason": "Initial reviewer misread K at 544s as separated 3+1. Enlarged original pixels show four contiguous rows; the answer was correct.",
+    "initial_review_sha256": "224a65e79335944464931090780a5e141e7009ba3e4b714ee00421bc69babc50",
+    "erratum_sha256": "763335cd1ecbfcce33ba30e91262a5c13b9b7dd0273bb1808f9e676b5906e140",
+    "affected": "kv_cache-R",
+    "initial_total": 33,
+    "corrected_total": 34,
+    "initial_review_preserved": true
+  }
+}

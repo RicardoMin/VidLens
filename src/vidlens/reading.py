@@ -10,9 +10,9 @@ import time
 from dataclasses import dataclass
 from functools import cached_property
 
-from .budget import TokenBudget
+from .budget import TokenBudget, compact_json
 from .models import Segment, Video, VidLensError
-from .retrieval import PassageIndex, navigation, passages, source_link
+from .retrieval import PassageIndex, navigation, source_link
 from .store import Store, union_intervals
 
 
@@ -126,7 +126,6 @@ class EvidenceReader:
                 "kind": "local_asr",
                 "processed_intervals": intervals[:20],
                 "whole_video_processed": whole,
-                "note": "Only requested intervals were transcribed; missing speech is not proof of absence.",
             }
         return "no_transcript"
 
@@ -144,12 +143,13 @@ class EvidenceReader:
         return notes[:4]
 
     def read(self, video: Video, question: str, max_tokens: int, hit: bool, started: float):
+        if not isinstance(question, str) or not question.strip():
+            raise VidLensError("invalid_query", "Provide a question, or use the study plan for a whole-video reading.")
         snapshot = self._snapshot(video.id)
         video, segments = snapshot.video, snapshot.segments
-        candidates = snapshot.index.rank(question, 8) if question.strip() else passages(segments)
+        candidates = snapshot.index.rank(question, 8)
         original_tokens = snapshot.transcript_tokens
-        mode = "question_evidence" if question.strip() else "complete_transcript"
-        # Source URL and provenance occur once. Astra can cite t=<start> on this verified URL.
+        # Source URL and provenance occur once; citations append t=<start> to this URL.
         evidence = [
             {
                 "start": round(p.start, 3),
@@ -165,7 +165,7 @@ class EvidenceReader:
             "source_url": video.url,
             "timestamp_parameter": "t",
             "duration": video.duration,
-            "mode": mode,
+            "mode": "question_evidence",
             "evidence": evidence,
             "warnings": self._warnings(snapshot.warnings, segments),
             "speech_scope": self._speech_scope(video, segments),
@@ -180,30 +180,8 @@ class EvidenceReader:
                 "No matching indexed text. Inspect chapters/frames or use local ASR; this is not proof of absence."
             )
             result["local_asr_installed"] = importlib.util.find_spec("faster_whisper") is not None
-        if not question.strip():
-            # Broad reading must preserve timeline coverage when the full text cannot fit.
-            result["outline"] = [
-                {"start": s["start"], "end": s["end"], "title": s["title"]}
-                for s in navigation(video, segments)
-            ]
-        if not question.strip() and not any(s.kind != "ocr" for s in segments):
-            result["mode"] = "visual_evidence" if evidence else "no_transcript"
-        scope = result["speech_scope"]
-        if (
-            result["mode"] == "complete_transcript"
-            and isinstance(scope, dict)
-            and not scope["whole_video_processed"]
-        ):
-            result["mode"] = "partial_transcript"
         packed = self.budget.finish(result, max_tokens, "evidence", len(candidates))
-        if packed["mode"] == "complete_transcript" and not packed["truncated"]:
-            packed["transcript_complete"] = True
-            self.budget.recount(packed)
-        self.store.delivered(
-            video.id,
-            packed["evidence"],
-            "text" if packed["transcript_complete"] else "excerpt",
-        )
+        self.store.delivered(video.id, packed["evidence"], "excerpt")
         return packed
 
     def search(self, video_id, query, max_tokens=3000, limit=6):
@@ -237,13 +215,22 @@ class EvidenceReader:
         self.store.delivered(video_id, result["evidence"], "excerpt")
         return result
 
-    def read_interval(self, video_id, start, end, max_tokens=4000, cursor=None):
+    def read_interval(self, video_id, start, end, max_tokens=4000, cursor=None, *,
+                      speech_only=False, record_delivery=True):
         validate_budget(max_tokens)
-        video = self.store.get(video_id)
-        start, end = validate_interval(video, start, end)
-        segments = self.store.segments(video_id, start, end)
+        snapshot = self._snapshot(video_id)
+        video = snapshot.video
+        start, end = validate_interval(video, start, end,
+                                      max_duration=float("inf") if speech_only else 7200)
+        segments = [
+            s for s in snapshot.segments
+            if s.end > start and s.start < end and (not speech_only or s.kind != "ocr")
+        ]
         revision = hashlib.sha256(
-            f"{video_id}:{start}:{end}:".encode() + "|".join(s.id for s in segments).encode()
+            compact_json([
+                video_id, start, end, video.metadata.get("revision", ""),
+                [(s.id, s.start, s.end, s.source, s.language) for s in segments],
+            ]).encode()
         ).hexdigest()[:12]
         index, offset = 0, 0
         if cursor not in (None, 0, "0"):
@@ -315,13 +302,6 @@ class EvidenceReader:
         if items and not consumed:
             raise VidLensError("budget_too_small", "Increase max_tokens to read this evidence.")
         self.budget.recount(result)
-        self.store.delivered(
-            video_id,
-            [
-                i
-                for i in result["evidence"]
-                if not i.get("excerpt_truncated") and not i["text_offset"]
-            ],
-            "text",
-        )
+        if record_delivery:
+            self.store.delivered_text(video_id, result["evidence"])
         return result

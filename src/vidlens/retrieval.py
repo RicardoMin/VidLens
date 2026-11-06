@@ -177,8 +177,15 @@ def tokenize(text: str) -> list[str]:
                         result.append(word)
         elif part not in STOPWORDS:
             result.append(_OPERATORS.get(part, part))
-            if "_" in part:
-                result.extend(p for p in part.split("_") if p and p not in STOPWORDS)
+            if (
+                re.search(r"[._/]", part)
+                and not re.fullmatch(r"[+-]?(?:\d+(?:\.\d+)?|\.\d+)(?:e[+-]?\d+)?", part)
+            ):
+                # Preserve the qualified identifier for exact matches, while
+                # allowing questions about `summary` to find model.summary().
+                # Numeric literals such as 0.001 remain indivisible.
+                result.extend(p for p in re.split(r"[._/]", part)
+                              if p and p != part and p not in STOPWORDS)
     return result
 
 

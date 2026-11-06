@@ -1,4 +1,5 @@
 import json
+from itertools import pairwise
 from pathlib import Path
 
 import pytest
@@ -187,6 +188,16 @@ def test_frames_cache_and_ocr_retrieval(service, tmp_path):
     service._visual = Visual()
     result = service.read_frames("lesson", 40, 50)
     assert result["frames"][0]["timestamp"] == 42
+    assert result["frames"][0]["evidence_id"] == "frame:42"
+    plan = service.learning.study.plan(video.id)
+    section = next(s for s in plan["sections"] if s["start"] <= 42 < s["end"])
+    saved = service.save_note(video.id, section["id"], plan["revision"], {
+        "title": "Visible environment", "summary": "The screen selects device zero.",
+        "claims": [{"text": "CUDA_VISIBLE_DEVICES=0", "evidence_ids": [
+            result["frames"][0]["evidence_id"]
+        ]}],
+    })
+    assert saved["note"]["claims"][0]["evidence_ids"] == ["frame:42"]
     assert service.search("lesson", "CUDA_VISIBLE_DEVICES")["evidence"][0]["kind"] == "ocr"
     assert service.coverage("lesson")["frame_timestamps_delivered"] == [42]
 
@@ -237,21 +248,27 @@ def test_one_call_reader_is_bounded_and_preserves_original_evidence(service):
 def test_whole_video_reader_does_not_call_sample_complete(service):
     video, _ = seed(service)
     result = service.read_video(video.url, max_tokens=1800)
-    assert result["mode"] == "sampled_transcript"
+    assert result["mode"] == "study_plan"
     assert not result["transcript_complete"]
-    assert result["evidence"][0]["start"] == 0
-    assert result["evidence"][-1]["end"] == 799
+    sections = list(result["sections"])
+    while result["next_cursor"] is not None:
+        result = service.study_status(video.id, max_tokens=1800, cursor=result["next_cursor"])
+        sections.extend(result["sections"])
+    assert sections[0]["start"] == 0
+    assert sections[-1]["end"] == 800
+    assert all(a["end"] == b["start"] for a, b in pairwise(sections))
 
 
-def test_small_transcript_can_be_read_in_full_once(service):
+def test_small_transcript_is_read_in_one_chapter_page(service):
     video = Video("short", "https://www.youtube.com/watch?v=aircAruvnKk", "youtube", "Short", 20)
     service.store.save(
         video, [Segment(0, 10, "A small lesson."), Segment(10, 20, "An important caveat.")], []
     )
     result = service.read_video(video.url, max_tokens=2000)
-    assert result["transcript_complete"]
-    assert result["mode"] == "complete_transcript"
-    assert "An important caveat" in result["evidence"][0]["text"]
+    chapter = service.read_section(video.id, result["sections"][0]["id"], include_frames=False)
+    assert chapter["next_cursor"] is None
+    assert chapter["progress"]["text_status"] == "delivered"
+    assert "An important caveat" in chapter["evidence"][-1]["text"]
 
 
 def test_open_language_preference_change_refreshes_evidence(service):
@@ -302,9 +319,9 @@ def test_partial_asr_is_never_labeled_complete_video(service):
     )
     result = service.read_video(video.url)
     assert not result["transcript_complete"]
-    assert result["mode"] == "partial_transcript"
+    assert result["mode"] == "study_plan"
     assert result["speech_scope"]["processed_intervals"] == [[60, 68]]
-    assert not any("metadata only" in warning for warning in result["warnings"])
+    assert not result["speech_scope"]["whole_video_processed"]
 
 
 def test_transcription_reuses_cached_recognition_and_tracks_processed_interval(service, tmp_path):

@@ -1,0 +1,86 @@
+{
+  "frozen_before_selection": true,
+  "common": {
+    "image_budget": 4,
+    "writing_language": "zh",
+    "answer_length": "900–1400 Chinese characters, formulas and diagram labels excluded",
+    "instructions": "只使用同一份原始转写和提供的四张原图作证据。逐张实际查看，按问题解释具体状态变化，可用文字树图、公式或表格连接步骤，图应靠近对应解释并有时间戳。区分图上可见、由规则复算和目前缺少的状态；不把没有出现在图片里的细节写成亲眼核对。不要把实验指标或验证流程写进教学正文。",
+    "transcript_backend": "mlx-whisper/large-v3-turbo, zh, no vocabulary; common to both conditions"
+  },
+  "cases": [
+    {
+      "id": "btree_insertion",
+      "split": "development",
+      "video_id": "bilibili:BV1sj411b7XC:p1",
+      "url": "https://www.bilibili.com/video/BV1sj411b7XC/?p=1",
+      "range": [
+        0,
+        270
+      ],
+      "question": "这段五阶 B 树中，为什么插入 26 会让树长高一层？请沿着视频最后插入 17、9、26 的过程，展示叶节点分裂、旧根分裂和最终树的具体关键字分布。把两次向上移动的因果关系讲清楚，让我能照着图复算。",
+      "visual_queries": [
+        "插入 17 9 26 的叶节点变化",
+        "插入 26 叶节点分裂 中间关键字往上",
+        "根节点满了 再往上挤一层",
+        "插入完成 B树 最终结构"
+      ]
+    },
+    {
+      "id": "btree_deletion",
+      "split": "held_out",
+      "video_id": "bilibili:BV1sj411b7XC:p1",
+      "url": "https://www.bilibili.com/video/BV1sj411b7XC/?p=1",
+      "range": [
+        170,
+        439
+      ],
+      "question": "请按视频的五阶 B 树，分别复盘“删除 25”和“删除根关键字 23”这两个独立例子。每个例子都从插入完成的原树重新开始。重点解释为什么第一次借位还不够、后续哪些关键字上移或下移，并画出各自最终树，帮我看清二者为什么会走到相似的调整过程。",
+      "visual_queries": [
+        "删除 25 中间借位 不够",
+        "删除 25 调整后的子树",
+        "删除根 23 前驱 后继 替换",
+        "删除根之后 连续借位 最终树"
+      ]
+    },
+    {
+      "id": "online_softmax",
+      "split": "held_out",
+      "video_id": "bilibili:BV1FM9XYoEQ5:p6",
+      "url": "https://www.bilibili.com/video/BV1FM9XYoEQ5/?p=6",
+      "range": [
+        220,
+        720
+      ],
+      "question": "请结合这段手写推导，把 online softmax 从 (m0,d0) 到 (m1,d1)，再到 (m2,d2) 的更新过程讲清楚。我要看到每一步原式、加减哪一个最大值、如何提取旧的 d，以及屏幕上被框出的那一项到底代表什么。尤其解释为什么不能直接在旧 d 上加一个新指数项，以及这为什么仍是精确计算。",
+      "visual_queries": [
+        "m0 d0 初始化",
+        "d1 改写为 d0 红框 指数",
+        "d2 前两项 加减 m1 提取公因子",
+        "d2 d1 m1 m2 最终公式"
+      ]
+    },
+    {
+      "id": "cuda-ncu-gemm-screen-2026-11-06",
+      "url": "https://www.bilibili.com/video/BV1nkgN6LE7h/?p=1",
+      "range": [
+        365,
+        845
+      ],
+      "question": "请把这段 CUDA 矩阵乘法的 NCU 实操讲成一份我能复算、也能照着检查报告的图文讲解：先交代实际运行了什么命令、矩阵输入规模和测得耗时，再沿着总览、吞吐拆解、计算管线和内存分析，列出这次报告中的关键实测数值与单位。尤其解释为何总览吞吐条很高，仍不能断言浮点计算和 DRAM 都已跑满；请核对指令管线、发射效率、缓存命中率，以及 L2 访问警告中每次请求涉及多少扇区及其字节规模，并说清这些屏幕状态如何支持瓶颈判断。区分画面中的测量结果、讲者的解释与你的推断；指出这段是否真的展示了代码优化后的新跑分。使用至多四张原始视频截图支撑关键步骤。",
+      "visual_queries": [
+        "NCU 命令、可执行程序、矩阵维度与报告输出名称",
+        "GPU Speed Of Light Throughput 总览的耗时、计算、内存和 DRAM 实测值",
+        "Compute Throughput Breakdown 中的最高贡献管线及其指标说明",
+        "Compute Workload Analysis 的 IPC、SM Busy、Issue Slots Busy 与管线图",
+        "Memory Workload Analysis 的实际带宽、缓存命中率、忙碌指标与 Memory Chart",
+        "L2 Load Access Pattern 和 L2 Store Access Pattern 警告中的请求扇区数与 cache line/sector 尺寸"
+      ],
+      "video_id": "bilibili:BV1nkgN6LE7h:p1",
+      "split": "held_out",
+      "added_after_initial_ceiling_check": true
+    }
+  ],
+  "frozen_source_sha256": "b4bb6e994d5737be651948686a68f889f4ad7ab42859f5b62b84da61df59801c",
+  "evaluation_note": "Final illustration cap is four per answer. The preview workflow uses additional image context during selection; this is not an equal-token comparison.",
+  "additional_case_source_sha256": "7e844c829978dcbae7682bb330122ff6efd2662fbf8ab7fbde5c03258169f7ec"
+}

@@ -1,9 +1,10 @@
-# Local video evidence, downloads, models and generated Astra configuration
+# Local video evidence, downloads, models and generated client configuration
 /.vidlens/
 /benchmarks/results/reading-eval-*/
 /.agents/
 /.codex/
 /integrations/astra/
+/integrations/ai/
 
 # Python environments, builds and test artifacts
 /.venv/

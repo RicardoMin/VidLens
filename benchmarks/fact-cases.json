@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "condition": "identical_original_frames_and_raw_ASR; verification_workflow_only",
+  "cases": [
+    {
+      "id": "ncu-scheduler-heldout",
+      "url": "https://www.bilibili.com/video/BV1nkgN6LE7h/?p=1",
+      "range": [
+        936,
+        1082
+      ],
+      "split": "heldout_range_same_video",
+      "question": "结合视频 15:36–18:02 的 Scheduler Statistics，解释图中的硬件上限、理论上限，以及 Active、Eligible、Issued Warps Per Scheduler、No Eligible 等表格字段。请准确读出主要数值和单位，说明为什么驻留 warp 不少但发射仍很少，并给出一套读者能用纸笔或短程序复现的判读步骤。涉及比例时写清分母；把视频已经展示的测量与后续还需要验证的推断分开。",
+      "frame_times": [
+        969,
+        990,
+        1045
+      ]
+    },
+    {
+      "id": "ncu-instruction-heldout",
+      "url": "https://www.bilibili.com/video/BV1nkgN6LE7h/?p=1",
+      "range": [
+        1082,
+        1205
+      ],
+      "split": "heldout_range_same_video",
+      "question": "结合视频 18:02–20:05 的 Warp State Statistics 与 Instruction Statistics，教读者读懂指令混合条形图：LDG、IMAD、FFMA 的大致数量、单位与数量关系分别是什么？相邻表格里的周期数与这些指令计数有什么区别？请据此复现视频的诊断顺序，说明从图中能计算什么，何时不能把指令条数直接当成 DRAM 流量或优化后的性能。小字的精度以实际画面能读到的程度为准。",
+      "frame_times": [
+        1088,
+        1129,
+        1140,
+        1185
+      ]
+    }
+  ],
+  "disclosure": "Both tasks are new temporal ranges from the already studied NCU video. They do not test independent-video generalization. Original stream is 852x480; crops enlarge visibility, not information."
+}

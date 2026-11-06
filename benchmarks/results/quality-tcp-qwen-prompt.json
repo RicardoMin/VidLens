@@ -1,0 +1,154 @@
+{
+  "schema_version": 1,
+  "matcher": "nfkc_casefold_spacing_ascii_token_boundaries_v1",
+  "metric": "time-local burnt-in-caption anchor retention; not WER/CER",
+  "case": "tcp_handshake",
+  "source_url": "https://www.bilibili.com/video/BV18h41187Ep/?p=1",
+  "range": [
+    210,
+    360
+  ],
+  "backend": "qwen3-asr-mlx",
+  "model": "0.6B-bf16",
+  "timestamp_precision": "30-second audio windows, not word/utterance alignment",
+  "vad": "Silero default; silence skipped",
+  "window_rule": "Segments overlapping an anchor window are searched in full; coarse audio windows include extra context.",
+  "vocabulary": [
+    "TCP",
+    "SYN",
+    "ACK"
+  ],
+  "elapsed_seconds": 4.219867209001677,
+  "matched": 14,
+  "total": 14,
+  "anchors": [
+    {
+      "id": "syn",
+      "term": "SYN",
+      "window": [
+        213,
+        221
+      ],
+      "retained": true
+    },
+    {
+      "id": "sync",
+      "term": "同步",
+      "window": [
+        219,
+        226
+      ],
+      "retained": true
+    },
+    {
+      "id": "tcp",
+      "term": "TCP",
+      "window": [
+        233,
+        241
+      ],
+      "retained": true
+    },
+    {
+      "id": "full-duplex",
+      "term": "全双工",
+      "window": [
+        233,
+        241
+      ],
+      "retained": true
+    },
+    {
+      "id": "sequence",
+      "term": "Sequence",
+      "window": [
+        239,
+        246
+      ],
+      "retained": true
+    },
+    {
+      "id": "sequence-number",
+      "term": "序号",
+      "window": [
+        239,
+        246
+      ],
+      "retained": true
+    },
+    {
+      "id": "random",
+      "term": "随机生成",
+      "window": [
+        254,
+        261
+      ],
+      "retained": true
+    },
+    {
+      "id": "initial-sequence",
+      "term": "初始序号",
+      "window": [
+        264,
+        271
+      ],
+      "retained": true
+    },
+    {
+      "id": "packet",
+      "term": "TCP报文",
+      "window": [
+        294,
+        301
+      ],
+      "retained": true
+    },
+    {
+      "id": "ack",
+      "term": "ACK",
+      "window": [
+        294,
+        301
+      ],
+      "retained": true
+    },
+    {
+      "id": "ack-english",
+      "term": "Acknowledgment",
+      "window": [
+        299,
+        306
+      ],
+      "retained": true
+    },
+    {
+      "id": "ack-number",
+      "term": "确认号",
+      "window": [
+        314,
+        321
+      ],
+      "retained": true
+    },
+    {
+      "id": "plus-one",
+      "term": "序号+1",
+      "window": [
+        314,
+        321
+      ],
+      "retained": true
+    },
+    {
+      "id": "third-packet",
+      "term": "TCP报文",
+      "window": [
+        334,
+        341
+      ],
+      "retained": true
+    }
+  ],
+  "reference_sha256": "be03eb5338e3cba65ccb2712c541d44c41e8b0c04584d8ecb5e4e8c5035a1bff",
+  "transcript_sha256": "733a6003eacd31b038c37cc2fdcf130c49f329a6138651054b9a4979755df1dd"
+}

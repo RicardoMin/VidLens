@@ -66,8 +66,14 @@ class Frame:
     ocr: str = ""
     selection: str = "uniform"
     duplicate_of: float | None = None
+    requested_timestamp: float | None = None
+    visible_until: float | None = None
+    ocr_regions: list[dict[str, Any]] = field(default_factory=list)
+    crop_box: list[float] | None = None
 
-    def to_dict(self) -> dict[str, Any]:
+    def to_dict(self, *, include_layout: bool = False) -> dict[str, Any]:
         result = asdict(self)
         result["path"] = str(self.path)
+        if not include_layout:
+            result.pop("ocr_regions")
         return result

@@ -1,0 +1,112 @@
+{
+  "version": "0.1.0",
+  "date": "2026-11-06",
+  "scope": "Fresh algorithm-v2 scans of cached full-video media; no download or ASR. Two YouTube scans overlapped in time. Warm service timing includes SQLite and JSON deserialization.",
+  "cases": [
+    {
+      "video_id": "youtube:aircAruvnKk",
+      "status": "complete",
+      "range": {
+        "start": 0.0,
+        "end": 1120.0
+      },
+      "rules": {
+        "method": "all_decoded_frames_ffmpeg_signalstats",
+        "scan_width": 640,
+        "scan_height": 360,
+        "anchor_seconds": 10.0,
+        "small_change_threshold": 1e-06,
+        "small_change_metric": "max_Y_U_V_mean_absolute_difference_divided_by_255",
+        "scene_change_threshold": 0.08,
+        "change_merge_window_seconds": 0.35,
+        "merge_rule": "first and last nearby small change; preserve scene cuts and anchors",
+        "end_rule": "actual last decoded frame",
+        "limitations": "Low-resolution visual change candidates require image inspection; they do not establish semantic coverage or detect every small text change."
+      },
+      "coverage": {
+        "complete": true,
+        "decoded_frames": 33598,
+        "first_timestamp": 0.0,
+        "last_timestamp": 1119.9
+      },
+      "scan_stats": {
+        "elapsed_seconds": 23.751,
+        "metadata_bytes": 7472593
+      },
+      "candidate_count": 4964,
+      "cached": false,
+      "warm_service_seconds": 0.00657,
+      "warm_cached": true
+    },
+    {
+      "video_id": "youtube:eMlx5fFNoYc",
+      "status": "complete",
+      "range": {
+        "start": 0.0,
+        "end": 1569.0
+      },
+      "rules": {
+        "method": "all_decoded_frames_ffmpeg_signalstats",
+        "scan_width": 640,
+        "scan_height": 360,
+        "anchor_seconds": 10.0,
+        "small_change_threshold": 1e-06,
+        "small_change_metric": "max_Y_U_V_mean_absolute_difference_divided_by_255",
+        "scene_change_threshold": 0.08,
+        "change_merge_window_seconds": 0.35,
+        "merge_rule": "first and last nearby small change; preserve scene cuts and anchors",
+        "end_rule": "actual last decoded frame",
+        "limitations": "Low-resolution visual change candidates require image inspection; they do not establish semantic coverage or detect every small text change."
+      },
+      "coverage": {
+        "complete": true,
+        "decoded_frames": 47070,
+        "first_timestamp": 0.0,
+        "last_timestamp": 1568.966667
+      },
+      "scan_stats": {
+        "elapsed_seconds": 37.94,
+        "metadata_bytes": 10583707
+      },
+      "candidate_count": 6713,
+      "cached": false,
+      "warm_service_seconds": 0.003507,
+      "warm_cached": true
+    },
+    {
+      "video_id": "bilibili:BV1SmrSBfEg6:p1",
+      "status": "complete",
+      "range": {
+        "start": 0.0,
+        "end": 748.0
+      },
+      "rules": {
+        "method": "all_decoded_frames_ffmpeg_signalstats",
+        "scan_width": 640,
+        "scan_height": 360,
+        "anchor_seconds": 10.0,
+        "small_change_threshold": 1e-06,
+        "small_change_metric": "max_Y_U_V_mean_absolute_difference_divided_by_255",
+        "scene_change_threshold": 0.08,
+        "change_merge_window_seconds": 0.35,
+        "merge_rule": "first and last nearby small change; preserve scene cuts and anchors",
+        "end_rule": "actual last decoded frame",
+        "limitations": "Low-resolution visual change candidates require image inspection; they do not establish semantic coverage or detect every small text change."
+      },
+      "coverage": {
+        "complete": true,
+        "decoded_frames": 22411,
+        "first_timestamp": 0.0,
+        "last_timestamp": 747.0
+      },
+      "scan_stats": {
+        "elapsed_seconds": 15.063,
+        "metadata_bytes": 4769900
+      },
+      "candidate_count": 1565,
+      "cached": false,
+      "warm_service_seconds": 0.001283,
+      "warm_cached": true
+    }
+  ]
+}

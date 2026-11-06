@@ -17,6 +17,7 @@ from urllib.request import getproxies
 
 import httpx
 
+from .asr import asr_source, resolve_asr
 from .models import AcquiredVideo, MediaAsset, Segment, Video, VidLensError
 from .subtitles import parse_subtitles
 
@@ -42,6 +43,29 @@ _USER_AGENT = (
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 Chrome/131.0 Safari/537.36"
 )
 _MAX_RESPONSE = 12 * 1024 * 1024
+
+
+def normalize_vocabulary(vocabulary: list[str] | None) -> list[str]:
+    if vocabulary is None:
+        return []
+    if (
+        not isinstance(vocabulary, list)
+        or len(vocabulary) > 64
+        or any(
+            not isinstance(term, str) or not term.strip() or len(term.strip()) > 80
+            for term in vocabulary
+        )
+    ):
+        raise VidLensError(
+            "ASR_VOCABULARY",
+            "Use a list of up to 64 nonempty vocabulary terms, each at most 80 characters.",
+        )
+    terms = list(dict.fromkeys(term.strip() for term in vocabulary))
+    if len(", ".join(terms)) > 2000:
+        raise VidLensError(
+            "ASR_VOCABULARY", "The combined vocabulary must be at most 2000 characters."
+        )
+    return terms
 
 
 def _validated_url(url: str) -> ParseResult:
@@ -257,11 +281,14 @@ class SourceProvider:
             )
             try:
                 stdout, stderr = process.communicate(input=input, timeout=timeout)
-            except subprocess.TimeoutExpired:
-                if os.name == "posix":
-                    os.killpg(process.pid, signal.SIGKILL)
-                else:
-                    process.kill()
+            except (subprocess.TimeoutExpired, KeyboardInterrupt, SystemExit):
+                try:
+                    if os.name == "posix":
+                        os.killpg(process.pid, signal.SIGKILL)
+                    else:
+                        process.kill()
+                except ProcessLookupError:
+                    pass
                 process.communicate()
                 raise
         except subprocess.TimeoutExpired as exc:
@@ -284,12 +311,19 @@ class SourceProvider:
                     "The selected media asset has no audio stream.",
                     "Download the interval with audio_only=True or import a media file containing audio.",
                 )
-            if len(command) > 3 and command[2:4] == ["vidlens.sources", "whisper"]:
+            mlx_asr = len(command) > 2 and command[2] == "vidlens.asr_mlx"
+            if mlx_asr or (len(command) > 3 and command[2:4] == ["vidlens.sources", "whisper"]):
+                if "vidlens_asr_mlx_platform" in diagnostic or "vidlens_asr_mlx_device" in diagnostic:
+                    raise VidLensError(
+                        "ASR_DEVICE", "MLX transcription needs Apple Silicon macOS with Metal access.",
+                        "Use faster-whisper on other platforms, or enable host GPU access.",
+                    )
                 if "no module named" in diagnostic:
+                    extra = "asr-mlx" if mlx_asr else "asr"
                     raise VidLensError(
                         "ASR_UNAVAILABLE",
                         "The optional local speech-recognition dependencies are not installed.",
-                        "Install VidLens with its asr extra (uv sync --extra asr or pip install 'vidlens-astra[asr]').",
+                        f"Install VidLens with uv sync --extra {extra} or pip install 'vidlens[{extra}]'.",
                     )
                 if any(
                     term in diagnostic
@@ -303,7 +337,7 @@ class SourceProvider:
                     raise VidLensError(
                         "ASR_MODEL_DOWNLOAD",
                         "The local Whisper model could not be downloaded from Hugging Face.",
-                        "Check model-source connectivity and your configured proxy, then retry. You can also pass an existing local CTranslate2 Whisper model directory.",
+                        "Check model-source connectivity, or pass an existing local directory for the selected backend.",
                     )
                 raise VidLensError(
                     "ASR_FAILED",
@@ -630,6 +664,7 @@ class SourceProvider:
         start: float = 0,
         end: float | None = None,
         audio_only: bool = False,
+        max_height: int | None = None,
     ) -> MediaAsset:
         if (
             not math.isfinite(start)
@@ -655,15 +690,25 @@ class SourceProvider:
             stem = ("audio-" if audio_only else "video-") + interval_key
         directory.mkdir(parents=True, exist_ok=True)
         try:
-            max_height = int(os.environ.get("VIDLENS_MAX_VIDEO_HEIGHT", "1080"))
+            max_height = (
+                int(os.environ.get("VIDLENS_MAX_VIDEO_HEIGHT", "1080"))
+                if max_height is None
+                else max_height
+            )
         except ValueError as exc:
             raise VidLensError(
-                "VIDEO_HEIGHT", "VIDLENS_MAX_VIDEO_HEIGHT must be 720, 1080, or 2160."
+                "VIDEO_HEIGHT", "Video height must be 360, 480, 720, 1080, or 2160."
             ) from exc
-        if max_height not in {720, 1080, 2160}:
-            raise VidLensError(
-                "VIDEO_HEIGHT", "VIDLENS_MAX_VIDEO_HEIGHT must be 720, 1080, or 2160."
-            )
+        if isinstance(max_height, bool) or max_height not in {360, 480, 720, 1080, 2160}:
+            raise VidLensError("VIDEO_HEIGHT", "Video height must be 360, 480, 720, 1080, or 2160.")
+        native_error = None
+        if urlparse(canonical).hostname == "www.bilibili.com":
+            try:
+                return self._fetch_bilibili_media(
+                    video, canonical, directory, stem, start, end, audio_only, max_height
+                )
+            except VidLensError as exc:
+                native_error = exc
         command = self._yt_base() + [
             "--ffmpeg-location",
             self._ffmpeg(),
@@ -681,10 +726,20 @@ class SourceProvider:
             "after_move:filepath",
             "--no-quiet",
         ]
-        if start > 0 or end is not None:
+        if start > 0 or (end is not None and (video.duration <= 0 or end < video.duration)):
             section = f"*{start}-{end if end is not None else 'inf'}"
             command += ["--download-sections", section, "--force-keyframes-at-cuts"]
-        output = self._run(command + ["--", canonical], timeout=300)
+        try:
+            output = self._run(command + ["--", canonical], timeout=300)
+        except VidLensError as exc:
+            if native_error is not None:
+                raise VidLensError(
+                    "BILI_MEDIA_UNAVAILABLE",
+                    "Bilibili did not provide usable media through public playback or the downloader.",
+                    f"Public playback: {native_error.code}; downloader: {exc.code}. "
+                    "Retry later or import an accessible local media file.",
+                ) from exc
+            raise
         candidates = [Path(line.strip()) for line in output.splitlines() if line.strip()]
         path = next(
             (
@@ -703,31 +758,193 @@ class SourceProvider:
         duration = max(0, end - start) if end is not None else 0
         return MediaAsset(path.resolve(), start, duration, audio_only)
 
+    def _bilibili_playback(self, video, canonical, max_height):
+        parsed = urlparse(canonical)
+        identity = parsed.path.strip("/").split("/")[-1]
+        part = int(parse_qs(parsed.query)["p"][0])
+        identity_params = (
+            {"bvid": identity} if identity.startswith("BV") else {"avid": identity[2:]}
+        )
+        cid = video.metadata.get("cid")
+        if not re.fullmatch(r"[1-9]\d{0,19}", str(cid)) or str(
+            video.metadata.get("part", part)
+        ) != str(part):
+            view_params = {"bvid": identity} if identity.startswith("BV") else {"aid": identity[2:]}
+            view = self._json("https://api.bilibili.com/x/web-interface/view", view_params)
+            data = view.get("data")
+            if view.get("code") != 0 or not isinstance(data, dict):
+                raise VidLensError(
+                    "BILI_MEDIA_ACCESS", "Bilibili public video metadata is unavailable."
+                )
+            pages = data.get("pages") or []
+            page = next(
+                (p for p in pages if isinstance(p, dict) and str(p.get("page")) == str(part)), None
+            )
+            if page is None or not re.fullmatch(r"[1-9]\d{0,19}", str(page.get("cid"))):
+                raise VidLensError(
+                    "PART_UNVERIFIED",
+                    "The public API could not verify this video's requested part.",
+                )
+            cid = page["cid"]
+        quality = {360: 16, 480: 32, 720: 64, 1080: 80, 2160: 120}[max_height]
+        payload = self._json(
+            "https://api.bilibili.com/x/player/playurl",
+            {
+                **identity_params,
+                "cid": cid,
+                "qn": quality,
+                "fnval": 16,
+                "fourk": 0,
+            },
+        )
+        if payload.get("code") != 0 or not isinstance(payload.get("data"), dict):
+            raise VidLensError(
+                "BILI_MEDIA_ACCESS", "Bilibili public playback did not authorize a media stream."
+            )
+        return payload["data"]
+
+    @staticmethod
+    def _bilibili_media_url(value):
+        if not isinstance(value, str):
+            return None
+        try:
+            parsed = _validated_url(value)
+        except VidLensError:
+            return None
+        if parsed.scheme != "https" or parsed.port not in {None, 443}:
+            return None
+        if not any(
+            parsed.hostname == d or parsed.hostname.endswith("." + d)
+            for d in ("bilivideo.com", "bilivideo.cn")
+        ):
+            return None
+        return parsed.geturl()
+
+    def _fetch_bilibili_media(
+        self, video, canonical, directory, stem, start, end, audio_only, max_height
+    ):
+        data = self._bilibili_playback(video, canonical, max_height)
+        dash = data.get("dash")
+        if not isinstance(dash, dict):
+            raise VidLensError(
+                "BILI_MEDIA_FORMAT", "Public playback has no separate video/audio tracks."
+            )
+        tracks = dash.get("audio" if audio_only else "video") or []
+        candidates = []
+        for track in tracks:
+            if not isinstance(track, dict):
+                continue
+            try:
+                height, bandwidth = int(track.get("height") or 0), int(track.get("bandwidth") or 0)
+            except (TypeError, ValueError, OverflowError):
+                continue
+            if not audio_only and not 0 < height <= max_height:
+                continue
+            urls = [track.get("baseUrl"), track.get("base_url")]
+            for key in ("backupUrl", "backup_url"):
+                if isinstance(track.get(key), list):
+                    urls.extend(track[key])
+            url = next(
+                (clean for value in urls if (clean := self._bilibili_media_url(value))), None
+            )
+            if url is None:
+                continue
+            codec = str(track.get("codecs") or "").lower()
+            preferred_codec = codec.startswith("mp4a") if audio_only else codec.startswith("avc")
+            score = (
+                (preferred_codec, bandwidth) if audio_only else (height, preferred_codec, bandwidth)
+            )
+            candidates.append((score, url))
+        if not candidates:
+            raise VidLensError(
+                "BILI_MEDIA_FORMAT",
+                "No public HTTPS Bilibili media track matches the requested format.",
+            )
+        _, url = max(candidates, key=lambda candidate: candidate[0])
+        path = directory / f"{stem}.native.{'m4a' if audio_only else 'mp4'}"
+        command = [
+            self._ffmpeg(),
+            "-hide_banner",
+            "-nostdin",
+            "-v",
+            "error",
+            "-y",
+            "-rw_timeout",
+            "15000000",
+            "-protocol_whitelist",
+            "https,tls,tcp,httpproxy",
+            "-user_agent",
+            _USER_AGENT,
+            "-headers",
+            f"Referer: {canonical}\r\n",
+            "-ss",
+            f"{start:.9f}",
+            "-i",
+            url,
+        ]
+        if end is not None:
+            command += ["-t", f"{end - start:.9f}"]
+        if audio_only:
+            command += ["-vn", "-map", "0:a:0", "-c:a", "aac", "-b:a", "96k", "-ac", "1"]
+        else:
+            command += [
+                "-an",
+                "-map",
+                "0:v:0",
+                "-c:v",
+                "libx264",
+                "-preset",
+                "ultrafast",
+                "-crf",
+                "18",
+                "-pix_fmt",
+                "yuv420p",
+                "-threads",
+                "2",
+            ]
+        command += ["-movflags", "+faststart", str(path)]
+        try:
+            self._run(command, timeout=300)
+            if not path.is_file() or path.stat().st_size == 0:
+                raise VidLensError(
+                    "MEDIA_MISSING", "Public playback did not produce a readable media file."
+                )
+        except BaseException:
+            path.unlink(missing_ok=True)
+            raise
+        duration = end - start if end is not None else float(dash.get("duration") or 0) - start
+        return MediaAsset(path.resolve(), start, max(0, duration), audio_only)
+
     def transcribe(
-        self, asset: MediaAsset, language: str | None = None, model: str = "base"
+        self,
+        asset: MediaAsset,
+        language: str | None = None,
+        model: str | None = None,
+        vocabulary: list[str] | None = None,
+        backend: str = "faster-whisper",
     ) -> list[Segment]:
+        backend, model = resolve_asr(backend, model)
+        vocabulary = normalize_vocabulary(vocabulary)
         if not asset.path.is_file():
             raise VidLensError("MEDIA_MISSING", "The media file for transcription does not exist.")
-        if not Path(model).is_dir() and not re.fullmatch(r"[A-Za-z0-9_./-]{1,160}", model):
-            raise VidLensError("ASR_MODEL", "Invalid local Whisper model name or path.")
-        model_cache = (self.cache_dir / "models" / "faster-whisper").resolve()
+        model_cache = (self.cache_dir / "models" / backend).resolve()
         model_cache.mkdir(parents=True, exist_ok=True)
-        output = self._run(
-            [
-                sys.executable,
-                "-m",
-                "vidlens.sources",
-                "whisper",
-                str(asset.path.resolve()),
-                model,
-                language or "",
-                str(model_cache),
-            ],
-            timeout=1200,
-        )
+        worker = ["vidlens.asr_mlx"] if backend == "mlx-whisper" else ["vidlens.sources", "whisper"]
+        command = [
+            sys.executable,
+            "-m",
+            *worker,
+            str(asset.path.resolve()),
+            model,
+            language or "",
+            str(model_cache),
+        ]
+        if vocabulary:
+            command.append(json.dumps(vocabulary, ensure_ascii=False))
+        output = self._run(command, timeout=1200)
         try:
             segments = parse_subtitles(
-                output, "json", source=f"whisper:{model}", language=language or ""
+                output, "json", source=asr_source(backend, model), language=language or ""
             )
         except VidLensError as exc:
             raise VidLensError(
@@ -860,7 +1077,11 @@ def _worker() -> None:
                 raise SystemExit("VIDLENS_ASR_MODEL_DOWNLOAD") from download_error
             model = WhisperModel(str(local), device="cpu", compute_type="int8")
         audio = _decode_asr_audio(Path(sys.argv[2]))
-        segments, _info = model.transcribe(audio, language=sys.argv[4] or None, vad_filter=True)
+        vocabulary = normalize_vocabulary(json.loads(sys.argv[6]) if len(sys.argv) > 6 else None)
+        options = {"initial_prompt": ", ".join(vocabulary)} if vocabulary else {}
+        segments, _info = model.transcribe(
+            audio, language=sys.argv[4] or None, vad_filter=True, **options
+        )
         print(
             json.dumps(
                 [{"start": s.start, "end": s.end, "text": s.text} for s in segments],

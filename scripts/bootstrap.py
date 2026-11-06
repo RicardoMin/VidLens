@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-"""Set up the local runtime and optional project-scoped Astra integration."""
+"""Set up the local runtime and optional project-scoped AI integration."""
 
 from __future__ import annotations
 
 import argparse
 import os
+import platform
 import shutil
 import subprocess
 import sys
@@ -13,13 +14,19 @@ from pathlib import Path
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument(
+    asr = parser.add_mutually_exclusive_group()
+    asr.add_argument(
         "--captions-only", action="store_true", help="Skip the optional local ASR runtime"
     )
+    asr.add_argument(
+        "--apple-asr", action="store_true", help="Add Apple Silicon MLX transcription with speech detection"
+    )
     parser.add_argument(
-        "--activate", action="store_true", help="Install this project's skill and MCP settings"
+        "--activate", action="store_true", help="Install this project's skill and Codex MCP settings"
     )
     args = parser.parse_args()
+    if args.apple_asr and (platform.system() != "Darwin" or platform.machine() != "arm64"):
+        parser.error("--apple-asr requires Apple Silicon macOS")
     project = Path(__file__).resolve().parents[1]
     uv = shutil.which("uv")
     if not uv:
@@ -35,7 +42,7 @@ def main() -> int:
     env["TIKTOKEN_CACHE_DIR"] = str(project / ".vidlens" / "tokenizer")
     command = [uv, "sync", "--frozen", "--python", "3.12"]
     if not args.captions_only:
-        command += ["--extra", "asr"]
+        command += ["--extra", "asr-mlx" if args.apple_asr else "asr"]
     subprocess.run(command, cwd=project, env=env, check=True)
     python = project / ".venv" / "bin" / "python"
     try:
@@ -51,7 +58,7 @@ def main() -> int:
             "Tokenizer download unavailable; VidLens will use its conservative byte-count budget.",
             file=sys.stderr,
         )
-    install = [str(python), str(project / "scripts" / "install-astra.py")]
+    install = [str(python), str(project / "scripts" / "install-ai.py")]
     if args.activate:
         install += ["--project-skill", "--project-mcp"]
     subprocess.run(install, cwd=project, env=env, check=True)

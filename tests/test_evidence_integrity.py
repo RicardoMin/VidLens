@@ -153,8 +153,12 @@ def test_reader_notices_other_process_writes_and_preserves_middle_coverage(tmp_p
     ]
     first.store.save(video, segments, [])
     before = first.read_video(video.url, max_tokens=1800)
-    starts = [e["start"] for e in before["evidence"]]
-    assert before["mode"] == "sampled_transcript"
+    sections = list(before["sections"])
+    while before["next_cursor"] is not None:
+        before = first.study_status(video.id, max_tokens=1800, cursor=before["next_cursor"])
+        sections.extend(before["sections"])
+    starts = [e["start"] for e in sections]
+    assert before["mode"] == "study_plan"
     assert any(800 < t < 1600 for t in starts)
     assert not first.search(video.id, "matrix_kernel")["evidence"]
     second.store.add_segments(video.id, [Segment(900, 900.001, "matrix_kernel", kind="ocr")])
@@ -166,7 +170,8 @@ def test_ocr_only_result_never_claims_a_complete_transcript(tmp_path):
     video = Video("screens", "https://youtu.be/aircAruvnKk", "youtube", "Slides", 60)
     service.store.save(video, [Segment(22, 22.001, "Figure 1", kind="ocr")], [])
     read = service.read_video(video.url)
-    assert read["mode"] == "visual_evidence"
+    assert read["mode"] == "study_plan"
+    assert read["speech_scope"] == "no_transcript"
     assert not read["transcript_complete"]
 
 

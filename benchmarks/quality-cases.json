@@ -1,0 +1,191 @@
+{
+  "schema_version": 1,
+  "reference_method": "Independent visual inspection of original frames and burnt-in captions. No audio listening and no human verbatim transcript. Existing ASR/notes are not gold.",
+  "source_reference_sha256": "be03eb5338e3cba65ccb2712c541d44c41e8b0c04584d8ecb5e4e8c5035a1bff  frozen-quality-cases.json",
+  "cases": [
+    {
+      "id": "tcp_handshake",
+      "url": "https://www.bilibili.com/video/BV18h41187Ep/?p=1",
+      "asr_clip": [
+        210,
+        360
+      ],
+      "term_score_eligible": true,
+      "asr_anchors": [
+        {
+          "id": "syn",
+          "term": "SYN",
+          "alternatives": [
+            "syn"
+          ],
+          "witness": 217.52,
+          "window": [
+            213,
+            221
+          ]
+        },
+        {
+          "id": "sync",
+          "term": "同步",
+          "alternatives": [
+            "同步"
+          ],
+          "witness": 222.52,
+          "window": [
+            219,
+            226
+          ]
+        },
+        {
+          "id": "tcp",
+          "term": "TCP",
+          "alternatives": [
+            "tcp"
+          ],
+          "witness": 237.52,
+          "window": [
+            233,
+            241
+          ]
+        },
+        {
+          "id": "full-duplex",
+          "term": "全双工",
+          "alternatives": [
+            "全双工"
+          ],
+          "witness": 237.52,
+          "window": [
+            233,
+            241
+          ]
+        },
+        {
+          "id": "sequence",
+          "term": "Sequence",
+          "alternatives": [
+            "sequence"
+          ],
+          "witness": 242.52,
+          "window": [
+            239,
+            246
+          ]
+        },
+        {
+          "id": "sequence-number",
+          "term": "序号",
+          "alternatives": [
+            "序号"
+          ],
+          "witness": 242.52,
+          "window": [
+            239,
+            246
+          ]
+        },
+        {
+          "id": "random",
+          "term": "随机生成",
+          "alternatives": [
+            "随机生成",
+            "随机产生"
+          ],
+          "witness": 257.52,
+          "window": [
+            254,
+            261
+          ]
+        },
+        {
+          "id": "initial-sequence",
+          "term": "初始序号",
+          "alternatives": [
+            "初始序号",
+            "初始的序号"
+          ],
+          "witness": 267.52,
+          "window": [
+            264,
+            271
+          ]
+        },
+        {
+          "id": "packet",
+          "term": "TCP报文",
+          "alternatives": [
+            "tcp报文"
+          ],
+          "witness": 297.52,
+          "window": [
+            294,
+            301
+          ]
+        },
+        {
+          "id": "ack",
+          "term": "ACK",
+          "alternatives": [
+            "ack"
+          ],
+          "witness": 297.52,
+          "window": [
+            294,
+            301
+          ]
+        },
+        {
+          "id": "ack-english",
+          "term": "Acknowledgment",
+          "alternatives": [
+            "acknowledgment",
+            "acknowledgement"
+          ],
+          "witness": 302.52,
+          "window": [
+            299,
+            306
+          ]
+        },
+        {
+          "id": "ack-number",
+          "term": "确认号",
+          "alternatives": [
+            "确认号"
+          ],
+          "witness": 317.52,
+          "window": [
+            314,
+            321
+          ]
+        },
+        {
+          "id": "plus-one",
+          "term": "序号+1",
+          "alternatives": [
+            "序号加1",
+            "序号加一",
+            "序号+1"
+          ],
+          "witness": 317.52,
+          "window": [
+            314,
+            321
+          ]
+        },
+        {
+          "id": "third-packet",
+          "term": "TCP报文",
+          "alternatives": [
+            "tcp报文"
+          ],
+          "witness": 337.52,
+          "window": [
+            334,
+            341
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1123 @@
+{
+  "schema_version": 1,
+  "access": "Evaluator reference. Keep separate from authors/readers until their answers are frozen.",
+  "adaptation": "Three distinct real Chinese technical-video cases. Structured facts and synthetic inputs only; no transcripts or source media.",
+  "cases": {
+    "mysql_explain_rows_filtered": {
+      "required_claims": [
+        {
+          "id": "m1",
+          "label": "SQL 条件和比较符",
+          "expected": {
+            "query": "SELECT * FROM orders WHERE user_id >= 3 AND total_price = 25",
+            "comparison": ">=",
+            "user_id_threshold": 3,
+            "total_price": 25
+          },
+          "timestamps": [
+            60,
+            90
+          ],
+          "critical": true,
+          "truth_status": "verified"
+        },
+        {
+          "id": "m2",
+          "label": "第一条访问计划",
+          "expected": {
+            "type": "ALL",
+            "possible_keys": "user_id",
+            "key": null,
+            "rows": 5,
+            "filtered_percent": 20
+          },
+          "timestamps": [
+            60,
+            90
+          ],
+          "critical": true,
+          "truth_status": "verified"
+        },
+        {
+          "id": "m3",
+          "label": "第一条预计保留行数",
+          "expected": {
+            "calculation": "5*20/100",
+            "rows": 1
+          },
+          "timestamps": [
+            60,
+            90
+          ],
+          "critical": true,
+          "truth_status": "verified"
+        },
+        {
+          "id": "m4",
+          "label": "第二条 SQL",
+          "expected": {
+            "query": "SELECT * FROM orders WHERE user_id > 3",
+            "comparison": ">",
+            "user_id_threshold": 3,
+            "has_total_price_condition": false
+          },
+          "timestamps": [
+            124
+          ],
+          "critical": true,
+          "truth_status": "verified"
+        },
+        {
+          "id": "m5",
+          "label": "第二条访问计划",
+          "expected": {
+            "type": "range",
+            "key": "user_id",
+            "key_len_bytes": 4,
+            "rows": 2,
+            "filtered_percent": 100
+          },
+          "timestamps": [
+            124
+          ],
+          "critical": true,
+          "truth_status": "verified"
+        },
+        {
+          "id": "m6",
+          "label": "第二条预计保留行数",
+          "expected": {
+            "calculation": "2*100/100",
+            "rows": 2
+          },
+          "timestamps": [
+            124
+          ],
+          "critical": true,
+          "truth_status": "verified"
+        },
+        {
+          "id": "m7",
+          "label": "rows 是所选访问方式预计检查行数",
+          "expected": {
+            "is_estimate": true,
+            "not_always_table_rows": true,
+            "not_actual_result_rows": true
+          },
+          "timestamps": [
+            21,
+            60,
+            124
+          ],
+          "critical": true,
+          "truth_status": "verified"
+        },
+        {
+          "id": "m8",
+          "label": "filtered 是保留百分比",
+          "expected": {
+            "survive_percent_not_discard_percent": true,
+            "100_does_not_mean_100_rows": true,
+            "range_predicate_already_counted_in_access": true
+          },
+          "timestamps": [
+            21,
+            124
+          ],
+          "critical": true,
+          "truth_status": "verified"
+        },
+        {
+          "id": "m9",
+          "label": "两条不同语义查询不能据此证明优化性能",
+          "expected": {
+            "changed_boundary": true,
+            "removed_price_condition": true,
+            "no_like_for_like_speedup": true
+          },
+          "timestamps": [
+            60,
+            124
+          ],
+          "critical": true,
+          "truth_status": "verified"
+        },
+        {
+          "id": "m10",
+          "label": "金额单位未知",
+          "expected": {
+            "field_value": 25,
+            "currency_unit": null,
+            "must_not_invent_RMB": true
+          },
+          "timestamps": [
+            60
+          ],
+          "critical": false,
+          "truth_status": "verified"
+        }
+      ],
+      "unscored_unknowns": [
+        "Underlying CREATE TABLE/full data rows are not displayed; do not invent the original dataset.",
+        "Extra column is truncated in some screenshots, so exact Extra string is not a scored source truth.",
+        "25 has no currency unit on screen."
+      ],
+      "primary_sources": [
+        "https://dev.mysql.com/doc/refman/8.0/en/explain-output.html",
+        "https://dev.mysql.com/doc/refman/8.4/en/condition-filtering.html"
+      ],
+      "review_rule": "Each original claim id occurs once. If a compound claim contains one incorrect required detail, mark incorrect and enumerate wrong subfields; do not average them into correct.",
+      "frozen_source_hashes": {
+        "freeze_manifest": "337dbcbe698405c6c87facfbb65786608b922c2778bdde391bded4ed7026cc1a",
+        "source_packet": "55a6924fe500aa629aa44c1b44e43af3606d04b7f53d5d00da5712de9ffc3dc6",
+        "question": "a69534e04b294f6186ac6027de0fcf0ae73bfa43509986f15b47432307b400a1",
+        "hidden_reference": "81fa405b86b81aadf18afd51509b2ef7f62c92e1e2b09d073a334eeb0d451631",
+        "reader_tasks": "b1d8f34bde3d58d8571167162744fa53545454b8870292c748338bf6418a51a9",
+        "reader_expected": "e9d66a286b9ae9a7b29b5553360bf0d5c5ce17587bd296d0610f6832f4ed5684",
+        "media": "b23a2db43992a2641d0497caaf7d42022c4fac4f9aa151a395abcd62ae259b70"
+      }
+    },
+    "wireshark_io_graph_units": {
+      "required_claims": [
+        {
+          "id": "w1",
+          "label": "ACK RTT 源值",
+          "expected": {
+            "field": "tcp.analysis.ack_rtt",
+            "seconds": 0.02554,
+            "milliseconds": 25.54,
+            "shown_text": "0.025540000 seconds",
+            "distinct_from_iRTT": true
+          },
+          "timestamps": [
+            120
+          ],
+          "critical": true,
+          "truth_status": "verified"
+        },
+        {
+          "id": "w2",
+          "label": "Bytes in flight 源值",
+          "expected": {
+            "field": "tcp.analysis.bytes_in_flight",
+            "bytes": 29200,
+            "not_bits": true,
+            "not_rate": true
+          },
+          "timestamps": [
+            170
+          ],
+          "critical": true,
+          "truth_status": "verified"
+        },
+        {
+          "id": "w3",
+          "label": "RTT 与 BIF 汇总方式",
+          "expected": {
+            "RTT": "MAX(Y Field)",
+            "BIF": "MAX(Y Field)",
+            "SMA": "None"
+          },
+          "timestamps": [
+            210,
+            250
+          ],
+          "critical": true,
+          "truth_status": "verified"
+        },
+        {
+          "id": "w4",
+          "label": "发送方向与统计",
+          "expected": {
+            "filter": "ip.src == 10.10.12.1",
+            "Y_axis": "Bytes",
+            "factor": 1
+          },
+          "timestamps": [
+            210,
+            250
+          ],
+          "critical": true,
+          "truth_status": "verified"
+        },
+        {
+          "id": "w5",
+          "label": "最终区间",
+          "expected": {
+            "interval_ms": 50,
+            "interval_seconds": 0.05,
+            "not_1_second_intermediate_setting": true
+          },
+          "timestamps": [
+            210,
+            250
+          ],
+          "critical": true,
+          "truth_status": "verified"
+        },
+        {
+          "id": "w6",
+          "label": "显示因子",
+          "expected": {
+            "RTT_factor": 17000000,
+            "BIF_factor": 1,
+            "Send_Rate_factor": 1,
+            "does_not_change_raw_data": true,
+            "cannot_compare_mixed_units_numerically": true
+          },
+          "timestamps": [
+            250
+          ],
+          "critical": true,
+          "truth_status": "verified"
+        },
+        {
+          "id": "w7",
+          "label": "错误标记设置",
+          "expected": {
+            "filter": "tcp.analysis.flags",
+            "Y_axis": "Packets",
+            "style": "Bar",
+            "factor": 600
+          },
+          "timestamps": [
+            250
+          ],
+          "critical": false,
+          "truth_status": "verified"
+        },
+        {
+          "id": "w8",
+          "label": "Bytes 到速率换算",
+          "expected": {
+            "raw_semantics": "sum of matching packet bytes per interval",
+            "bits_per_second_formula": "interval_bytes * 8 / 0.05",
+            "not_payload_goodput": true,
+            "not_default_bytes_per_second": true
+          },
+          "timestamps": [
+            210,
+            250
+          ],
+          "critical": true,
+          "truth_status": "verified"
+        },
+        {
+          "id": "w9",
+          "label": "BIF 与拥塞窗口区别",
+          "expected": {
+            "BIF": "observed bytes sent but not yet acknowledged",
+            "CWND": "sender congestion-control limit",
+            "not_universal_equality": true
+          },
+          "timestamps": [
+            170
+          ],
+          "critical": true,
+          "truth_status": "verified"
+        }
+      ],
+      "unscored_unknowns": [
+        "Do not infer exact graph plateau measurements from pixels.",
+        "The video capture UI version is not identified. Current docs include Avg over Time/THROUGHPUT options absent in this video; source configuration uses Bytes per interval.",
+        "The original pcap is not supplied; reader reproduction uses a declared synthetic fixture, not re-running the author capture."
+      ],
+      "primary_sources": [
+        "https://www.wireshark.org/docs/wsug_html_chunked/ChStatIOGraphs.html",
+        "https://www.wireshark.org/docs/dfref/t/tcp.html"
+      ],
+      "review_rule": "Each original claim id occurs once. If a compound claim contains one incorrect required detail, mark incorrect and enumerate wrong subfields; do not average them into correct.",
+      "frozen_source_hashes": {
+        "freeze_manifest": "aa41d9eca1f43745e0690b6d2bf9e6ff895511a166310d7b37e5f95bcf82d4f6",
+        "source_packet": "437106d618350765b395ee63b1331dd19e3dba41e055fac62b01eba55aaaa769",
+        "question": "01b00b6261a3ebe69ca7603b9ce11561d991e3c2cae332d18a911588b71a3490",
+        "hidden_reference": "65dcbe4dff797c055db949663307dcb414eb2a6c15649694d2cc86ad80b5b91e",
+        "reader_tasks": "1bed4253b28f6d012299c57791657c03a0e881319b4c82bb8cbccbd2a279e83e",
+        "reader_expected": "30eb8fc145934d4510bb1290d1158bcfb8a485a157aa5b231f153943bf2fa3bf",
+        "media": "dfdb461edacf9589f101e2879176f102d88810a0a86d24a22fc2cac515ca5a63"
+      }
+    },
+    "zh-flower-confusion-smalltext": {
+      "required_claims": [
+        {
+          "id": "class_order",
+          "kind": "visual_exact",
+          "value": [
+            "daisy",
+            "dandelion",
+            "rose",
+            "sunflower",
+            "tulip"
+          ],
+          "source_times": [
+            625,
+            860
+          ]
+        },
+        {
+          "id": "printed_matrix",
+          "kind": "visual_exact",
+          "value": [
+            [
+              132,
+              5,
+              0,
+              5,
+              3
+            ],
+            [
+              10,
+              189,
+              1,
+              10,
+              3
+            ],
+            [
+              2,
+              2,
+              133,
+              2,
+              24
+            ],
+            [
+              6,
+              9,
+              4,
+              122,
+              5
+            ],
+            [
+              4,
+              6,
+              19,
+              8,
+              162
+            ]
+          ],
+          "unit": "samples",
+          "source_times": [
+            860
+          ],
+          "acceptance": "All 25 cells exact; do not substitute percentages. Ground truth read from original decoded PNG and corroborated by earlier test-set support, never from model OCR."
+        },
+        {
+          "id": "matrix_units",
+          "value": "Unnormalized cells are counts of samples; accuracy/precision/recall/F1 are dimensionless proportions. Percent display multiplies by 100.",
+          "source_times": [
+            580,
+            625,
+            860
+          ]
+        },
+        {
+          "id": "micro_selected",
+          "value": "precision_score, recall_score, f1_score all pass average='micro'; accuracy_score is separate.",
+          "source_times": [
+            580
+          ]
+        },
+        {
+          "id": "annotation_code",
+          "value": "Visible code iterates i then j and places confusion[i,j] at xy=(i,j), whereas matshow row i / column j is at x=j,y=i. Correct to xy=(j,i).",
+          "source_times": [
+            625
+          ],
+          "critical": true
+        },
+        {
+          "id": "saved_matrix_conditional",
+          "value": [
+            [
+              132,
+              10,
+              2,
+              6,
+              4
+            ],
+            [
+              5,
+              189,
+              2,
+              9,
+              6
+            ],
+            [
+              0,
+              1,
+              133,
+              4,
+              19
+            ],
+            [
+              5,
+              10,
+              2,
+              122,
+              8
+            ],
+            [
+              3,
+              3,
+              24,
+              5,
+              162
+            ]
+          ],
+          "condition": "If the final saved PNG was produced by the same displayed annotation code, the displayed text array A is C.T. The video shows a pre-saved file, so identical generating code is an inference/condition, not observed file provenance.",
+          "source_times": [
+            625,
+            860
+          ],
+          "critical": true
+        },
+        {
+          "id": "total_and_correct",
+          "value": {
+            "n": 866,
+            "correct": 738
+          },
+          "unit": "samples",
+          "source_times": [
+            860
+          ],
+          "note": "Transpose does not affect these values."
+        },
+        {
+          "id": "accuracy",
+          "value": 0.8521939953810623,
+          "unit": "ratio",
+          "percent": 85.21939953810623,
+          "tolerance": 0.0001,
+          "source_times": [
+            860
+          ],
+          "note": "85.22% rounded is accepted; do not quote many console decimals as belonging to the PNG."
+        },
+        {
+          "id": "daisy_metrics_conditional",
+          "value": {
+            "true_daisy_pred_dandelion": 10,
+            "true_dandelion_pred_daisy": 5,
+            "true_daisy_support": 154,
+            "predicted_daisy_count": 145,
+            "correct_daisy": 132,
+            "precision": 0.9103448275862069,
+            "recall": 0.8571428571428571
+          },
+          "condition": "Same generating annotation code assumption as saved_matrix_conditional. If reader chooses to follow displayed axes literally, they must flag that interpretation conflicts with visible code and cannot claim recovered true C.",
+          "source_times": [
+            625,
+            860
+          ],
+          "critical": true
+        },
+        {
+          "id": "micro_scope",
+          "value": "For exhaustive single-label multiclass classification, counting every class, micro P=R=F1=accuracy because global FP and FN each equal total mistakes. Does not assert per-class equality; macro need not match.",
+          "source_times": [
+            580
+          ]
+        },
+        {
+          "id": "saved_vs_console",
+          "value": "At 809.7–824 speaker says figures were saved previously. The final opened PNG at 860 is not established to come from the current background console run; do not merge its figures with console metrics.",
+          "source_times": [
+            825,
+            860
+          ],
+          "speech_interval": [
+            809.7,
+            824.3
+          ],
+          "critical": true
+        },
+        {
+          "id": "generalization",
+          "value": "The demonstrated progression does not prove that higher training accuracy necessarily raises accuracy on new test data. Need held-out performance for that dataset; training/test support and distribution matter.",
+          "source_times": [
+            860
+          ],
+          "speech_interval": [
+            857.6,
+            876
+          ]
+        }
+      ],
+      "unscored_unknowns": [
+        "Full-precision background console values beyond clearly visible leading digits; not needed for scoring.",
+        "Exact version/provenance of pre-saved PNG generating code; conditional inference only.",
+        "ROC AUC decimals and checkpoint test-set accuracy correspondence outside selected evidence."
+      ],
+      "primary_sources": [
+        "https://scikit-learn.org/stable/modules/generated/sklearn.metrics.confusion_matrix.html",
+        "https://scikit-learn.org/stable/modules/generated/sklearn.metrics.precision_score.html",
+        "https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.annotate.html"
+      ],
+      "review_rule": "Preserve conditional claims as conditional. Matrix has all25 cell values inside original printed_matrix claim; list individual mistaken/missing cells in reason, not only total accuracy. Never turn a conditional inferred C into proven saved-file provenance.",
+      "frozen_source_hashes": {
+        "freeze_manifest": "fb91d9c6be5bb76aa330ae505de05620fd9547fd0c636ea06a48a9fc57d481d6",
+        "source_packet": "d15c9ec2d8917b870f4a7d206a840443e8b728a77be4d5b1cd37b50dfd747e4d",
+        "question": "7e12383c61ecec0edf6f29eb01136d67f3d8e83eae6c7142d6c8ac0af8a79369",
+        "hidden_reference": "0c16d551e0ac0a68ca8de1b38d375286268016790c3621f21ee67159e9eb7648",
+        "reader_tasks": "b3d49788b0762389015eb63185fe44956317e82188f640ba879949c8996d435c",
+        "media": "0261cfd972952ddf07bb8d2d6ad11e4474bbf33737887c67dab075d10f3f4b39"
+      }
+    }
+  },
+  "reader_expected": {
+    "m_reproduce_queries": {
+      "case": "mysql_explain_rows_filtered",
+      "interface": "select_video_queries",
+      "public_case": {
+        "input": [
+          {
+            "id": "A",
+            "user_id": 2,
+            "total_price": 25
+          },
+          {
+            "id": "B",
+            "user_id": 3,
+            "total_price": 25
+          },
+          {
+            "id": "C",
+            "user_id": 4,
+            "total_price": 20
+          },
+          {
+            "id": "D",
+            "user_id": 5,
+            "total_price": 25
+          },
+          {
+            "id": "E",
+            "user_id": 3,
+            "total_price": 20
+          }
+        ],
+        "expected": {
+          "first_ids": [
+            "B",
+            "D"
+          ],
+          "second_ids": [
+            "C",
+            "D"
+          ]
+        }
+      },
+      "hidden_cases": [
+        {
+          "input": [
+            {
+              "id": "boundary",
+              "user_id": 3,
+              "total_price": 25
+            },
+            {
+              "id": "gt",
+              "user_id": 4,
+              "total_price": 25
+            },
+            {
+              "id": "wrong_price",
+              "user_id": 5,
+              "total_price": 24
+            },
+            {
+              "id": "none_user",
+              "user_id": null,
+              "total_price": 25
+            },
+            {
+              "id": "none_price",
+              "user_id": 4,
+              "total_price": null
+            }
+          ],
+          "expected": {
+            "first_ids": [
+              "boundary",
+              "gt"
+            ],
+            "second_ids": [
+              "gt",
+              "wrong_price",
+              "none_price"
+            ]
+          }
+        },
+        {
+          "input": [
+            {
+              "id": 1,
+              "user_id": 2,
+              "total_price": 25
+            },
+            {
+              "id": 2,
+              "user_id": 3,
+              "total_price": 0
+            },
+            {
+              "id": 3,
+              "user_id": -1,
+              "total_price": 25
+            }
+          ],
+          "expected": {
+            "first_ids": [],
+            "second_ids": []
+          }
+        },
+        {
+          "input": [],
+          "expected": {
+            "first_ids": [],
+            "second_ids": []
+          }
+        }
+      ],
+      "meaning_rubric": [
+        "filtered=survive percent, 20% of5=1; 100%of2=2",
+        "rows is estimate not actual returned",
+        "queries change >= to > and remove price predicate",
+        "fair comparison uses identical query/data and actual timings, not this pair"
+      ],
+      "comparison": "Integer/string/list/dict structure exact; finite float values abs/relative tolerance1e-9; booleans are not numbers."
+    },
+    "w_reproduce_bins": {
+      "case": "wireshark_io_graph_units",
+      "interface": "summarize_io",
+      "public_case": {
+        "input": [
+          {
+            "t": 0.01,
+            "src": "10.10.12.1",
+            "frame_len": 1000,
+            "bytes_in_flight": 29200
+          },
+          {
+            "t": 0.025,
+            "src": "10.10.12.2",
+            "frame_len": 60,
+            "ack_rtt": 0.02554
+          },
+          {
+            "t": 0.049,
+            "src": "10.10.12.1",
+            "frame_len": 500,
+            "bytes_in_flight": 40000
+          },
+          {
+            "t": 0.05,
+            "src": "10.10.12.2",
+            "frame_len": 60,
+            "ack_rtt": 0.03
+          },
+          {
+            "t": 0.075,
+            "src": "10.10.12.1",
+            "frame_len": 800,
+            "bytes_in_flight": 20000
+          }
+        ],
+        "expected": [
+          {
+            "bin": 0,
+            "rtt_seconds": 0.02554,
+            "bif_bytes": 40000,
+            "sender_bytes": 1500,
+            "sender_bits_per_second": 240000
+          },
+          {
+            "bin": 1,
+            "rtt_seconds": 0.03,
+            "bif_bytes": 20000,
+            "sender_bytes": 800,
+            "sender_bits_per_second": 128000
+          }
+        ]
+      },
+      "hidden_cases": [
+        {
+          "input": [
+            {
+              "t": 0.0,
+              "src": "10.10.12.2",
+              "frame_len": 60,
+              "ack_rtt": 0.01
+            },
+            {
+              "t": 0.02,
+              "src": "10.10.12.2",
+              "frame_len": 60,
+              "ack_rtt": 0.03
+            },
+            {
+              "t": 0.05,
+              "src": "10.10.12.1",
+              "frame_len": 500,
+              "bytes_in_flight": 1000
+            },
+            {
+              "t": 0.099,
+              "src": "10.10.12.1",
+              "frame_len": 800,
+              "bytes_in_flight": 2000
+            },
+            {
+              "t": 0.1,
+              "src": "10.10.12.2",
+              "frame_len": 60,
+              "ack_rtt": 0.005
+            }
+          ],
+          "expected": [
+            {
+              "bin": 0,
+              "rtt_seconds": 0.03,
+              "bif_bytes": null,
+              "sender_bytes": 0,
+              "sender_bits_per_second": 0
+            },
+            {
+              "bin": 1,
+              "rtt_seconds": null,
+              "bif_bytes": 2000,
+              "sender_bytes": 1300,
+              "sender_bits_per_second": 208000
+            },
+            {
+              "bin": 2,
+              "rtt_seconds": 0.005,
+              "bif_bytes": null,
+              "sender_bytes": 0,
+              "sender_bits_per_second": 0
+            }
+          ]
+        },
+        {
+          "input": [
+            {
+              "t": 0.15,
+              "src": "10.10.12.1",
+              "frame_len": 100,
+              "bytes_in_flight": 123
+            },
+            {
+              "t": 0.151,
+              "src": "10.10.12.3",
+              "frame_len": 99999,
+              "ack_rtt": 0.04,
+              "bytes_in_flight": 500
+            }
+          ],
+          "expected": [
+            {
+              "bin": 0,
+              "rtt_seconds": null,
+              "bif_bytes": null,
+              "sender_bytes": 0,
+              "sender_bits_per_second": 0
+            },
+            {
+              "bin": 1,
+              "rtt_seconds": null,
+              "bif_bytes": null,
+              "sender_bytes": 0,
+              "sender_bits_per_second": 0
+            },
+            {
+              "bin": 2,
+              "rtt_seconds": null,
+              "bif_bytes": null,
+              "sender_bytes": 0,
+              "sender_bits_per_second": 0
+            },
+            {
+              "bin": 3,
+              "rtt_seconds": 0.04,
+              "bif_bytes": 500,
+              "sender_bytes": 100,
+              "sender_bits_per_second": 16000
+            }
+          ]
+        },
+        {
+          "input": [],
+          "expected": []
+        }
+      ],
+      "meaning_rubric": [
+        "RTT shared-axis reading /17000000 gives raw seconds for the displayed scaling",
+        "Bytes is packet bytes per50ms; multiply by8/0.05 for bit/s",
+        "750000*8/0.05=120000000bit/s=120Mbit/s decimal",
+        "includes matching packet/frame bytes and is not application payload goodput",
+        "BIF is outstanding byte observation; cwnd is sending limit, not universal equality"
+      ],
+      "comparison": "Integer/string/list/dict structure exact; finite float values abs/relative tolerance1e-9; booleans are not numbers."
+    },
+    "2": {
+      "case": "zh-flower-confusion-smalltext",
+      "source_number": 2,
+      "interface": [
+        "video_case()",
+        "metrics(C,k)",
+        "annotation_cells(C)"
+      ],
+      "source_case": {
+        "input": {
+          "source": "video_case",
+          "k": 0
+        },
+        "expected": {
+          "C": [
+            [
+              132,
+              10,
+              2,
+              6,
+              4
+            ],
+            [
+              5,
+              189,
+              2,
+              9,
+              6
+            ],
+            [
+              0,
+              1,
+              133,
+              4,
+              19
+            ],
+            [
+              5,
+              10,
+              2,
+              122,
+              8
+            ],
+            [
+              3,
+              3,
+              24,
+              5,
+              162
+            ]
+          ],
+          "metrics": {
+            "n": 866,
+            "correct": 738,
+            "accuracy": 0.8521939953810623,
+            "micro_precision": 0.8521939953810623,
+            "micro_recall": 0.8521939953810623,
+            "micro_f1": 0.8521939953810623,
+            "class_precision": 0.9103448275862069,
+            "class_recall": 0.8571428571428571
+          }
+        }
+      },
+      "hidden_cases": [
+        {
+          "input": {
+            "source": "video_case",
+            "k": 0
+          },
+          "expected": {
+            "C": [
+              [
+                132,
+                10,
+                2,
+                6,
+                4
+              ],
+              [
+                5,
+                189,
+                2,
+                9,
+                6
+              ],
+              [
+                0,
+                1,
+                133,
+                4,
+                19
+              ],
+              [
+                5,
+                10,
+                2,
+                122,
+                8
+              ],
+              [
+                3,
+                3,
+                24,
+                5,
+                162
+              ]
+            ],
+            "metrics": {
+              "n": 866,
+              "correct": 738,
+              "accuracy": 0.8521939953810623,
+              "micro_precision": 0.8521939953810623,
+              "micro_recall": 0.8521939953810623,
+              "micro_f1": 0.8521939953810623,
+              "class_precision": 0.9103448275862069,
+              "class_recall": 0.8571428571428571
+            }
+          }
+        },
+        {
+          "input": {
+            "C": [
+              [
+                8,
+                2
+              ],
+              [
+                1,
+                9
+              ]
+            ],
+            "k": 0
+          },
+          "expected": {
+            "n": 20,
+            "correct": 17,
+            "accuracy": 0.85,
+            "micro_precision": 0.85,
+            "micro_recall": 0.85,
+            "micro_f1": 0.85,
+            "class_precision": 0.8888888888888888,
+            "class_recall": 0.8
+          }
+        },
+        {
+          "input": {
+            "C": [
+              [
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                3,
+                1
+              ],
+              [
+                0,
+                2,
+                4
+              ]
+            ],
+            "k": 0
+          },
+          "expected": {
+            "n": 10,
+            "correct": 7,
+            "accuracy": 0.7,
+            "micro_precision": 0.7,
+            "micro_recall": 0.7,
+            "micro_f1": 0.7,
+            "class_precision": 0,
+            "class_recall": 0
+          }
+        },
+        {
+          "input": {
+            "C": [
+              [
+                0
+              ]
+            ],
+            "k": 0
+          },
+          "expected": {
+            "n": 0,
+            "correct": 0,
+            "accuracy": 0,
+            "micro_precision": 0,
+            "micro_recall": 0,
+            "micro_f1": 0,
+            "class_precision": 0,
+            "class_recall": 0
+          }
+        }
+      ],
+      "numeric_tolerance": 1e-09,
+      "zero_division_rule": 0,
+      "annotation_rule": "[(j,i,str(C[i][j])) for i in rows for j in columns], exactly the frozen task and original score_reader.py",
+      "coverage_note": "source_case is included in hidden_cases to require a logged source-bound video_case execution, as already required by the frozen task. The other three inputs are unchanged original hidden_variants."
+    }
+  },
+  "videos": [
+    {
+      "case": "mysql_explain_rows_filtered",
+      "url": "https://www.bilibili.com/video/BV11V4y1R73P/?p=8",
+      "interval": [
+        0,
+        138
+      ],
+      "actual_source_size": [
+        808,
+        480
+      ],
+      "timestamps": [
+        21,
+        60,
+        90,
+        124
+      ]
+    },
+    {
+      "case": "wireshark_io_graph_units",
+      "url": "https://www.bilibili.com/video/BV1wx1kBvEjq/?p=1",
+      "interval": [
+        68,
+        301
+      ],
+      "actual_source_size": [
+        852,
+        480
+      ],
+      "timestamps": [
+        120,
+        170,
+        210,
+        250
+      ]
+    },
+    {
+      "case": "zh-flower-confusion-smalltext",
+      "url": "https://www.bilibili.com/video/BV1Sq4y1L7B2/?p=1",
+      "interval": [
+        576,
+        876
+      ],
+      "actual_source_size": [
+        852,
+        480
+      ],
+      "timestamps": [
+        580,
+        625,
+        735,
+        790,
+        825,
+        860
+      ]
+    }
+  ]
+}

@@ -1,0 +1,204 @@
+{
+  "method": "Independent AI writers, blinded AI review, and independent AI reader transfer tasks. Not a human study.",
+  "final_illustration_cap": 4,
+  "equal_token_comparison": false,
+  "shared_asr": "mlx-whisper/large-v3-turbo; same segments for paired authors",
+  "rubric": {
+    "facts": 20,
+    "explanation": 8,
+    "visual_grounding": 8,
+    "transfer": 8
+  },
+  "frozen_reference_sha256": "4ef2b91f9c445969033907c0174b8558f708f5c6dd9a03f401c31e1999fbaacf",
+  "review_sha256": "a689b9a83d6ca681151e7d07db47b5ca415d043d39ed8acbe413d6bc01ecac2f",
+  "cases": [
+    {
+      "id": "btree_deletion",
+      "url": "https://www.bilibili.com/video/BV1sj411b7XC/?p=1",
+      "range": [
+        170,
+        439
+      ],
+      "split": "held_out",
+      "scores": {
+        "question_preview_review": {
+          "factual_total": 20,
+          "explanation_total": 8,
+          "visual_grounding_total": 8,
+          "transfer_total": 8,
+          "total": 44,
+          "maximum": 44,
+          "visual_event_counts": {
+            "present": 4,
+            "partial": 1,
+            "absent": 0
+          },
+          "provided_image_count": 4,
+          "embedded_image_count": 4,
+          "answer_sha256": "b9321dd5228489c7f31d6a5721f9b3b54daf0181e6da6a77e6d4f6271b73400a",
+          "reader_sha256": "1c1d12b1f3dc6bf6f9e23044d7dcbe0a0c10a075830d574f7b3bc9f09eb751d2"
+        },
+        "timeline_baseline": {
+          "factual_total": 20,
+          "explanation_total": 8,
+          "visual_grounding_total": 8,
+          "transfer_total": 8,
+          "total": 44,
+          "maximum": 44,
+          "visual_event_counts": {
+            "present": 3,
+            "partial": 0,
+            "absent": 2
+          },
+          "provided_image_count": 4,
+          "embedded_image_count": 2,
+          "answer_sha256": "a3a346ba87f6b74fe4f4044b277e66915089e91c7e0c749999e0186b8aba2f72",
+          "reader_sha256": "7b72be9d3120b638119df039f7b225c88ab3a09904df6290274d159d157989eb"
+        }
+      },
+      "selection_cost": {
+        "initial_preview_sheets_viewed": 4,
+        "extra_preview_calls": 1,
+        "extra_preview_sheets_viewed": 4,
+        "total_preview_sheets_viewed": 8,
+        "candidate_tiles_viewed": 45,
+        "preview_pixels_viewed": 21827904,
+        "full_image_fetch_calls": 1,
+        "full_images_returned": 4,
+        "full_images_viewed": 4,
+        "full_image_pixels_viewed": 1635840,
+        "full_fetch_elapsed_seconds": 0.052,
+        "token_cost": "not measured; image and pixel counts are not model billing"
+      }
+    },
+    {
+      "id": "online_softmax",
+      "url": "https://www.bilibili.com/video/BV1FM9XYoEQ5/?p=6",
+      "range": [
+        220,
+        720
+      ],
+      "split": "held_out",
+      "scores": {
+        "timeline_baseline": {
+          "factual_total": 20,
+          "explanation_total": 8,
+          "visual_grounding_total": 8,
+          "transfer_total": 8,
+          "total": 44,
+          "maximum": 44,
+          "visual_event_counts": {
+            "present": 4,
+            "partial": 0,
+            "absent": 0
+          },
+          "provided_image_count": 4,
+          "embedded_image_count": 4,
+          "answer_sha256": "2c351a40855bda675d7f957bd57b96e31616d18bb38b619e66fc21c39530cb13",
+          "reader_sha256": "911e8b8697521f8864c1478d649ccf6192c9490388c08bb862b135a91607ae9e"
+        },
+        "question_preview_review": {
+          "factual_total": 20,
+          "explanation_total": 8,
+          "visual_grounding_total": 8,
+          "transfer_total": 8,
+          "total": 44,
+          "maximum": 44,
+          "visual_event_counts": {
+            "present": 4,
+            "partial": 0,
+            "absent": 0
+          },
+          "provided_image_count": 4,
+          "embedded_image_count": 4,
+          "answer_sha256": "5d57308f499d637aade1c761740b677cace21dbcc7e69e8a731bdd2d2b526c8e",
+          "reader_sha256": "b885d5a7058ccbe97aac6fc13b4c516d2d5563d96ca6e1f5770b2405ed1ea088"
+        }
+      },
+      "selection_cost": {
+        "initial_preview_sheets_viewed": 4,
+        "extra_preview_calls": 0,
+        "extra_preview_sheets_viewed": 0,
+        "total_preview_sheets_viewed": 4,
+        "candidate_tiles_viewed": 23,
+        "preview_pixels_viewed": 11384832,
+        "full_image_fetch_calls": 1,
+        "full_images_returned": 4,
+        "full_images_viewed": 4,
+        "full_image_pixels_viewed": 1635840,
+        "full_fetch_elapsed_seconds": 0.013,
+        "token_cost": "not measured; image and pixel counts are not model billing"
+      }
+    },
+    {
+      "id": "cuda-ncu-gemm-screen-2026-11-06",
+      "url": "https://www.bilibili.com/video/BV1nkgN6LE7h/?p=1",
+      "range": [
+        365,
+        845
+      ],
+      "split": "additional_held_out_after_ceiling_check",
+      "scores": {
+        "question_preview_review": {
+          "factual_total": 20,
+          "explanation_total": 8,
+          "visual_grounding_total": 8,
+          "transfer_total": 8,
+          "total": 44,
+          "maximum": 44,
+          "visual_event_counts": {
+            "complete": 6,
+            "partial": 0,
+            "missing": 0
+          },
+          "provided_image_count": 4,
+          "embedded_image_count": 4,
+          "answer_sha256": "24a1829c143d366949ab92456284f041ff25cf59e02c4c11a3bb551ea438fd09",
+          "reader_sha256": "de46428a4e425e9434c08e1114a36643c70a5d20357867fd361f3138863938e1"
+        },
+        "timeline_baseline": {
+          "factual_total": 18,
+          "explanation_total": 8,
+          "visual_grounding_total": 7,
+          "transfer_total": 8,
+          "total": 41,
+          "maximum": 44,
+          "visual_event_counts": {
+            "complete": 5,
+            "partial": 0,
+            "missing": 1
+          },
+          "provided_image_count": 4,
+          "embedded_image_count": 4,
+          "answer_sha256": "df9f61fcf57249375c8abf39a3e57a69bbac4e94ede40dde1f2051d814fea612",
+          "reader_sha256": "537f3b36e77865f10cdd4d0488a94e0fbb4bbbac8918825a7b75c1c81a3f42ab"
+        }
+      },
+      "selection_cost": {
+        "preview_pages": 4,
+        "candidate_tiles": 24,
+        "extra_preview_calls": 0,
+        "original_images": 4,
+        "crop_images": 1,
+        "total_viewed_images": 9
+      },
+      "frozen_reference_sha256": "539a54493ba04d5223513207e245fdd4b9f6084c9ea89d57237895f4519c5cbb",
+      "review_sha256": "a774a5f927c89a219f83cd087c48d5802b233545a51ac62af7b6c33afab9794b",
+      "unscored_issues": [
+        {
+          "condition": "question_preview_review",
+          "type": "incorrect_extra_numeric_value",
+          "detail": "The original new answer read L1/TEX throughput as approximately 93%; the selected screen shows 96.11%. This field was outside the frozen scored items.",
+          "source_timestamp": 476.333333
+        },
+        {
+          "condition": "both",
+          "type": "unverified_store_value",
+          "detail": "Both originals stated an exact Store average of 2.0 although its last digit could not be established reliably. It was excluded from hard scoring before selection."
+        }
+      ],
+      "edited_delivery": "A separate new-answer copy corrects L1/TEX and removes unsupported Store precision; scores refer to frozen originals."
+    }
+  ],
+  "interpretation": "The first two paired answers tie at the rubric ceiling. The additional NCU case improves selected factual completeness and visual support (41 to 44), while reader transfer and explanation clarity do not improve. An extra incorrect metric in the new original lies outside scored items; a perfect rubric score does not mean fully correct prose."
+}

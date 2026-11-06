@@ -4,17 +4,95 @@ from __future__ import annotations
 
 import hashlib
 import json
+import math
 import sqlite3
 import time
 from contextlib import contextmanager
 from pathlib import Path
 
+from PIL import Image
+
+from .budget import compact_json
 from .models import Frame, Segment, Video, VidLensError
 
 
 def segment_id(video_id: str, segment: Segment) -> str:
     value = f"{video_id}|{segment.kind}|{segment.start:.3f}|{segment.end:.3f}|{segment.text}"
     return hashlib.sha256(value.encode()).hexdigest()[:16]
+
+
+def _segment_key(segment) -> tuple:
+    return (float(segment.start), float(segment.end), segment.text, segment.kind,
+            segment.source, segment.language)
+
+
+def frame_interval(frame: dict) -> tuple[float, float]:
+    """Use a decoder-confirmed display interval, or a legacy point capture."""
+    start = frame["timestamp"]
+    end = frame.get("visible_until")
+    if not isinstance(end, (int, float)) or isinstance(end, bool) or not math.isfinite(end) or end <= start:
+        end = start
+    return start, end
+
+
+def frame_source_revision(video: Video) -> str:
+    """Shared identity for decoded pixels, independent of speech/learning changes."""
+    identity = [video.id, video.metadata.get("revision", ""), video.duration]
+    if local := video.metadata.get("local_media_path"):
+        path = Path(local)
+        stat = path.stat()
+        identity.extend([str(path.resolve()), stat.st_size, stat.st_mtime_ns])
+    return hashlib.sha256(compact_json(identity).encode()).hexdigest()[:24]
+
+
+def _retained_frame_quality(data: dict) -> tuple[int, int, bool] | None:
+    """Inspect actual full-frame pixels, including a display image's larger source."""
+    if data.get("crop_box"):
+        return None
+    path = Path(data["path"])
+    def size(image):
+        width, height = image.size
+        return (height, width) if image.getexif().get(274) in {5, 6, 7, 8} else (width, height)
+
+    try:
+        with Image.open(path) as image:
+            display_size = size(image)
+        try:
+            info = json.loads(path.with_suffix(".json").read_text())
+        except (OSError, ValueError):
+            info = {}
+        value = info.get("source") if isinstance(info, dict) else None
+        source = Path(value) if isinstance(value, str) and Path(value).is_file() else path
+        with Image.open(source) as image:
+            width, height = size(image)
+            lossless = image.format == "PNG"
+        if not math.isclose(width / height, display_size[0] / display_size[1], rel_tol=.01):
+            return None
+        return width, height, lossless
+    except (OSError, ValueError, KeyError):
+        return None
+
+
+def _keep_retained_frame(previous: dict, incoming: dict) -> bool:
+    old, new = _retained_frame_quality(previous), _retained_frame_quality(incoming)
+    if old is None:
+        return False
+    if new is None:
+        return True
+    if not math.isclose(old[0] / old[1], new[0] / new[1], rel_tol=.01):
+        return False
+    # A larger area alone does not establish more detail in both dimensions.
+    return old[0] >= new[0] and old[1] >= new[1] and (
+        old[:2] != new[:2] or (old[2] and not new[2])
+    )
+
+
+def _matching_frame_geometry(previous: dict, incoming: dict) -> bool:
+    values = [previous.get("width"), previous.get("height"),
+              incoming.get("width"), incoming.get("height")]
+    if not all(isinstance(v, int) and not isinstance(v, bool) and v > 0 for v in values):
+        return False
+    return math.isclose(values[0] / values[1], values[2] / values[3], rel_tol=.01)
 
 
 class Store:
@@ -57,6 +135,11 @@ class Store:
                     created REAL NOT NULL
                 );
                 CREATE INDEX IF NOT EXISTS deliveries_evidence ON deliveries(video_id,kind,start,end,evidence_id);
+                CREATE TABLE IF NOT EXISTS text_deliveries (
+                    video_id TEXT NOT NULL REFERENCES videos(id), evidence_id TEXT NOT NULL,
+                    start_char INTEGER NOT NULL, end_char INTEGER NOT NULL,
+                    PRIMARY KEY(video_id,evidence_id,start_char,end_char)
+                );
             """)
 
             # Invalidate reader snapshots even when another CLI or older MCP process writes.
@@ -92,8 +175,17 @@ class Store:
         replace=True,
         invalidate_derived=False,
         aliases=(),
+        replace_asr_range: tuple[float, float, str | None] | None = None,
     ):
         with self.connect() as db:
+            db.execute("BEGIN IMMEDIATE")
+            prior_ids = {}
+            if replace and replace_asr_range is None and not invalidate_derived:
+                prior_ids = {
+                    _segment_key(s): s.id for s in self._decode_segments(db.execute(
+                        "SELECT * FROM segments WHERE video_id=?", (video.id,),
+                    ))
+                }
             db.execute(
                 "INSERT INTO videos VALUES (?, ?, ?, ?, ?) ON CONFLICT(id) DO UPDATE SET "
                 "url=excluded.url, data=excluded.data, warnings=excluded.warnings, updated=excluded.updated",
@@ -115,15 +207,63 @@ class Store:
                 db.execute("DELETE FROM segments WHERE video_id=?", (video.id,))
                 db.execute("DELETE FROM frames WHERE video_id=?", (video.id,))
                 db.execute("DELETE FROM deliveries WHERE video_id=?", (video.id,))
-            elif replace:
+                db.execute("DELETE FROM text_deliveries WHERE video_id=?", (video.id,))
+            elif replace and replace_asr_range is None:
                 db.execute("DELETE FROM segments WHERE video_id=? AND kind != 'ocr'", (video.id,))
-            self._add_segments(db, video.id, segments)
+            if replace_asr_range is not None:
+                start, end, language = replace_asr_range
+                predicate = (
+                    "video_id=? AND kind='transcript' "
+                    "AND (source LIKE 'whisper:%' OR source LIKE 'mlx-whisper:%') "
+                    "AND language=? AND start>=? AND end<=?"
+                )
+                params = (video.id, language or "", start, end)
+                # Delete attribution before deleting its source, in this same
+                # transaction. A later cue with the same text ID must not inherit
+                # pages read from an earlier recognition run.
+                for table in ("deliveries", "text_deliveries"):
+                    db.execute(
+                        f"DELETE FROM {table} WHERE video_id=? AND evidence_id IN "
+                        f"(SELECT id FROM segments WHERE {predicate})",
+                        (video.id, *params),
+                    )
+                # Older complete-read responses did not carry raw IDs. Their
+                # aggregate attribution cannot survive replacement of any cue.
+                db.execute(
+                    "DELETE FROM deliveries WHERE video_id=? AND kind IN ('text','excerpt') "
+                    "AND NOT EXISTS (SELECT 1 FROM segments WHERE id=evidence_id) "
+                    f"AND EXISTS (SELECT 1 FROM segments s WHERE {predicate} "
+                    "AND s.start < deliveries.end AND s.end > deliveries.start)",
+                    (video.id, *params),
+                )
+                db.execute(
+                    f"DELETE FROM segments WHERE {predicate}", params,
+                )
+            self._add_segments(db, video.id, segments, prior_ids)
 
-    def _add_segments(self, db, video_id: str, segments: list[Segment]):
+    def _add_segments(self, db, video_id: str, segments: list[Segment], prior_ids=None):
+        prior_ids = prior_ids or {}
+        reserved = set(prior_ids.values())
         for s in segments:
             if s.end < s.start or s.start < 0 or not s.text.strip():
                 continue
-            s.id = segment_id(video_id, s)
+            key = _segment_key(s)
+            existing = db.execute(
+                "SELECT id FROM segments WHERE video_id=? AND start=? AND end=? "
+                "AND text=? AND kind=? AND source=? AND language=?", (video_id, *key),
+            ).fetchone()
+            if existing:
+                s.id = existing["id"]
+            elif key in prior_ids:
+                s.id = prior_ids[key]
+            else:
+                s.id = segment_id(video_id, s)
+                if s.id in reserved or db.execute("SELECT 1 FROM segments WHERE id=?", (s.id,)).fetchone():
+                    # Legacy IDs omitted track provenance and rounded time to
+                    # milliseconds. Preserve them unless two distinct cues
+                    # collide; qualify only the additional cue's identity.
+                    value = json.dumps([video_id, *key], ensure_ascii=False, separators=(",", ":"))
+                    s.id = hashlib.sha256(value.encode()).hexdigest()[:16]
             db.execute(
                 "INSERT OR REPLACE INTO segments VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
                 (s.id, video_id, s.start, s.end, s.text, s.kind, s.source, s.language),
@@ -131,6 +271,7 @@ class Store:
 
     def add_segments(self, video_id: str, segments: list[Segment]):
         with self.connect() as db:
+            db.execute("BEGIN IMMEDIATE")
             self._add_segments(db, video_id, segments)
 
     def get(self, video_id: str) -> Video:
@@ -226,16 +367,47 @@ class Store:
 
     def save_frames(self, video_id: str, frames: list[Frame]):
         with self.connect() as db:
+            db.execute("BEGIN IMMEDIATE")
+            row = db.execute("SELECT data FROM videos WHERE id=?", (video_id,)).fetchone()
+            if row is None:
+                raise VidLensError("video_not_found", f"Unknown video: {video_id}")
+            source_identity = frame_source_revision(Video(**json.loads(row["data"])))
             for frame in frames:
+                data = frame.to_dict(include_layout=True)
+                previous = db.execute(
+                    "SELECT data FROM frames WHERE video_id=? AND timestamp=?",
+                    (video_id, frame.timestamp),
+                ).fetchone()
+                old = json.loads(previous["data"]) if previous else None
+                if old and old.get("_source_identity") == source_identity:
+                    if _keep_retained_frame(old, data):
+                        incoming = data
+                        data = dict(old)
+                        for key in ("selection", "requested_timestamp"):
+                            data[key] = incoming.get(key)
+                        if frame_interval(incoming)[1] > frame.timestamp:
+                            data["visible_until"] = incoming["visible_until"]
+                        if not data.get("ocr") and incoming.get("ocr"):
+                            data["ocr"] = incoming["ocr"]
+                            data["ocr_regions"] = incoming.get("ocr_regions", [])
+                    elif (not data.get("ocr") and old.get("ocr")
+                          and _matching_frame_geometry(old, data)):
+                        data["ocr"] = old["ocr"]
+                        data["ocr_regions"] = old.get("ocr_regions", [])
+                    if frame_interval(data)[1] == frame.timestamp:
+                        known_end = frame_interval(old)[1]
+                        if known_end > frame.timestamp:
+                            data["visible_until"] = known_end
+                data["_source_identity"] = source_identity
                 db.execute(
                     "INSERT OR REPLACE INTO frames VALUES (?, ?, ?)",
-                    (video_id, frame.timestamp, json.dumps(frame.to_dict(), ensure_ascii=False)),
+                    (video_id, frame.timestamp, json.dumps(data, ensure_ascii=False)),
                 )
-                if frame.ocr.strip():
-                    db.execute(
-                        "DELETE FROM segments WHERE video_id=? AND kind='ocr' AND start=?",
-                        (video_id, frame.timestamp),
-                    )
+                db.execute(
+                    "DELETE FROM segments WHERE video_id=? AND kind='ocr' AND start=?",
+                    (video_id, frame.timestamp),
+                )
+                if data["ocr"].strip():
                     self._add_segments(
                         db,
                         video_id,
@@ -243,7 +415,7 @@ class Store:
                             Segment(
                                 frame.timestamp,
                                 frame.timestamp + 0.001,
-                                frame.ocr,
+                                data["ocr"],
                                 kind="ocr",
                                 source="local_ocr",
                                 language="mixed",
@@ -263,12 +435,23 @@ class Store:
         if row is None:
             return None
         data = json.loads(row["data"])
+        data.pop("_source_identity", None)
         data["path"] = Path(data["path"])
         return Frame(**data) if data["path"].is_file() else None
 
     def delivered(self, video_id: str, items: list[dict], kind: str = "text"):
         with self.connect() as db:
             for item in items:
+                start = item.get("start", item.get("timestamp", 0))
+                end = item.get("end", item.get("timestamp", 0))
+                if kind == "frame" and "timestamp" in item:
+                    start, end = frame_interval(item)
+                    stored = db.execute(
+                        "SELECT data FROM frames WHERE video_id=? AND timestamp=?",
+                        (video_id, item["timestamp"]),
+                    ).fetchone()
+                    if stored:
+                        start, end = frame_interval(json.loads(stored["data"]))
                 db.execute(
                     """INSERT INTO deliveries SELECT ?1, ?2, ?3, ?4, ?5, ?6
                        WHERE NOT EXISTS (SELECT 1 FROM deliveries WHERE video_id=?1 AND kind=?2
@@ -276,8 +459,8 @@ class Store:
                     (
                         video_id,
                         kind,
-                        item.get("start", item.get("timestamp", 0)),
-                        item.get("end", item.get("timestamp", 0)),
+                        start,
+                        end,
                         item.get("id", ""),
                         time.time(),
                     ),
@@ -290,6 +473,53 @@ class Store:
                 (video_id,),
             ).fetchall()
         return [dict(r) for r in rows]
+
+    def delivered_text(self, video_id: str, items: list[dict]):
+        """Accumulate character ranges so a paginated cue can eventually count as read."""
+        with self.connect() as db:
+            for item in items:
+                row = db.execute(
+                    "SELECT * FROM segments WHERE video_id=? AND id=?",
+                    (video_id, item["id"]),
+                ).fetchone()
+                if row is None:
+                    continue
+                start = item.get("text_offset", 0)
+                text = item["text"]
+                if item.get("excerpt_truncated"):
+                    text = text[:-1]
+                end = start + len(text)
+                if not text or row["text"][start:end] != text:
+                    continue
+                db.execute(
+                    "INSERT OR IGNORE INTO text_deliveries VALUES (?,?,?,?)",
+                    (video_id, row["id"], start, end),
+                )
+                intervals = db.execute(
+                    "SELECT start_char,end_char FROM text_deliveries "
+                    "WHERE video_id=? AND evidence_id=? ORDER BY start_char",
+                    (video_id, row["id"]),
+                ).fetchall()
+                covered = 0
+                for left, right in intervals:
+                    if left > covered:
+                        break
+                    covered = max(covered, right)
+                if covered >= len(row["text"]):
+                    db.execute(
+                        "INSERT INTO deliveries SELECT ?, 'text', ?, ?, ?, ? "
+                        "WHERE NOT EXISTS (SELECT 1 FROM deliveries "
+                        "WHERE video_id=? AND kind='text' AND evidence_id=?)",
+                        (
+                            video_id,
+                            row["start"],
+                            row["end"],
+                            row["id"],
+                            time.time(),
+                            video_id,
+                            row["id"],
+                        ),
+                    )
 
     def list(self, limit: int) -> list[dict]:
         with self.connect() as db:

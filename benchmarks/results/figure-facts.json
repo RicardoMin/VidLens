@@ -1,0 +1,1621 @@
+{
+  "schema_version": 1,
+  "version": "0.1.0",
+  "study": "paired figure-fact checks with independent AI writers, blinded judges and readers",
+  "scope": "Two new intervals of the same previously studied Chinese NCU video; not independent-video generalization or human learning study",
+  "frozen_inputs": {
+    "public-questions.json": "07452949398293400d8fa9bc3f59bf26e8822a321480d0c811d7c738fd06eb4a",
+    "hidden-reference.json": "a51caa5b22563679d6ea0f813e1d7c08885799297f260cc88366f780cf0d6b84",
+    "reader-questions.json": "6b43086b1dfad373e3d521eb8a90c3788624777a80ddab17d08efe145c308635",
+    "ncu-scheduler-heldout-packet.json": "872705f16208805c140c982ea2a654254110cd7a158e89bf0e8a3283b4a3454e",
+    "ncu-instruction-heldout-packet.json": "ec83c002c64272428e805cddb6da7f71bd124625cee371e9a9f76d4c575d9fb1"
+  },
+  "cases": [
+    {
+      "id": "ncu-scheduler-heldout",
+      "conditions": {
+        "previous_workflow": {
+          "required_facts": {
+            "correct": 12,
+            "incorrect": 0,
+            "omitted": 0,
+            "unverifiable": 0
+          },
+          "extra_claims": {
+            "correct": 14,
+            "incorrect": 0,
+            "omitted": 0,
+            "unverifiable": 0
+          },
+          "critical_errors": 0,
+          "dimensions": {
+            "binding": {
+              "correct": 8
+            },
+            "semantic": {
+              "correct": 8
+            },
+            "derived": {
+              "correct": 6
+            },
+            "process": {
+              "correct": 1
+            },
+            "value": {
+              "correct": 1
+            },
+            "unit": {
+              "correct": 2
+            }
+          },
+          "reader_task_counts": {
+            "passed": 3
+          },
+          "reader_tasks": [
+            {
+              "id": "SR1",
+              "status": "passed",
+              "reason": "正确重建五根条 12、8、7.92、1.10、0.27 与每调度器/活动周期单位；算出 99% 和 66%，明确二者不是 GPU 有效计算时间比例。"
+            },
+            {
+              "id": "SR2",
+              "status": "passed",
+              "reason": "原始 scheduler_trace 未修补，在独立离线 Python 子进程通过冻结十周期输入、三个冻结变体及两个额外变体。固定结果为 0.4、0.2、80%、5；正确解释多个候选只对应一次发射，1/eligible_mean 不能替代发射率倒数。无发射时正无穷的含义明确。",
+              "execution": {
+                "sha256": "c3749b334dcf6aefd5d86500e78246be93fd9941097e2e1b99da154f2eb35471",
+                "status": "passed",
+                "checks": [
+                  {
+                    "input": [
+                      2,
+                      2,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0
+                    ],
+                    "expected": {
+                      "eligible_mean": 0.4,
+                      "issued_mean": 0.2,
+                      "no_eligible_percent": 80.0,
+                      "cycles_per_issue": 5.0
+                    },
+                    "actual": {
+                      "eligible_mean": 0.4,
+                      "issued_mean": 0.2,
+                      "no_eligible_percent": 80.0,
+                      "cycles_per_issue": 5.0
+                    },
+                    "passed": true
+                  },
+                  {
+                    "input": [
+                      0,
+                      0,
+                      0
+                    ],
+                    "expected": {
+                      "eligible_mean": 0,
+                      "issued_mean": 0,
+                      "no_eligible_percent": 100,
+                      "cycles_per_issue": null
+                    },
+                    "actual": {
+                      "eligible_mean": 0.0,
+                      "issued_mean": 0.0,
+                      "no_eligible_percent": 100.0,
+                      "cycles_per_issue": "positive_infinity"
+                    },
+                    "passed": true,
+                    "equivalence": "冻结参考允许无发射时返回 None 或明确正无穷；原函数返回正无穷。"
+                  },
+                  {
+                    "input": [
+                      1,
+                      2,
+                      3,
+                      1
+                    ],
+                    "expected": {
+                      "eligible_mean": 1.75,
+                      "issued_mean": 1,
+                      "no_eligible_percent": 0,
+                      "cycles_per_issue": 1
+                    },
+                    "actual": {
+                      "eligible_mean": 1.75,
+                      "issued_mean": 1.0,
+                      "no_eligible_percent": 0.0,
+                      "cycles_per_issue": 1.0
+                    },
+                    "passed": true
+                  },
+                  {
+                    "input": [
+                      0,
+                      1,
+                      0,
+                      3
+                    ],
+                    "expected": {
+                      "eligible_mean": 1,
+                      "issued_mean": 0.5,
+                      "no_eligible_percent": 50,
+                      "cycles_per_issue": 2
+                    },
+                    "actual": {
+                      "eligible_mean": 1.0,
+                      "issued_mean": 0.5,
+                      "no_eligible_percent": 50.0,
+                      "cycles_per_issue": 2.0
+                    },
+                    "passed": true
+                  },
+                  {
+                    "input": [
+                      1,
+                      1,
+                      1
+                    ],
+                    "expected": {
+                      "eligible_mean": 1,
+                      "issued_mean": 1,
+                      "no_eligible_percent": 0,
+                      "cycles_per_issue": 1
+                    },
+                    "actual": {
+                      "eligible_mean": 1.0,
+                      "issued_mean": 1.0,
+                      "no_eligible_percent": 0.0,
+                      "cycles_per_issue": 1.0
+                    },
+                    "passed": true
+                  },
+                  {
+                    "input": [
+                      2,
+                      0,
+                      1,
+                      0
+                    ],
+                    "expected": {
+                      "eligible_mean": 0.75,
+                      "issued_mean": 0.5,
+                      "no_eligible_percent": 50,
+                      "cycles_per_issue": 2
+                    },
+                    "actual": {
+                      "eligible_mean": 0.75,
+                      "issued_mean": 0.5,
+                      "no_eligible_percent": 50.0,
+                      "cycles_per_issue": 2.0
+                    },
+                    "passed": true
+                  }
+                ],
+                "frozen_inputs_checked": 3
+              }
+            },
+            {
+              "id": "SR3",
+              "status": "passed",
+              "reason": "拒绝由约 50.3% 的驻留增幅推出加速；按 Scheduler、Warp State/Source Counters、内存与源码的顺序说明用途，并另明确同工作量实测运行时间不可缺少。也指出新 Active 超过旧理论 8，必须重核配置。"
+            }
+          ],
+          "provenance": {
+            "reference_sha256": "a51caa5b22563679d6ea0f813e1d7c08885799297f260cc88366f780cf0d6b84",
+            "reader_questions_sha256": "6b43086b1dfad373e3d521eb8a90c3788624777a80ddab17d08efe145c308635",
+            "writer_sha256": "46e4691aea492edcc358e483a1243e742a01b16fde7283ed1881d5ed8dad9b74",
+            "reader_sha256": "5684d77c07b60975dac63f3ac8ee06d2d033b8fc9243ae675bfcd663fd66146d",
+            "review_sha256": "5b9da48367e441b162bd95e3daa7dab80e6ec431b6417d299bf5b1b654f50aa4"
+          },
+          "audited_numeric_tokens": 48,
+          "claims": [
+            {
+              "id": "S01",
+              "kind": "required",
+              "dimension": "binding",
+              "status": "correct",
+              "critical": false,
+              "reason": "12 warp/scheduler，条形末端与横轴 12 对齐，来源 frame 969。"
+            },
+            {
+              "id": "S02",
+              "kind": "required",
+              "dimension": "binding",
+              "status": "correct",
+              "critical": false,
+              "reason": "8 warp/scheduler，条形末端与横轴 8 对齐，来源 frame 969。"
+            },
+            {
+              "id": "S03",
+              "kind": "required",
+              "dimension": "binding",
+              "status": "correct",
+              "critical": false,
+              "reason": "7.92 为每调度器活动周期内的平均驻留 warp 数，非就绪数；frame 969 表格及详情与此一致。"
+            },
+            {
+              "id": "S04",
+              "kind": "required",
+              "dimension": "binding",
+              "status": "correct",
+              "critical": false,
+              "reason": "1.10 为每调度器每活动周期平均就绪 warp 数，frame 990 表格及 per_cycle_active 详情一致。"
+            },
+            {
+              "id": "S05",
+              "kind": "required",
+              "dimension": "binding",
+              "status": "correct",
+              "critical": false,
+              "reason": "0.27 为每调度器每活动周期平均发射 warp 数；frame 1045 表格与详情一致，并非 0.27%。"
+            },
+            {
+              "id": "S06",
+              "kind": "required",
+              "dimension": "binding",
+              "status": "correct",
+              "critical": false,
+              "reason": "72.94% 为相应调度器活动周期中没有就绪 warp 的比例，frame 969 右列一致。"
+            },
+            {
+              "id": "S07",
+              "kind": "required",
+              "dimension": "binding",
+              "status": "correct",
+              "critical": false,
+              "reason": "27.06% 为相同分母下至少一个就绪 warp 的周期比例，frame 969 右列一致。"
+            },
+            {
+              "id": "S08",
+              "kind": "required",
+              "dimension": "semantic",
+              "status": "correct",
+              "critical": false,
+              "reason": "明确区分驻留、等待就绪与从就绪集合选择发射。与 NVIDIA Profiling Guide 的 Scheduler Statistics 定义一致。"
+            },
+            {
+              "id": "S09",
+              "kind": "required",
+              "dimension": "semantic",
+              "status": "correct",
+              "critical": false,
+              "reason": "正确给出零 Eligible 导致不发射；没有把零 Active 当成必要条件。依据原图 Scheduler Statistics 说明及 NVIDIA 官方定义。"
+            },
+            {
+              "id": "S10",
+              "kind": "required",
+              "dimension": "derived",
+              "status": "correct",
+              "critical": false,
+              "reason": "7.92/8=0.99，7.92/12=0.66。行名明确是实际驻留相对上限，邻文要求保留分母；这里解释为容量占比，未解释为 GPU 有效计算时间。"
+            },
+            {
+              "id": "S11",
+              "kind": "required",
+              "dimension": "derived",
+              "status": "correct",
+              "critical": false,
+              "reason": "以已四舍五入的 0.27 warp/活动周期取倒数为 3.7037 活动周期/发射 warp，约 3.70；分母与单位均正确。"
+            },
+            {
+              "id": "S12",
+              "kind": "required",
+              "dimension": "process",
+              "status": "correct",
+              "critical": false,
+              "reason": "结合前文 Scheduler 图、上限/驻留/就绪/发射比较与 No Eligible，明确接着查 Warp State、Source Counters、内存及源码，并在修改后比较时间和就绪/发射。未用高驻留宣布加速。"
+            },
+            {
+              "id": "E01",
+              "kind": "extra",
+              "dimension": "value",
+              "status": "correct",
+              "critical": false,
+              "reason": "7.92 可描述为将近八个；频繁不发射由 No Eligible 72.94% 支持。"
+            },
+            {
+              "id": "E02",
+              "kind": "extra",
+              "dimension": "semantic",
+              "status": "correct",
+              "critical": false,
+              "reason": "原图横轴及行名均为每调度器的 warp 数；12 是容量而非整个 GPU warp 总数，解释正确。"
+            },
+            {
+              "id": "E03",
+              "kind": "extra",
+              "dimension": "binding",
+              "status": "correct",
+              "critical": false,
+              "reason": "已查看 P 嵌图与 frame 969；12、8、接近 8 及较短的就绪/发射条顺序正确。"
+            },
+            {
+              "id": "E04",
+              "kind": "extra",
+              "dimension": "unit",
+              "status": "correct",
+              "critical": false,
+              "reason": "frame 990 右侧 Eligible 详情显示 per_cycle_active；句中平均值指 Active/Eligible/Issued 的活动周期平均，没有把硬件容量解释成动态累计。"
+            },
+            {
+              "id": "E05",
+              "kind": "extra",
+              "dimension": "semantic",
+              "status": "correct",
+              "critical": false,
+              "reason": "原图可确认硬件 12、此配置理论 8；需查 Occupancy 才能区分资源限制，未伪造唯一原因。NVIDIA 的 Launch/Occupancy/Scheduler 定义支持此区分。"
+            },
+            {
+              "id": "E06",
+              "kind": "extra",
+              "dimension": "derived",
+              "status": "correct",
+              "critical": false,
+              "reason": "8/12*100=66.666...，按一位小数为 66.7%；等号按表中有限位数的四舍五入读法，不是声称精确无限位。分母是硬件容量。"
+            },
+            {
+              "id": "E07",
+              "kind": "extra",
+              "dimension": "derived",
+              "status": "correct",
+              "critical": false,
+              "reason": "1.10/7.92*100=13.888...，约 13.9%；正确标为两个平均数之比，明确不等于非空周期比例。"
+            },
+            {
+              "id": "E08",
+              "kind": "extra",
+              "dimension": "unit",
+              "status": "correct",
+              "critical": false,
+              "reason": "调度器可交错发射不同 warp；3.7 是整体每次发射的活动周期间隔，不是同一 warp 的指令间隔，也不是访存延迟。与 NVIDIA Scheduler/Warp State 定义一致。"
+            },
+            {
+              "id": "E09",
+              "kind": "extra",
+              "dimension": "derived",
+              "status": "correct",
+              "critical": false,
+              "reason": "1.10 大于 1，72.94% 取整约 73%；平均就绪数不规定每个周期均非空。"
+            },
+            {
+              "id": "E10",
+              "kind": "extra",
+              "dimension": "derived",
+              "status": "correct",
+              "critical": false,
+              "reason": "教学假设明确，不冒充实测；(73*0+27*4)/100=1.08，1.08 与 1.10 接近且大于一，零候选周期占 73%。例子正确。"
+            },
+            {
+              "id": "E11",
+              "kind": "extra",
+              "dimension": "semantic",
+              "status": "correct",
+              "critical": false,
+              "reason": "NVIDIA Scheduler Statistics 规定从 eligible warp 中选择一个 warp 发射，多个候选竞争机会的描述正确。"
+            },
+            {
+              "id": "E12",
+              "kind": "extra",
+              "dimension": "semantic",
+              "status": "correct",
+              "critical": false,
+              "reason": "依赖返回数据的后续指令可以阻塞该 warp 的就绪性而不撤销驻留；调度器改选其他 ready warp 可隐藏等待。是明确的机理例子，并未称为当前内核实测原因。"
+            },
+            {
+              "id": "E13",
+              "kind": "extra",
+              "dimension": "semantic",
+              "status": "correct",
+              "critical": false,
+              "reason": "驻留 7.92 接近理论 8；平均就绪 1.10、72.94% 无就绪周期及 0.27 发射率支持此判断。NVIDIA Scheduler Statistics 明确将大量跳过发射槽解释为延迟隐藏不足；不是已确定的具体访存/同步原因。"
+            },
+            {
+              "id": "E14",
+              "kind": "extra",
+              "dimension": "semantic",
+              "status": "correct",
+              "critical": false,
+              "reason": "这些是待调查的等待类别，Scheduler 汇总数本身不唯一决定具体 stall 主因；需要 Warp State/Source Counters 的后续证据。"
+            }
+          ],
+          "review_report_sha256": "7ec635879879b89afa11dbee99a01c35f1b1fbfd1570ab730324701e6e7ccc7b"
+        },
+        "figure_fact_check_workflow": {
+          "required_facts": {
+            "correct": 12,
+            "incorrect": 0,
+            "omitted": 0,
+            "unverifiable": 0
+          },
+          "extra_claims": {
+            "correct": 12,
+            "incorrect": 0,
+            "omitted": 0,
+            "unverifiable": 0
+          },
+          "critical_errors": 0,
+          "dimensions": {
+            "binding": {
+              "correct": 8
+            },
+            "semantic": {
+              "correct": 5
+            },
+            "derived": {
+              "correct": 7
+            },
+            "process": {
+              "correct": 2
+            },
+            "value": {
+              "correct": 1
+            },
+            "unit": {
+              "correct": 1
+            }
+          },
+          "reader_task_counts": {
+            "passed": 3
+          },
+          "reader_tasks": [
+            {
+              "id": "SR1",
+              "status": "passed",
+              "reason": "正确重建五根条 12、8、7.92、1.10、0.27 与每调度器/活动周期单位；算出 99% 和 66%，明确二者不是 GPU 有效计算时间比例。"
+            },
+            {
+              "id": "SR2",
+              "status": "passed",
+              "reason": "原始 scheduler_trace 未修补，在独立离线 Python 子进程通过冻结十周期输入、三个冻结变体及两个额外变体。固定结果为 0.4、0.2、80%、5；正确解释多个候选只对应一次发射，1/eligible_mean 不能替代发射率倒数。无发射时正无穷的含义明确。",
+              "execution": {
+                "sha256": "4290b91dab248922b36c7f740041acfd6adeacc126c3edeaedf2b4c7a00d51c2",
+                "status": "passed",
+                "checks": [
+                  {
+                    "input": [
+                      2,
+                      2,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0
+                    ],
+                    "expected": {
+                      "eligible_mean": 0.4,
+                      "issued_mean": 0.2,
+                      "no_eligible_percent": 80.0,
+                      "cycles_per_issue": 5.0
+                    },
+                    "actual": {
+                      "eligible_mean": 0.4,
+                      "issued_mean": 0.2,
+                      "no_eligible_percent": 80.0,
+                      "cycles_per_issue": 5.0
+                    },
+                    "passed": true
+                  },
+                  {
+                    "input": [
+                      0,
+                      0,
+                      0
+                    ],
+                    "expected": {
+                      "eligible_mean": 0,
+                      "issued_mean": 0,
+                      "no_eligible_percent": 100,
+                      "cycles_per_issue": null
+                    },
+                    "actual": {
+                      "eligible_mean": 0.0,
+                      "issued_mean": 0.0,
+                      "no_eligible_percent": 100.0,
+                      "cycles_per_issue": "positive_infinity"
+                    },
+                    "passed": true,
+                    "equivalence": "冻结参考允许无发射时返回 None 或明确正无穷；原函数返回正无穷。"
+                  },
+                  {
+                    "input": [
+                      1,
+                      2,
+                      3,
+                      1
+                    ],
+                    "expected": {
+                      "eligible_mean": 1.75,
+                      "issued_mean": 1,
+                      "no_eligible_percent": 0,
+                      "cycles_per_issue": 1
+                    },
+                    "actual": {
+                      "eligible_mean": 1.75,
+                      "issued_mean": 1.0,
+                      "no_eligible_percent": 0.0,
+                      "cycles_per_issue": 1.0
+                    },
+                    "passed": true
+                  },
+                  {
+                    "input": [
+                      0,
+                      1,
+                      0,
+                      3
+                    ],
+                    "expected": {
+                      "eligible_mean": 1,
+                      "issued_mean": 0.5,
+                      "no_eligible_percent": 50,
+                      "cycles_per_issue": 2
+                    },
+                    "actual": {
+                      "eligible_mean": 1.0,
+                      "issued_mean": 0.5,
+                      "no_eligible_percent": 50.0,
+                      "cycles_per_issue": 2.0
+                    },
+                    "passed": true
+                  },
+                  {
+                    "input": [
+                      1,
+                      1,
+                      1
+                    ],
+                    "expected": {
+                      "eligible_mean": 1,
+                      "issued_mean": 1,
+                      "no_eligible_percent": 0,
+                      "cycles_per_issue": 1
+                    },
+                    "actual": {
+                      "eligible_mean": 1.0,
+                      "issued_mean": 1.0,
+                      "no_eligible_percent": 0.0,
+                      "cycles_per_issue": 1.0
+                    },
+                    "passed": true
+                  },
+                  {
+                    "input": [
+                      2,
+                      0,
+                      1,
+                      0
+                    ],
+                    "expected": {
+                      "eligible_mean": 0.75,
+                      "issued_mean": 0.5,
+                      "no_eligible_percent": 50,
+                      "cycles_per_issue": 2
+                    },
+                    "actual": {
+                      "eligible_mean": 0.75,
+                      "issued_mean": 0.5,
+                      "no_eligible_percent": 50.0,
+                      "cycles_per_issue": 2.0
+                    },
+                    "passed": true
+                  }
+                ],
+                "frozen_inputs_checked": 3
+              }
+            },
+            {
+              "id": "SR3",
+              "status": "passed",
+              "reason": "拒绝由约 50.25% 的驻留增幅推出加速，且不反向断言一定没变快；按同条件 kernel 时长、Scheduler、Warp State 三项给出用途和单位，要求新的时间/发射/stall 实测；提醒重新确认新配置理论上限。"
+            }
+          ],
+          "provenance": {
+            "reference_sha256": "a51caa5b22563679d6ea0f813e1d7c08885799297f260cc88366f780cf0d6b84",
+            "reader_questions_sha256": "6b43086b1dfad373e3d521eb8a90c3788624777a80ddab17d08efe145c308635",
+            "writer_sha256": "a0fd84a076dff853c2633a9b412f271e6feb2965c70d8b613d60f168d17de2e5",
+            "reader_sha256": "af097d35143521cb1c4829afa643b9512fd00aef00645f0530c7f44a78db1952",
+            "review_sha256": "467cc1978f4d390bdd71eb9ba52ca969bd3b2fff632e0a1811373734560fd27c"
+          },
+          "audited_numeric_tokens": 42,
+          "claims": [
+            {
+              "id": "S01",
+              "kind": "required",
+              "dimension": "binding",
+              "status": "correct",
+              "critical": false,
+              "reason": "12 warp/scheduler，条形末端与横轴 12 对齐，来源 frame 969。"
+            },
+            {
+              "id": "S02",
+              "kind": "required",
+              "dimension": "binding",
+              "status": "correct",
+              "critical": false,
+              "reason": "8 warp/scheduler，条形末端与横轴 8 对齐，来源 frame 969。"
+            },
+            {
+              "id": "S03",
+              "kind": "required",
+              "dimension": "binding",
+              "status": "correct",
+              "critical": false,
+              "reason": "7.92 为每调度器活动周期内的平均驻留 warp 数，非就绪数；frame 969 表格及详情与此一致。"
+            },
+            {
+              "id": "S04",
+              "kind": "required",
+              "dimension": "binding",
+              "status": "correct",
+              "critical": false,
+              "reason": "1.10 为每调度器每活动周期平均就绪 warp 数，frame 990 表格及 per_cycle_active 详情一致。"
+            },
+            {
+              "id": "S05",
+              "kind": "required",
+              "dimension": "binding",
+              "status": "correct",
+              "critical": false,
+              "reason": "0.27 为每调度器每活动周期平均发射 warp 数；frame 1045 表格与详情一致，并非 0.27%。"
+            },
+            {
+              "id": "S06",
+              "kind": "required",
+              "dimension": "binding",
+              "status": "correct",
+              "critical": false,
+              "reason": "72.94% 为相应调度器活动周期中没有就绪 warp 的比例，frame 969 右列一致。"
+            },
+            {
+              "id": "S07",
+              "kind": "required",
+              "dimension": "binding",
+              "status": "correct",
+              "critical": false,
+              "reason": "27.06% 为相同分母下至少一个就绪 warp 的周期比例，frame 969 右列一致。"
+            },
+            {
+              "id": "S08",
+              "kind": "required",
+              "dimension": "semantic",
+              "status": "correct",
+              "critical": false,
+              "reason": "明确驻留、就绪子集、选择发射的顺序，与 NVIDIA Scheduler Statistics 定义一致。"
+            },
+            {
+              "id": "S09",
+              "kind": "required",
+              "dimension": "semantic",
+              "status": "correct",
+              "critical": false,
+              "reason": "准确指出 Eligible 为零足以导致不发射，Active 不必为零。"
+            },
+            {
+              "id": "S10",
+              "kind": "required",
+              "dimension": "derived",
+              "status": "correct",
+              "critical": false,
+              "reason": "7.92/12=66.0%，7.92/8=99.0%；紧跟解释明确是硬件/理论驻留容量的分母，不是 GPU 有效计算时间。"
+            },
+            {
+              "id": "S11",
+              "kind": "required",
+              "dimension": "derived",
+              "status": "correct",
+              "critical": false,
+              "reason": "1/0.27=3.7037，约 3.7；随后明确周期/发射 warp 及活动周期口径，也排除单指令执行延迟。没有用 1/Eligible 代替。"
+            },
+            {
+              "id": "S12",
+              "kind": "required",
+              "dimension": "process",
+              "status": "correct",
+              "critical": false,
+              "reason": "前文按 Scheduler 上限/驻留/就绪/发射与空周期复算，随后要求 Warp State、源码定位原因，修改前后同规模 kernel 时长、发射率与 stall 比较。没有从驻留提升推出性能提升。"
+            },
+            {
+              "id": "E01",
+              "kind": "extra",
+              "dimension": "value",
+              "status": "correct",
+              "critical": false,
+              "reason": "7.92 可近似为约八个，72.94% 无就绪周期支持频繁不发射。"
+            },
+            {
+              "id": "E02",
+              "kind": "extra",
+              "dimension": "semantic",
+              "status": "correct",
+              "critical": false,
+              "reason": "frame 990 与 Q 嵌图有五根条，字段按每调度器统计。将此处“同一个调度器”按上下文读为同一 per-scheduler 口径，而非声称只采样一台调度器；没有将 12 当 GPU 总数。"
+            },
+            {
+              "id": "E03",
+              "kind": "extra",
+              "dimension": "semantic",
+              "status": "correct",
+              "critical": false,
+              "reason": "正确区分硬件容量、配置约束与需要另查的具体 Occupancy 限制；未把可能的寄存器/共享内存/线程块限制当已证实原因。"
+            },
+            {
+              "id": "E04",
+              "kind": "extra",
+              "dimension": "unit",
+              "status": "correct",
+              "critical": false,
+              "reason": "frame 969、990、1045 详情及活动周期字段支持；per_cycle_active 与全部 elapsed 周期是不同分母。"
+            },
+            {
+              "id": "E05",
+              "kind": "extra",
+              "dimension": "derived",
+              "status": "correct",
+              "critical": false,
+              "reason": "8/12*100=66.666...，一位小数约 66.7%；相邻文字指定该项分母为硬件容量。"
+            },
+            {
+              "id": "E06",
+              "kind": "extra",
+              "dimension": "derived",
+              "status": "correct",
+              "critical": false,
+              "reason": "1.10/7.92*100=13.888...，约 13.9%；紧邻解释明确为两个平均数之比，不能替代非空周期比例。"
+            },
+            {
+              "id": "E07",
+              "kind": "extra",
+              "dimension": "derived",
+              "status": "correct",
+              "critical": false,
+              "reason": "两个互补周期类别和为 100%，计算正确，原图使用同一周期分母。"
+            },
+            {
+              "id": "E08",
+              "kind": "extra",
+              "dimension": "derived",
+              "status": "correct",
+              "critical": false,
+              "reason": "在明说的同一统计口径下，E[N | N>0]=E[N]/P(N>0)，1.10/0.2706=4.06504，约 4.1。明确是约数条件均值推导，未声称有逐周期轨迹；平均数与大量空周期可共存。"
+            },
+            {
+              "id": "E09",
+              "kind": "extra",
+              "dimension": "binding",
+              "status": "correct",
+              "critical": false,
+              "reason": "复算代码五个常量按字段顺序绑定正确；单位继承上表，非新实测量。"
+            },
+            {
+              "id": "E10",
+              "kind": "extra",
+              "dimension": "derived",
+              "status": "correct",
+              "critical": false,
+              "reason": "原样执行的两行得到 0.6666667、0.66、0.99，以及 0.1388889、3.7037037、4.0650407。27.06/100 正确转成非空周期概率；1/issued 正确取整体发射间隔。"
+            },
+            {
+              "id": "E11",
+              "kind": "extra",
+              "dimension": "semantic",
+              "status": "correct",
+              "critical": false,
+              "reason": "72.94% No Eligible 与 0.27 Issued 支持较多空槽，7.92 接近理论 8；这是本次报告测量概况，未扩展为优化后性能结果。"
+            },
+            {
+              "id": "E12",
+              "kind": "extra",
+              "dimension": "process",
+              "status": "correct",
+              "critical": false,
+              "reason": "提出的驻留/独立指令/复用均为改善隐藏延迟的可能方向，明确作为待验证方案；同规模实测时间决定加速，发射/stall 用于解释，没有声称实测优化已成功。"
+            }
+          ],
+          "review_report_sha256": "f539079f3ca21e3b40a3ab6f10bb5ec48dd53c561c1256b36d3d237c4f682809"
+        }
+      }
+    },
+    {
+      "id": "ncu-instruction-heldout",
+      "conditions": {
+        "previous_workflow": {
+          "required_facts": {
+            "correct": 9,
+            "incorrect": 0,
+            "omitted": 1,
+            "unverifiable": 0
+          },
+          "extra_claims": {
+            "correct": 21,
+            "incorrect": 3,
+            "omitted": 0,
+            "unverifiable": 0
+          },
+          "critical_errors": 3,
+          "dimensions": {
+            "binding": {
+              "correct": 8,
+              "incorrect": 1
+            },
+            "derived": {
+              "correct": 7
+            },
+            "semantic": {
+              "correct": 8,
+              "omitted": 1,
+              "incorrect": 2
+            },
+            "process": {
+              "correct": 1
+            },
+            "precision": {
+              "correct": 1
+            },
+            "value": {
+              "correct": 3
+            },
+            "unit": {
+              "correct": 2
+            }
+          },
+          "reader_task_counts": {
+            "passed": 2,
+            "failed": 1
+          },
+          "reader_tasks": [
+            {
+              "id": "IR1",
+              "status": "passed",
+              "reason": "正确重建三类近似warp执行计数、约二比一关系，并拒绝直接换算DRAM字节；解释覆盖宽度、有效线程、合并与缓存。"
+            },
+            {
+              "id": "IR2",
+              "status": "passed",
+              "reason": "原始表达式按3400万×有效线程数×2计算；root独立运行原代码，16/32两个条件均与冻结值一致，读者明确教学假设不等于实测线程数。",
+              "execution": {
+                "sha256": "8e379aeb3d2d5bdebb1fcdbe62ab2c973828e1831b99eded863b6575cbf27b83",
+                "status": "passed",
+                "checks": [
+                  {
+                    "input": {
+                      "warp_executions": 34000000,
+                      "active_threads": 16,
+                      "flops_per_ffma": 2
+                    },
+                    "expected": 1088000000,
+                    "actual": 1088000000,
+                    "passed": true
+                  },
+                  {
+                    "input": {
+                      "warp_executions": 34000000,
+                      "active_threads": 32,
+                      "flops_per_ffma": 2
+                    },
+                    "expected": 2176000000,
+                    "actual": 2176000000,
+                    "passed": true
+                  }
+                ],
+                "frozen_inputs_checked": 0
+              }
+            },
+            {
+              "id": "IR3",
+              "status": "failed",
+              "reason": "栏目、计数/字节单位、同工作量前后计时与两种周期分母均解释正确；允许引用配套scheduler篇以及7.92/0.27的正确推导。但原始答案将20.3 warp cycle/instruction与69.3%复述为L1TEX依赖等待，1088实际是lg_throttle队列满。这一关键等待类别归属错误会改变复现诊断，按冻结critical规则该题failed，不能被其他步骤正确抵消。"
+            }
+          ],
+          "provenance": {
+            "reference_sha256": "a51caa5b22563679d6ea0f813e1d7c08885799297f260cc88366f780cf0d6b84",
+            "reader_questions_sha256": "6b43086b1dfad373e3d521eb8a90c3788624777a80ddab17d08efe145c308635",
+            "writer_sha256": "a1ac5ae14b6575856185723dbd489eba450866fd4ecc17e1c84b8dce72529ed0",
+            "reader_sha256": "5684d77c07b60975dac63f3ac8ee06d2d033b8fc9243ae675bfcd663fd66146d",
+            "review_sha256": "65a9956e011bbf32bdb3e4018c1057a2a4d33a62d1786f7e7ef96786faf90275"
+          },
+          "audited_numeric_tokens": 55,
+          "claims": [
+            {
+              "id": "I01",
+              "kind": "required",
+              "dimension": "binding",
+              "status": "correct",
+              "critical": false,
+              "reason": "1129/1140原帧及嵌图显示约6700万；近似数落在冻结容差内，后文明确warp级执行次数。"
+            },
+            {
+              "id": "I02",
+              "kind": "required",
+              "dimension": "binding",
+              "status": "correct",
+              "critical": false,
+              "reason": "1129/1140中约3400万，采用标明的约数而非声称精确末位；落在冻结容差内。"
+            },
+            {
+              "id": "I03",
+              "kind": "required",
+              "dimension": "binding",
+              "status": "correct",
+              "critical": false,
+              "reason": "1129/1140中约3400万；单位由紧随段落限定为warp级执行次数，符合冻结容差。"
+            },
+            {
+              "id": "I04",
+              "kind": "required",
+              "dimension": "derived",
+              "status": "correct",
+              "critical": false,
+              "reason": "1129/1140显示LDG最长，IMAD与FFMA接近其一半；给定近似数的比值也相容。"
+            },
+            {
+              "id": "I05",
+              "kind": "required",
+              "dimension": "semantic",
+              "status": "correct",
+              "critical": false,
+              "reason": "正确拒绝把global地址空间加载执行数直接换成DRAM字节；1185中Instructions与Device Memory Bytes为独立指标。"
+            },
+            {
+              "id": "I06",
+              "kind": "required",
+              "dimension": "semantic",
+              "status": "correct",
+              "critical": false,
+              "reason": "表中IMAD整数乘加、FFMA浮点融合乘加定义正确；本段与后文计数不代表耗时的限制均符合官方opcode定义。"
+            },
+            {
+              "id": "I07",
+              "kind": "required",
+              "dimension": "binding",
+              "status": "correct",
+              "critical": false,
+              "reason": "1088原帧两行均约29.4；29.3在冻结0.3容差内，单位是warp周期/指令，不是ns。"
+            },
+            {
+              "id": "I08",
+              "kind": "required",
+              "dimension": "semantic",
+              "status": "omitted",
+              "critical": false,
+              "reason": "已解释多个warp的等待可重叠，属于部分铺垫；本篇未给出scheduler cycles/issued warp的分母、约3.7的口径及其与约29.3的直接比较。此处记本篇必需事实不完整；不否定读者从配套篇正确推导。"
+            },
+            {
+              "id": "I09",
+              "kind": "required",
+              "dimension": "process",
+              "status": "correct",
+              "critical": false,
+              "reason": "正文连接内存工作量、调度器就绪、warp等待与指令混合，并将shared memory复用作为待测方向；未捏造优化结果。错误的具体stall归因另列extra，不能被本项正确抵消。"
+            },
+            {
+              "id": "I10",
+              "kind": "required",
+              "dimension": "precision",
+              "status": "correct",
+              "critical": false,
+              "reason": "全文把计数、周期与比值明示为约数，未声称67,108,864或33,554,432等精确末位。"
+            },
+            {
+              "id": "E01",
+              "kind": "extra",
+              "dimension": "semantic",
+              "status": "correct",
+              "critical": false,
+              "reason": "动态指令次数会包含循环重复；不是静态源码行数。符合官方InstructionStats与opcode定义。"
+            },
+            {
+              "id": "E02",
+              "kind": "extra",
+              "dimension": "binding",
+              "status": "correct",
+              "critical": false,
+              "reason": "1129/1140横轴刻度与计数单位相符；中文数字也纳入语义审核。"
+            },
+            {
+              "id": "E03",
+              "kind": "extra",
+              "dimension": "value",
+              "status": "correct",
+              "critical": false,
+              "reason": "1129/1140条形支持这些粗略范围。"
+            },
+            {
+              "id": "E04",
+              "kind": "extra",
+              "dimension": "value",
+              "status": "correct",
+              "critical": false,
+              "reason": "代码常量为前表约数除以百万，量级正确；没有伪装成另一组精确测量。"
+            },
+            {
+              "id": "E05",
+              "kind": "extra",
+              "dimension": "derived",
+              "status": "correct",
+              "critical": false,
+              "reason": "67.1/33.6=1.9970238，四舍五入到所写精度为2.00；属于正确教学复算。"
+            },
+            {
+              "id": "E06",
+              "kind": "extra",
+              "dimension": "derived",
+              "status": "correct",
+              "critical": false,
+              "reason": "33.8/33.6=1.0059524，取两位小数为1.01。"
+            },
+            {
+              "id": "E07",
+              "kind": "extra",
+              "dimension": "derived",
+              "status": "correct",
+              "critical": false,
+              "reason": "67.1/(67.1+33.8+33.6)=49.8884758%，所示49.9%及三类分母正确。"
+            },
+            {
+              "id": "E08",
+              "kind": "extra",
+              "dimension": "derived",
+              "status": "correct",
+              "critical": false,
+              "reason": "正确限定该比例分母；1140中能见到其他opcode类别。"
+            },
+            {
+              "id": "E09",
+              "kind": "extra",
+              "dimension": "binding",
+              "status": "correct",
+              "critical": false,
+              "reason": "1140上方Executed Instructions约1.48亿；本原子项只判总量及字段绑定。"
+            },
+            {
+              "id": "E10",
+              "kind": "extra",
+              "dimension": "derived",
+              "status": "correct",
+              "critical": false,
+              "reason": "本项判比例：6710万/1.48亿约45.34%，约45%正确；未声称opcode总和与硬件计数精确相等。"
+            },
+            {
+              "id": "E11",
+              "kind": "extra",
+              "dimension": "semantic",
+              "status": "correct",
+              "critical": false,
+              "reason": "正确区分指令数、管线利用率与端到端时间；删掉一半及时间减半是被否定的假设，未冒充实测。"
+            },
+            {
+              "id": "E12",
+              "kind": "extra",
+              "dimension": "binding",
+              "status": "correct",
+              "critical": false,
+              "reason": "1088与嵌图两行约29.4，近似值可接受。"
+            },
+            {
+              "id": "E13",
+              "kind": "extra",
+              "dimension": "value",
+              "status": "correct",
+              "critical": false,
+              "reason": "仅就20.3 cycle数值判断，1088告警显示约20.3；其原因绑定另列E14。"
+            },
+            {
+              "id": "E14",
+              "kind": "extra",
+              "dimension": "semantic",
+              "status": "incorrect",
+              "critical": true,
+              "reason": "1088告警名称是lg_throttle，文字说明local/global指令队列满；依赖等待是不同stall类别long_scoreboard。此句错误改变等待原因及优化诊断。官方定义：https://docs.nvidia.com/nsight-compute/ProfilingGuide/index.html#warp-stall-reasons"
+            },
+            {
+              "id": "E15",
+              "kind": "extra",
+              "dimension": "derived",
+              "status": "correct",
+              "critical": false,
+              "reason": "仅判数值和分母：20.3/29.3约69.283%，69.3%正确。错误的类别绑定另列E16，数值正确不抵消。"
+            },
+            {
+              "id": "E16",
+              "kind": "extra",
+              "dimension": "binding",
+              "status": "incorrect",
+              "critical": true,
+              "reason": "表格再次把lg_throttle的20.3周期/约69.3%归入L1TEX依赖等待。1088支持的是local/global指令队列等待，不能这样改名。"
+            },
+            {
+              "id": "E17",
+              "kind": "extra",
+              "dimension": "semantic",
+              "status": "correct",
+              "critical": false,
+              "reason": "warp等待可重叠；该聚合指标不能作全kernel串行时间或某opcode独有延迟。"
+            },
+            {
+              "id": "E18",
+              "kind": "extra",
+              "dimension": "semantic",
+              "status": "incorrect",
+              "critical": true,
+              "reason": "不能全部叫DRAM等待这一限制正确，但“此处提示所指的L1TEX依赖”仍错误指认lg_throttle。作为原子类别归属错误记录。"
+            },
+            {
+              "id": "E19",
+              "kind": "extra",
+              "dimension": "semantic",
+              "status": "correct",
+              "critical": false,
+              "reason": "表述不够严格：就绪数少会限制候选，但在本图调度模型中空发射的必要相关条件是该周期没有eligible warp。若将“太少”读为零，则方向正确；没有明确断言非零必空发射，不按错误扣分。"
+            },
+            {
+              "id": "E20",
+              "kind": "extra",
+              "dimension": "binding",
+              "status": "correct",
+              "critical": false,
+              "reason": "1185的Global Load Instructions约6710万，并有L2与Device Memory Bytes；量级和列归属正确。"
+            },
+            {
+              "id": "E21",
+              "kind": "extra",
+              "dimension": "unit",
+              "status": "correct",
+              "critical": false,
+              "reason": "与1185字段及官方Device Memory定义一致：https://docs.nvidia.com/nsight-compute/ProfilingGuide/index.html#device-memory"
+            },
+            {
+              "id": "E22",
+              "kind": "extra",
+              "dimension": "unit",
+              "status": "correct",
+              "critical": false,
+              "reason": "1185确实分别是执行指令数与设备内存字节；层级区分正确。"
+            },
+            {
+              "id": "E23",
+              "kind": "extra",
+              "dimension": "semantic",
+              "status": "correct",
+              "critical": false,
+              "reason": "将访存及重复加载列为待排查方向是合理假设，未断言已证实唯一瓶颈；故不因“依赖”一词在此泛称而另扣一次错误。把1088具体告警定名为L1TEX依赖的错误已在E14/E16/E18逐处记录。"
+            },
+            {
+              "id": "E24",
+              "kind": "extra",
+              "dimension": "semantic",
+              "status": "correct",
+              "critical": false,
+              "reason": "指令计数减少与运行时间改善需分别验证，未声称实测加速。"
+            }
+          ],
+          "review_report_sha256": "7cd082609dd1ab43e5e92b075ffdd62f6aff30305db540c4774f3f14912a84f5"
+        },
+        "figure_fact_check_workflow": {
+          "required_facts": {
+            "correct": 9,
+            "incorrect": 0,
+            "omitted": 1,
+            "unverifiable": 0
+          },
+          "extra_claims": {
+            "correct": 18,
+            "incorrect": 0,
+            "omitted": 0,
+            "unverifiable": 0
+          },
+          "critical_errors": 0,
+          "dimensions": {
+            "binding": {
+              "correct": 8
+            },
+            "derived": {
+              "correct": 6
+            },
+            "semantic": {
+              "correct": 8,
+              "omitted": 1
+            },
+            "process": {
+              "correct": 3
+            },
+            "precision": {
+              "correct": 1
+            },
+            "value": {
+              "correct": 1
+            }
+          },
+          "reader_task_counts": {
+            "passed": 3
+          },
+          "reader_tasks": [
+            {
+              "id": "IR1",
+              "status": "passed",
+              "reason": "正确重建三类近似warp执行计数、约二比一关系，并拒绝直接换算DRAM字节；解释覆盖宽度、有效线程、合并与缓存。"
+            },
+            {
+              "id": "IR2",
+              "status": "passed",
+              "reason": "原始表达式按3400万×有效线程数×2计算；root独立运行原代码，16/32两个条件均与冻结值一致，读者明确教学假设不等于实测线程数。",
+              "execution": {
+                "sha256": "0e4018341123572f7636ccd365cbd99b55fdf6cba70342caddfbbad4dbc405ee",
+                "status": "passed",
+                "checks": [
+                  {
+                    "input": {
+                      "warp_executions": 34000000,
+                      "active_threads": 16,
+                      "flops_per_ffma": 2
+                    },
+                    "expected": 1088000000,
+                    "actual": 1088000000,
+                    "passed": true
+                  },
+                  {
+                    "input": {
+                      "warp_executions": 34000000,
+                      "active_threads": 32,
+                      "flops_per_ffma": 2
+                    },
+                    "expected": 2176000000,
+                    "actual": 2176000000,
+                    "passed": true
+                  }
+                ],
+                "frozen_inputs_checked": 0
+              }
+            },
+            {
+              "id": "IR3",
+              "status": "passed",
+              "reason": "按顺序给出Memory Workload、Scheduler、Warp State和Instruction Statistics，保留计数/周期/百分比/字节单位；正确区分lg_throttle与long_scoreboard，要求一致条件下的前后kernel时间且承认片中无优化结果。两种分母及warp交错发射解释正确；7.92/0.27与29.4/7.92明示为口径近似复算，允许此正确推导，不视为虚构实测。"
+            }
+          ],
+          "provenance": {
+            "reference_sha256": "a51caa5b22563679d6ea0f813e1d7c08885799297f260cc88366f780cf0d6b84",
+            "reader_questions_sha256": "6b43086b1dfad373e3d521eb8a90c3788624777a80ddab17d08efe145c308635",
+            "writer_sha256": "d16515ea15657e93b027f6ee8f955bcdacda479282941709deaf8e3a32b98c6e",
+            "reader_sha256": "af097d35143521cb1c4829afa643b9512fd00aef00645f0530c7f44a78db1952",
+            "review_sha256": "81994b87515d59b9ff58d629ae989ed012078329f0b0ac582b1fd4b6885b9e5b"
+          },
+          "audited_numeric_tokens": 24,
+          "claims": [
+            {
+              "id": "I01",
+              "kind": "required",
+              "dimension": "binding",
+              "status": "correct",
+              "critical": false,
+              "reason": "1129/1140支持约6700万，warp级执行次数绑定正确。"
+            },
+            {
+              "id": "I02",
+              "kind": "required",
+              "dimension": "binding",
+              "status": "correct",
+              "critical": false,
+              "reason": "1129/1140支持约3400万，单位正确且未把具体用途当成已知。"
+            },
+            {
+              "id": "I03",
+              "kind": "required",
+              "dimension": "binding",
+              "status": "correct",
+              "critical": false,
+              "reason": "1129/1140支持约3400万，单位为warp级执行次数。"
+            },
+            {
+              "id": "I04",
+              "kind": "required",
+              "dimension": "derived",
+              "status": "correct",
+              "critical": false,
+              "reason": "1129/1140的条形关系与67/34约1.97相符。"
+            },
+            {
+              "id": "I05",
+              "kind": "required",
+              "dimension": "semantic",
+              "status": "correct",
+              "critical": false,
+              "reason": "正确区分global加载执行和DRAM流量；相邻句列出宽度、有效线程、合并与命中。"
+            },
+            {
+              "id": "I06",
+              "kind": "required",
+              "dimension": "semantic",
+              "status": "correct",
+              "critical": false,
+              "reason": "IMAD/FFMA操作语义在表中正确；warp计数定义准确，其他段落也拒绝从指令次数推时间占比。"
+            },
+            {
+              "id": "I07",
+              "kind": "required",
+              "dimension": "binding",
+              "status": "correct",
+              "critical": false,
+              "reason": "1088两行约29.4，29.3在冻结容差内；分母指明同一warp相邻指令。"
+            },
+            {
+              "id": "I08",
+              "kind": "required",
+              "dimension": "semantic",
+              "status": "omitted",
+              "critical": false,
+              "reason": "已解释多个warp的等待可重叠，属于部分铺垫；本篇未给出scheduler cycles/issued warp的分母、约3.7的口径及其与约29.3的直接比较。此处记本篇必需事实不完整；不否定读者从配套篇正确推导。"
+            },
+            {
+              "id": "I09",
+              "kind": "required",
+              "dimension": "process",
+              "status": "correct",
+              "critical": false,
+              "reason": "给出连接内存、调度器、warp等待和指令mix的路径，明确shared memory属于下一步待验证优化而非既成结果。"
+            },
+            {
+              "id": "I10",
+              "kind": "required",
+              "dimension": "precision",
+              "status": "correct",
+              "critical": false,
+              "reason": "只用约6700万/3400万及明示近似复算，未猜精确整数末位。"
+            },
+            {
+              "id": "E01",
+              "kind": "extra",
+              "dimension": "semantic",
+              "status": "correct",
+              "critical": false,
+              "reason": "1129/1140的LDG最长且1088有lg_throttle告警；“入口处等待”对应LG指令队列等待，未声称DRAM唯一瓶颈。"
+            },
+            {
+              "id": "E02",
+              "kind": "extra",
+              "dimension": "binding",
+              "status": "correct",
+              "critical": false,
+              "reason": "1129/1140横轴间隔约2000万，单位区分正确。"
+            },
+            {
+              "id": "E03",
+              "kind": "extra",
+              "dimension": "binding",
+              "status": "correct",
+              "critical": false,
+              "reason": "1140浮层可见opcode和Count列，前三类与条形排序相符。"
+            },
+            {
+              "id": "E04",
+              "kind": "extra",
+              "dimension": "binding",
+              "status": "correct",
+              "critical": false,
+              "reason": "1088/1140中上下两区域计数和周期单位不同；未声明其具体数值或精确等式。"
+            },
+            {
+              "id": "E05",
+              "kind": "extra",
+              "dimension": "derived",
+              "status": "correct",
+              "critical": false,
+              "reason": "67+34+34=135百万；67/135约49.63%，称约一半正确。"
+            },
+            {
+              "id": "E06",
+              "kind": "extra",
+              "dimension": "semantic",
+              "status": "correct",
+              "critical": false,
+              "reason": "1140有其他opcode，三类子集比例不能当全部计数占比。"
+            },
+            {
+              "id": "E07",
+              "kind": "extra",
+              "dimension": "semantic",
+              "status": "correct",
+              "critical": false,
+              "reason": "正确限制从指令计数推出时间、饱和和并发的因果结论；两倍是明确被否定的推断。"
+            },
+            {
+              "id": "E08",
+              "kind": "extra",
+              "dimension": "value",
+              "status": "correct",
+              "critical": false,
+              "reason": "代码常量等于表中近似warp执行计数，科学记数法量级正确。"
+            },
+            {
+              "id": "E09",
+              "kind": "extra",
+              "dimension": "derived",
+              "status": "correct",
+              "critical": false,
+              "reason": "67/34约1.970588，34/34=1；计算正确且未冒充独立测量。"
+            },
+            {
+              "id": "E10",
+              "kind": "extra",
+              "dimension": "derived",
+              "status": "correct",
+              "critical": false,
+              "reason": "合计135000000除以1000000得135百万，换算正确。"
+            },
+            {
+              "id": "E11",
+              "kind": "extra",
+              "dimension": "derived",
+              "status": "correct",
+              "critical": false,
+              "reason": "67/135约0.496296；三类分母限定正确。"
+            },
+            {
+              "id": "E12",
+              "kind": "extra",
+              "dimension": "semantic",
+              "status": "correct",
+              "critical": false,
+              "reason": "正确区分warp周期/指令和kernel墙钟时间，不能串行累加多个warp的等待。"
+            },
+            {
+              "id": "E13",
+              "kind": "extra",
+              "dimension": "semantic",
+              "status": "correct",
+              "critical": false,
+              "reason": "1088及嵌图告警名称和可见文字与本说法一致。"
+            },
+            {
+              "id": "E14",
+              "kind": "extra",
+              "dimension": "binding",
+              "status": "correct",
+              "critical": false,
+              "reason": "1088约20.3 cycle与lg_throttle字段正确绑定；官方定义亦一致：https://docs.nvidia.com/nsight-compute/ProfilingGuide/index.html#warp-stall-reasons"
+            },
+            {
+              "id": "E15",
+              "kind": "extra",
+              "dimension": "derived",
+              "status": "correct",
+              "critical": false,
+              "reason": "20.3/29.3约69.283%，取整数约69%正确；周期分母明确。"
+            },
+            {
+              "id": "E16",
+              "kind": "extra",
+              "dimension": "semantic",
+              "status": "correct",
+              "critical": false,
+              "reason": "正确区分LG队列节流与L1TEX scoreboard依赖，不将告警独立升级为DRAM瓶颈证明。"
+            },
+            {
+              "id": "E17",
+              "kind": "extra",
+              "dimension": "process",
+              "status": "correct",
+              "critical": false,
+              "reason": "这是合理待执行检查过程，并未宣称已测得线程数或优化流量。"
+            },
+            {
+              "id": "E18",
+              "kind": "extra",
+              "dimension": "process",
+              "status": "correct",
+              "critical": false,
+              "reason": "明确保持工作负载/测量条件一致，并分别检验运行时间及解释指标，满足证据限制。"
+            }
+          ],
+          "review_report_sha256": "b401f1945ba52ce00cc559b28ace264fae29f96c6f038df84bd5e79d4bffa175"
+        }
+      }
+    }
+  ],
+  "task_only_control": {
+    "scheduler-control": {
+      "case": "ncu-scheduler-heldout",
+      "label": "task-only-control",
+      "reference_sha256": "a51caa5b22563679d6ea0f813e1d7c08885799297f260cc88366f780cf0d6b84",
+      "questions_sha256": "6b43086b1dfad373e3d521eb8a90c3788624777a80ddab17d08efe145c308635",
+      "evaluation_scope": "reader_tasks_only; 不纳入 P/Q 稿件事实统计",
+      "reader_tasks": [
+        {
+          "id": "SR1",
+          "status": "partial",
+          "reason": "未得到讲解/原图，未能重建五根条完整数值与单位，也未能给出 99%/66%；不过正确说明容量比例公式并拒绝将驻留比例当有效计算时间。信息缺失被如实保留。"
+        },
+        {
+          "id": "SR2",
+          "status": "passed",
+          "reason": "原始函数通过冻结输入、三个冻结变体及两个额外变体；0.4、0.2、80%、5 与倒数分母解释正确，明确有 ready 则发射的教学假设和无发射时正无穷。",
+          "execution": {
+            "sha256": "39a0c18d45207420e1f5e2817fb107021bf7cdc4093c8f53cb54a161bca53e2d"
+          }
+        },
+        {
+          "id": "SR3",
+          "status": "passed",
+          "reason": "按冻结任务要求正确拒绝驻留增加推出加速，提出同工作量 kernel 时长、Scheduler 发射/就绪、Warp State 等待原因三步及各自用途。明确是先验通用诊断建议而非视频复述。"
+        }
+      ],
+      "observation": "task-only 已通过 SR2 与 SR3，因此 P/Q 在这些题上的成功不能单独归因为讲解带来的学习增益；SR1 的图中字段重建在此对照缺失。"
+    },
+    "instruction-control-reader": {
+      "case": "ncu-instruction-heldout",
+      "label": "task-only-control",
+      "scope": "reader_tasks_only_no_writer_facts",
+      "reader_tasks": [
+        {
+          "id": "IR1",
+          "status": "partial",
+          "reason": "正确拒绝无材料时补造IMAD与FFMA实测计数，解释为何加载执行数不能换DRAM字节；但未完成本题要求的图中三类计数与单位重建。条件比值1.97是正确计算，不扣作虚构测量。"
+        },
+        {
+          "id": "IR2",
+          "status": "passed",
+          "reason": "root运行原代码的16/32条件均通过；表达式和教学假设限制均正确。此题输入已给齐，任务本身可解，不能把成功全部归于讲解。",
+          "execution": {
+            "sha256": "cc487f6a329f779ab09e1b6952b51d2e13feb11bd2f67f8febae8c3d83ce829f"
+          }
+        },
+        {
+          "id": "IR3",
+          "status": "partial",
+          "reason": "通用栏目、单位、前后计时和两种分母解释正确，约7.95/约8的推导明确是简化模型，未冒充实测。但没有本片的具体等待类别和已观测证据，也未确认片中没有展示优化后时间，因此不足以完整复现本段诊断。"
+        }
+      ]
+    }
+  },
+  "key_findings": {
+    "required_fact_correct_per_condition": 21,
+    "required_fact_total_per_condition": 22,
+    "shared_omission": "Instruction lesson does not explicitly contrast scheduler issue interval with warp per-instruction interval; readers may connect the paired Scheduler lesson.",
+    "critical_root_causes": {
+      "previous_workflow": 1,
+      "figure_fact_check_workflow": 0
+    },
+    "critical_root_cause_note": "The same lg_throttle versus data-dependency confusion occurs in three baseline claims, not three independent failures.",
+    "reader_passed": {
+      "previous_workflow": 5,
+      "figure_fact_check_workflow": 6
+    },
+    "reader_total": 6,
+    "interpretation": "One material metric-meaning error and its propagation into a reader diagnostic answer were avoided. Scheduler and pure arithmetic tasks show no measured gain."
+  },
+  "ocr": {
+    "synthetic_real_vision": "Spatial binding detects wrong-row/wrong-value claims; missing percent units stay unresolved despite OCR confidence 1.0.",
+    "heldout_claims": 15,
+    "heldout_literal_unreadable": 15,
+    "actual_resolution": "Host AI inspected original/cropped pixels and official definitions; no semantic pass from OCR.",
+    "rejected_development_experiment": "2x/3x/4x interpolation produced more OCR regions but corrupted labels and digits; not shipped."
+  },
+  "costs": {
+    "equal_original_evidence": true,
+    "extra_review_and_prompt_cost": "not controlled; no token billing measurement",
+    "previous_image_views_reported": 17,
+    "new_image_views_reported": 19
+  },
+  "reproduction": "Original reader programs executed unchanged on frozen cases and additional variants; this is teaching-program reproduction, not an original GPU kernel rerun.",
+  "validation": {
+    "offline_tests_passed": 454,
+    "ruff": "passed",
+    "skill": "passed",
+    "installed_stdio_mcp": {
+      "tools": 14,
+      "distinct_same_frame_crops": 2,
+      "mime_type": "image/png",
+      "image_indices": "passed",
+      "crop_full_frame_deliveries": 0,
+      "ocr_in_sandbox": "unavailable; returns unreadable plus images"
+    }
+  }
+}

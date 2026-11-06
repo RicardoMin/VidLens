@@ -1,0 +1,789 @@
+{
+  "schema_version": 1,
+  "version": "0.1.0",
+  "date": "2026-11-05",
+  "environment": {
+    "system": "Darwin",
+    "machine": "arm64",
+    "python": "3.12.16"
+  },
+  "scope": {
+    "text": "Exact reconstruction of all acquired speech cues across paginated chapters. This does not measure ASR accuracy.",
+    "visual": "All-frame low-resolution candidate indexing, chapter images and selected actual visual checks.",
+    "timing": "Mixed cache and first-use image/OCR costs in visual traversals; not end-to-end AI reading time or a comparative benchmark.",
+    "comparison": "No cross-product blind evaluation or client billing measurement."
+  },
+  "cases": [
+    {
+      "video_id": "youtube:aircAruvnKk",
+      "url": "https://www.youtube.com/watch?v=aircAruvnKk",
+      "title": "But what is a neural network? | Deep learning chapter 1",
+      "duration": 1120.0,
+      "speech_scope": "available_platform_or_imported_captions",
+      "source_sha256": "51b4e9116bf7d8f8c10ed6165950483774219fdffc39b8bf0d0accb6dda6cc2f",
+      "indexed_speech_segments": 231,
+      "exactly_reconstructed_segments": 231,
+      "lossless_text_read": true,
+      "chapter_count": 12,
+      "text_pages": 12,
+      "images_returned": 48,
+      "visual_enabled": true,
+      "visual_issues": [],
+      "elapsed_seconds": 19.103,
+      "chapters": [
+        {
+          "index": 1,
+          "start": 0.0,
+          "end": 67.0,
+          "pages": 1,
+          "images_returned": 4
+        },
+        {
+          "index": 2,
+          "start": 67.0,
+          "end": 162.0,
+          "pages": 1,
+          "images_returned": 4
+        },
+        {
+          "index": 3,
+          "start": 162.0,
+          "end": 215.0,
+          "pages": 1,
+          "images_returned": 4
+        },
+        {
+          "index": 4,
+          "start": 215.0,
+          "end": 331.0,
+          "pages": 1,
+          "images_returned": 4
+        },
+        {
+          "index": 5,
+          "start": 331.0,
+          "end": 518.0,
+          "pages": 1,
+          "images_returned": 4
+        },
+        {
+          "index": 6,
+          "start": 518.0,
+          "end": 694.0,
+          "pages": 1,
+          "images_returned": 4
+        },
+        {
+          "index": 7,
+          "start": 694.0,
+          "end": 750.0,
+          "pages": 1,
+          "images_returned": 4
+        },
+        {
+          "index": 8,
+          "start": 750.0,
+          "end": 806.0,
+          "pages": 1,
+          "images_returned": 4
+        },
+        {
+          "index": 9,
+          "start": 806.0,
+          "end": 917.0,
+          "pages": 1,
+          "images_returned": 4
+        },
+        {
+          "index": 10,
+          "start": 917.0,
+          "end": 987.0,
+          "pages": 1,
+          "images_returned": 4
+        },
+        {
+          "index": 11,
+          "start": 987.0,
+          "end": 1023.0,
+          "pages": 1,
+          "images_returned": 4
+        },
+        {
+          "index": 12,
+          "start": 1023.0,
+          "end": 1120.0,
+          "pages": 1,
+          "images_returned": 4
+        }
+      ]
+    },
+    {
+      "video_id": "youtube:eMlx5fFNoYc",
+      "url": "https://www.youtube.com/watch?v=eMlx5fFNoYc",
+      "title": "Attention in transformers, step-by-step | Deep Learning Chapter 6",
+      "duration": 1569.0,
+      "speech_scope": "available_platform_or_imported_captions",
+      "source_sha256": "593f324ef3bfdf4cfb0d7f421ce40403cf6b4473559f9729d000b0913c4bc363",
+      "indexed_speech_segments": 452,
+      "exactly_reconstructed_segments": 452,
+      "lossless_text_read": true,
+      "chapter_count": 13,
+      "text_pages": 13,
+      "images_returned": 52,
+      "visual_enabled": true,
+      "visual_issues": [],
+      "elapsed_seconds": 24.011,
+      "chapters": [
+        {
+          "index": 1,
+          "start": 0.0,
+          "end": 99.0,
+          "pages": 1,
+          "images_returned": 4
+        },
+        {
+          "index": 2,
+          "start": 99.0,
+          "end": 269.0,
+          "pages": 1,
+          "images_returned": 4
+        },
+        {
+          "index": 3,
+          "start": 269.0,
+          "end": 497.02,
+          "pages": 1,
+          "images_returned": 4
+        },
+        {
+          "index": 4,
+          "start": 497.02,
+          "end": 668.0,
+          "pages": 1,
+          "images_returned": 4
+        },
+        {
+          "index": 5,
+          "start": 668.0,
+          "end": 762.0,
+          "pages": 1,
+          "images_returned": 4
+        },
+        {
+          "index": 6,
+          "start": 762.0,
+          "end": 790.0,
+          "pages": 1,
+          "images_returned": 4
+        },
+        {
+          "index": 7,
+          "start": 790.0,
+          "end": 944.0,
+          "pages": 1,
+          "images_returned": 4
+        },
+        {
+          "index": 8,
+          "start": 944.0,
+          "end": 1101.0,
+          "pages": 1,
+          "images_returned": 4
+        },
+        {
+          "index": 9,
+          "start": 1101.0,
+          "end": 1159.0,
+          "pages": 1,
+          "images_returned": 4
+        },
+        {
+          "index": 10,
+          "start": 1159.0,
+          "end": 1336.0,
+          "pages": 1,
+          "images_returned": 4
+        },
+        {
+          "index": 11,
+          "start": 1336.0,
+          "end": 1399.0,
+          "pages": 1,
+          "images_returned": 4
+        },
+        {
+          "index": 12,
+          "start": 1399.0,
+          "end": 1494.0,
+          "pages": 1,
+          "images_returned": 4
+        },
+        {
+          "index": 13,
+          "start": 1494.0,
+          "end": 1569.2,
+          "pages": 1,
+          "images_returned": 4
+        }
+      ]
+    },
+    {
+      "video_id": "youtube:kCc8FmEb1nY",
+      "url": "https://www.youtube.com/watch?v=kCc8FmEb1nY",
+      "title": "Let's build GPT: from scratch, in code, spelled out.",
+      "duration": 6980.0,
+      "speech_scope": "available_platform_or_imported_captions",
+      "source_sha256": "8d395c16f4fdf5b84c0bab4022a5336f84caab9a7b55b6d30384924f11190eb5",
+      "indexed_speech_segments": 2955,
+      "exactly_reconstructed_segments": 2955,
+      "lossless_text_read": true,
+      "chapter_count": 35,
+      "text_pages": 48,
+      "images_returned": 0,
+      "visual_enabled": false,
+      "visual_issues": [],
+      "elapsed_seconds": 1.921,
+      "chapters": [
+        {
+          "index": 1,
+          "start": 0.0,
+          "end": 380.28,
+          "pages": 2,
+          "images_returned": 0
+        },
+        {
+          "index": 2,
+          "start": 380.28,
+          "end": 472.0,
+          "pages": 1,
+          "images_returned": 0
+        },
+        {
+          "index": 3,
+          "start": 472.0,
+          "end": 568.0,
+          "pages": 1,
+          "images_returned": 0
+        },
+        {
+          "index": 4,
+          "start": 568.0,
+          "end": 867.0,
+          "pages": 2,
+          "images_returned": 0
+        },
+        {
+          "index": 5,
+          "start": 867.0,
+          "end": 1255.76,
+          "pages": 2,
+          "images_returned": 0
+        },
+        {
+          "index": 6,
+          "start": 1255.76,
+          "end": 1331.0,
+          "pages": 1,
+          "images_returned": 0
+        },
+        {
+          "index": 7,
+          "start": 1331.0,
+          "end": 1730.559,
+          "pages": 2,
+          "images_returned": 0
+        },
+        {
+          "index": 8,
+          "start": 1730.559,
+          "end": 2093.0,
+          "pages": 2,
+          "images_returned": 0
+        },
+        {
+          "index": 9,
+          "start": 2093.0,
+          "end": 2199.4395,
+          "pages": 1,
+          "images_returned": 0
+        },
+        {
+          "index": 10,
+          "start": 2199.4395,
+          "end": 2280.0,
+          "pages": 1,
+          "images_returned": 0
+        },
+        {
+          "index": 11,
+          "start": 2280.0,
+          "end": 2533.0,
+          "pages": 2,
+          "images_returned": 0
+        },
+        {
+          "index": 12,
+          "start": 2533.0,
+          "end": 2831.0,
+          "pages": 2,
+          "images_returned": 0
+        },
+        {
+          "index": 13,
+          "start": 2831.0,
+          "end": 3114.0,
+          "pages": 2,
+          "images_returned": 0
+        },
+        {
+          "index": 14,
+          "start": 3114.0,
+          "end": 3282.0,
+          "pages": 1,
+          "images_returned": 0
+        },
+        {
+          "index": 15,
+          "start": 3282.0,
+          "end": 3506.0,
+          "pages": 1,
+          "images_returned": 0
+        },
+        {
+          "index": 16,
+          "start": 3506.0,
+          "end": 3618.0,
+          "pages": 1,
+          "images_returned": 0
+        },
+        {
+          "index": 17,
+          "start": 3618.0,
+          "end": 3720.0,
+          "pages": 1,
+          "images_returned": 0
+        },
+        {
+          "index": 18,
+          "start": 3720.0,
+          "end": 4141.12,
+          "pages": 2,
+          "images_returned": 0
+        },
+        {
+          "index": 19,
+          "start": 4141.12,
+          "end": 4298.0,
+          "pages": 1,
+          "images_returned": 0
+        },
+        {
+          "index": 20,
+          "start": 4298.0,
+          "end": 4366.0,
+          "pages": 1,
+          "images_returned": 0
+        },
+        {
+          "index": 21,
+          "start": 4366.0,
+          "end": 4420.0,
+          "pages": 1,
+          "images_returned": 0
+        },
+        {
+          "index": 22,
+          "start": 4420.0,
+          "end": 4454.0,
+          "pages": 1,
+          "images_returned": 0
+        },
+        {
+          "index": 23,
+          "start": 4454.0,
+          "end": 4539.0,
+          "pages": 1,
+          "images_returned": 0
+        },
+        {
+          "index": 24,
+          "start": 4539.0,
+          "end": 4616.0,
+          "pages": 1,
+          "images_returned": 0
+        },
+        {
+          "index": 25,
+          "start": 4616.0,
+          "end": 4751.0,
+          "pages": 1,
+          "images_returned": 0
+        },
+        {
+          "index": 26,
+          "start": 4751.0,
+          "end": 4919.0,
+          "pages": 1,
+          "images_returned": 0
+        },
+        {
+          "index": 27,
+          "start": 4919.0,
+          "end": 5065.0,
+          "pages": 1,
+          "images_returned": 0
+        },
+        {
+          "index": 28,
+          "start": 5065.0,
+          "end": 5208.0,
+          "pages": 1,
+          "images_returned": 0
+        },
+        {
+          "index": 29,
+          "start": 5208.0,
+          "end": 5571.0,
+          "pages": 2,
+          "images_returned": 0
+        },
+        {
+          "index": 30,
+          "start": 5571.0,
+          "end": 5869.0,
+          "pages": 2,
+          "images_returned": 0
+        },
+        {
+          "index": 31,
+          "start": 5869.0,
+          "end": 6159.0,
+          "pages": 2,
+          "images_returned": 0
+        },
+        {
+          "index": 32,
+          "start": 6159.0,
+          "end": 6382.0,
+          "pages": 1,
+          "images_returned": 0
+        },
+        {
+          "index": 33,
+          "start": 6382.0,
+          "end": 6533.0,
+          "pages": 1,
+          "images_returned": 0
+        },
+        {
+          "index": 34,
+          "start": 6533.0,
+          "end": 6872.0,
+          "pages": 2,
+          "images_returned": 0
+        },
+        {
+          "index": 35,
+          "start": 6872.0,
+          "end": 6981.76,
+          "pages": 1,
+          "images_returned": 0
+        }
+      ]
+    },
+    {
+      "video_id": "bilibili:BV1SmrSBfEg6:p1",
+      "url": "https://www.bilibili.com/video/BV1SmrSBfEg6/?p=1",
+      "title": "什么是KV Cache？为什么它能加快模型推理速度？",
+      "duration": 748.0,
+      "speech_scope": {
+        "kind": "local_asr",
+        "processed_intervals": [
+          [
+            0.0,
+            748.0
+          ]
+        ],
+        "whole_video_processed": true
+      },
+      "source_sha256": "87d924cd47bebb7c91dfe0cfa58fcb3dd8ddc3785a2935712b0f45ac5d9d69f2",
+      "indexed_speech_segments": 261,
+      "exactly_reconstructed_segments": 261,
+      "lossless_text_read": true,
+      "chapter_count": 2,
+      "text_pages": 4,
+      "images_returned": 8,
+      "visual_enabled": true,
+      "visual_issues": [],
+      "elapsed_seconds": 12.318,
+      "chapters": [
+        {
+          "index": 1,
+          "start": 0.0,
+          "end": 421.03,
+          "pages": 2,
+          "images_returned": 4
+        },
+        {
+          "index": 2,
+          "start": 421.03,
+          "end": 748.0,
+          "pages": 2,
+          "images_returned": 4
+        }
+      ]
+    }
+  ],
+  "scans": [
+    {
+      "video_id": "youtube:aircAruvnKk",
+      "status": "complete",
+      "coverage": {
+        "complete": true,
+        "decoded_frames": 33598,
+        "first_timestamp": 0.0,
+        "last_timestamp": 1119.9
+      },
+      "candidate_count": 2394,
+      "method": "all_decoded_frames_ffmpeg_scdet"
+    },
+    {
+      "video_id": "youtube:eMlx5fFNoYc",
+      "status": "complete",
+      "coverage": {
+        "complete": true,
+        "decoded_frames": 47070,
+        "first_timestamp": 0.0,
+        "last_timestamp": 1568.966667
+      },
+      "candidate_count": 3242,
+      "method": "all_decoded_frames_ffmpeg_scdet"
+    },
+    {
+      "video_id": "bilibili:BV1SmrSBfEg6:p1",
+      "status": "complete",
+      "coverage": {
+        "complete": true,
+        "decoded_frames": 22411,
+        "first_timestamp": 0.0,
+        "last_timestamp": 747.0
+      },
+      "candidate_count": 656,
+      "method": "all_decoded_frames_ffmpeg_scdet"
+    }
+  ],
+  "forward_review": {
+    "video_id": "youtube:aircAruvnKk",
+    "completion": {
+      "available_speech_read": true,
+      "chapters": 12,
+      "all_text_cursors_exhausted": true,
+      "unique_speech_evidence_ids": 231,
+      "source_evidence_set_unchanged_after_revision": true,
+      "notes_saved": 12,
+      "source_linked_notes": true,
+      "current_study_progress": {
+        "sections": 12,
+        "text_delivered_sections": 12,
+        "notes_saved": 12,
+        "text_reviewed_sections": 12,
+        "visual_sampled_sections": 12
+      },
+      "external_references_saved_retrieved": 2,
+      "external_references_in_export": true,
+      "candidate_map_pages_read": 3,
+      "candidate_count": 2394,
+      "representative_frames_v2_actually_opened": 48,
+      "earlier_frames_actually_opened": 12,
+      "targeted_supplements_actually_opened": 5,
+      "unique_opened_image_paths": 65,
+      "all_decoded_frames_watched": false
+    },
+    "visual_findings": [
+      {
+        "timestamp": 214.433333,
+        "finding": "28×28=784 的输入像素与激活亮度在画面上可读。"
+      },
+      {
+        "timestamp": 290.4,
+        "finding": "手写7输入对应右侧7输出变亮；用于解释十个分类响应。"
+      },
+      {
+        "timestamp": 394.433333,
+        "finding": "上半圈检测神经元旁写有 maybe；分层特征是解释动机的设想，不能说该网络已被证实学到这种分工。"
+      },
+      {
+        "timestamp": 607.5,
+        "finding": "目标区域绿色正权重、上下红色负权重与手写7横边对应。"
+      },
+      {
+        "timestamp": 640.5,
+        "finding": "sigmoid 函数1/(1+exp(-x))与趋近0、1的曲线实际可读。"
+      },
+      {
+        "timestamp": 680.5,
+        "finding": "偏置−10和 weighted sum >10 的阈值解释同屏可读。"
+      },
+      {
+        "timestamp": 749.433333,
+        "finding": "权重784×16+16×16+16×10，偏置16+16+10，以及总数13,002直接显示在图上。"
+      },
+      {
+        "timestamp": 885.5,
+        "finding": "矩阵、激活向量、偏置向量和逐元素sigmoid同屏；当前图片最后偏置下标可读为k，与描述中的作者勘误一致。"
+      },
+      {
+        "timestamp": 915.066667,
+        "finding": "可见前向计算代码逐层执行 sigmoid(np.dot(w,a)+b)。"
+      },
+      {
+        "timestamp": 1068.5,
+        "finding": "ReLU(a)=max(0,a)及正区间无1上界的直线可见。"
+      }
+    ],
+    "external_reference_count": 2,
+    "note_count": 12,
+    "writing_focus": "Explain one concrete input through the computation, resolve cross-chapter qualifications, keep video evidence distinct from external extensions."
+  },
+  "attention_factual_review": {
+    "video_id": "youtube:eMlx5fFNoYc",
+    "input": "Held-out manual Chinese captions plus inspected source images",
+    "available_speech_read_by_ai": true,
+    "reviewed_visual_timestamps": [
+      734.233333,
+      747,
+      990.966667,
+      1002
+    ],
+    "findings": [
+      {
+        "type": "subtitle_arithmetic_mismatch",
+        "timestamp": 1002,
+        "subtitle_claim": "约1500万",
+        "visible_dimensions": [
+          12288,
+          12288
+        ],
+        "calculated_parameters": 150994944,
+        "resolution": "Use the visibly stated dimensions and identify the local subtitle error."
+      },
+      {
+        "type": "notation_alignment",
+        "timestamp": 747,
+        "observed": "Column-wise normalization and zero probabilities at masked entries.",
+        "external_source": "https://arxiv.org/html/1706.03762v7"
+      }
+    ],
+    "current_source_linked_notes_saved": 2,
+    "external_references_read_and_saved": 1,
+    "evaluation_scope": "Focused factual and visual checks, not a scored whole-answer benchmark."
+  },
+  "asr_review": {
+    "video_id": "bilibili:BV1SmrSBfEg6:p1",
+    "range": [
+      0,
+      120
+    ],
+    "models": [
+      "base",
+      "small"
+    ],
+    "conditions": [
+      "without vocabulary",
+      "with vocabulary"
+    ],
+    "conclusion": "本样本不支持把small作为术语保真的直接解决方案或仅据此修改默认模型。small改善矩阵字形、Transformer和WQ/WK/WV，但KV Cache、token、床前明可退化；可选词表改善个别术语，却不能保证符号保真。",
+    "timing_limits": [
+      "small无提示的12.97秒为SourceProvider worker整体时间，包含加载/解码；其他表列inference_seconds仅模型生成并消费segments的时间。",
+      "base无提示与small有提示有约6.1秒CPU任务重叠；这些单次时间不能用于严格模型速度比或词表开销比较。",
+      "官方small模型初次下载与校验59.73秒独立列出；不是120秒音频推理耗时。"
+    ],
+    "quality_limits": [
+      "这是对照特定术语与实际图像的定性检查，没有人工逐字音频参考，因此没有报告WER/CER或整体准确率。",
+      "词表提供了待识别领域词，不能把输出中的词表命中自动当作真实识别正确；画面和原音仍需核对。",
+      "当前样本只覆盖前120秒，不推广为全片或所有中文课程的质量结果。"
+    ]
+  },
+  "interfaces": {
+    "transport": "stdio",
+    "tools": [
+      "read_video",
+      "study_status",
+      "scan_video",
+      "read_section",
+      "save_note",
+      "revise_sections",
+      "add_reference",
+      "search_knowledge",
+      "read_interval",
+      "read_frames",
+      "crop_frame",
+      "video_coverage",
+      "transcribe_video"
+    ],
+    "plan_mode": "study_plan",
+    "section_id": "section:81a302d38b4a79a9",
+    "text_items": 14,
+    "images": 4,
+    "frame_mapping_valid": true,
+    "error": false
+  },
+  "interactive": {
+    "node_dom_and_computation": "passed",
+    "real_browser_layout": "not_verified_file_protocol_rejected"
+  },
+  "asr_refresh_integration": {
+    "isolated_copy": true,
+    "first": {
+      "video_id": "local-asr-contract",
+      "start": 60.0,
+      "end": 120.0,
+      "segments_added": 7,
+      "cache_hit": false,
+      "source": "local_asr",
+      "signature": "cc72a52e80eba63d1460754a",
+      "next_action": "Search or read the interval; ASR may misrecognize technical terms."
+    },
+    "second": {
+      "video_id": "local-asr-contract",
+      "start": 60.0,
+      "end": 120.0,
+      "cache_hit": true,
+      "segments_added": 0,
+      "segments_available": 7,
+      "source": "local_asr",
+      "signature": "cc72a52e80eba63d1460754a"
+    },
+    "source_revision_changed": true,
+    "old_asr_removed": true,
+    "elapsed_seconds": 2.433
+  },
+  "crossmodal_review": {
+    "video_id": "bilibili:BV1SmrSBfEg6:p1",
+    "chapters": 2,
+    "speech_pages": 4,
+    "speech_evidence_ids_read": 261,
+    "images_actually_opened": 8,
+    "notes_saved": 2,
+    "findings": [
+      "Actual images resolved the ASR confusions for Q/K/V, QK transpose, and the input sequence.",
+      "The final explanation follows current input token 月 to prediction 光 and explains the reuse of previous keys/values."
+    ],
+    "scope": "AI reading using both original ASR and actual images; the original ASR errors were not edited or counted as recognition improvements."
+  },
+  "checks": {
+    "offline_tests": 289,
+    "ruff": "passed",
+    "skill_validation": "passed",
+    "source_and_wheel_build": "passed"
+  },
+  "fresh_install": {
+    "installed_distribution": "0.1.0",
+    "import_from_site_packages": true,
+    "tool_count": 13,
+    "plan_mode": "study_plan",
+    "read_section_evidence_count": 14,
+    "transcribe_vocabulary_in_schema": true,
+    "error": false
+  }
+}

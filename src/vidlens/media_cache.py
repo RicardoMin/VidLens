@@ -4,9 +4,11 @@ from __future__ import annotations
 
 import hashlib
 import json
+import math
 import os
 import subprocess
 import tempfile
+import time
 from pathlib import Path
 
 from filelock import FileLock
@@ -20,7 +22,36 @@ class MediaCache:
         self.store = store
         self.root = store.home / "media"
 
-    def get(self, video, start, end, audio_only, provider):
+    def optional_full_video(self, video, provider):
+        """Amortize chapter downloads; a failed optional prefetch backs off across clients."""
+        profile = os.environ.get("VIDLENS_MAX_VIDEO_HEIGHT", "1080")
+        key = hashlib.sha256(
+            compact_json(
+                [
+                    video.id,
+                    video.metadata.get("revision", ""),
+                    video.duration,
+                    profile,
+                ]
+            ).encode()
+        ).hexdigest()[:24]
+        self.root.mkdir(parents=True, exist_ok=True)
+        failure = self.root / f"prefetch-{key}.failed"
+        with FileLock(str(failure) + ".lock", timeout=330):
+            try:
+                if time.time() - failure.stat().st_mtime < 600:
+                    return None
+            except FileNotFoundError:
+                pass
+            try:
+                asset = self.get(video, 0, video.duration, False, provider)
+            except VidLensError:
+                failure.touch()
+                return None
+            failure.unlink(missing_ok=True)
+            return asset
+
+    def get(self, video, start, end, audio_only, provider, *, max_height=None):
         local = video.metadata.get("local_media_path")
         if local:
             path = Path(local)
@@ -29,7 +60,11 @@ class MediaCache:
             return MediaAsset(path, 0, video.duration, False)
 
         revision = video.metadata.get("revision", "")
-        profile = "audio" if audio_only else os.environ.get("VIDLENS_MAX_VIDEO_HEIGHT", "1080")
+        profile = (
+            "audio"
+            if audio_only
+            else str(max_height or os.environ.get("VIDLENS_MAX_VIDEO_HEIGHT", "1080"))
+        )
         group = (video.id, revision, profile)
         self.root.mkdir(parents=True, exist_ok=True)
         lock_key = hashlib.sha256(compact_json(group).encode()).hexdigest()[:24]
@@ -44,26 +79,37 @@ class MediaCache:
                     (*group, start, end),
                 )
                 for row in rows:
-                    if Path(row["path"]).is_file():
-                        return MediaAsset(
-                            Path(row["path"]), row["start"], row["end"] - row["start"], audio_only
-                        )
+                    path = Path(row["path"])
+                    asset = self._existing(path.parent / "asset.json", start, end, audio_only)
+                    if asset is not None and asset.path == path:
+                        return asset
 
-            # Default profile keeps compatibility with pre-release interval manifests.
-            identity = f"{video.id}|{revision}|{start:.3f}|{end:.3f}|{audio_only}"
+            # Read old rounded manifests only when they really cover the request.
+            # Never publish new clips into them: distinct sub-ms requests used to
+            # overwrite each other's file while old database offsets survived.
+            legacy = f"{video.id}|{revision}|{start:.3f}|{end:.3f}|{audio_only}"
             if profile not in ("audio", "1080"):
-                identity += f"|{profile}"
+                legacy += f"|{profile}"
+            legacy_manifest = (
+                self.root / hashlib.sha256(legacy.encode()).hexdigest()[:24] / "asset.json"
+            )
+            identity = compact_json(
+                ["precise-v2", *group, float(start).hex(), float(end).hex(), bool(audio_only)]
+            )
             directory = self.root / hashlib.sha256(identity.encode()).hexdigest()[:24]
             manifest = directory / "asset.json"
-            asset = self._existing(manifest, start, end, audio_only)
+            asset = self._existing(manifest, start, end, audio_only) or self._existing(
+                legacy_manifest, start, end, audio_only
+            )
             if asset is None:
                 directory.mkdir(exist_ok=True)
                 # A failed yt-dlp run can leave a playable-looking partial file.
                 # Only publish the result of a successfully completed attempt.
                 with tempfile.TemporaryDirectory(dir=directory) as work:
                     target = Path(work) / ("audio.m4a" if audio_only else "clip.mp4")
+                    options = {"max_height": max_height} if max_height is not None else {}
                     asset = provider().fetch_media(
-                        video, target, start=start, end=end, audio_only=audio_only
+                        video, target, start=start, end=end, audio_only=audio_only, **options
                     )
                     saved = directory / asset.path.name
                     asset.path.replace(saved)
@@ -73,6 +119,8 @@ class MediaCache:
                     "offset": asset.offset,
                     "duration": asset.duration,
                     "audio_only": asset.audio_only,
+                    "size_bytes": asset.path.stat().st_size,
+                    "mtime_ns": asset.path.stat().st_mtime_ns,
                 }
                 temporary = manifest.with_suffix(".tmp")
                 temporary.write_text(compact_json(info))
@@ -97,9 +145,18 @@ class MediaCache:
             if (
                 asset.path.is_file()
                 and asset.audio_only == audio_only
+                and math.isfinite(asset.offset)
+                and math.isfinite(asset.duration)
+                and asset.duration > 0
                 and asset.offset <= start
                 and asset.offset + asset.duration >= end - 1e-7
             ):
+                stat = asset.path.stat()
+                if (
+                    data.get("size_bytes", stat.st_size) != stat.st_size
+                    or data.get("mtime_ns", stat.st_mtime_ns) != stat.st_mtime_ns
+                ):
+                    return None
                 return asset
         except (ValueError, TypeError, KeyError, OSError):
             return None

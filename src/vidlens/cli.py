@@ -1,4 +1,4 @@
-"""Small JSON command line interface shared with the Astra skill."""
+"""JSON command line tools for AI clients and local video study."""
 
 from __future__ import annotations
 
@@ -24,7 +24,7 @@ def seconds(value: str) -> float:
             raise ValueError
         if len(numbers) > 1 and any(number >= 60 for number in numbers[1:]):
             raise ValueError
-        return sum(number * 60 ** index for index, number in enumerate(reversed(numbers)))
+        return sum(number * 60**index for index, number in enumerate(reversed(numbers)))
     except ValueError as exc:
         raise argparse.ArgumentTypeError("Use nonnegative seconds, MM:SS, or HH:MM:SS.") from exc
 
@@ -33,7 +33,9 @@ def _common(parser: argparse.ArgumentParser, *, subcommand: bool = False) -> Non
     default = argparse.SUPPRESS if subcommand else None
     parser.add_argument("--home", type=Path, default=default, help="Cache root (or VIDLENS_HOME)")
     parser.add_argument(
-        "--pretty", action="store_true", default=argparse.SUPPRESS if subcommand else False,
+        "--pretty",
+        action="store_true",
+        default=argparse.SUPPRESS if subcommand else False,
         help="Indent JSON output (default: compact)",
     )
 
@@ -44,7 +46,7 @@ def _budget(parser: argparse.ArgumentParser, default: int) -> None:
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        prog="vidlens", description="Give Astra bounded, timestamped video evidence."
+        prog="vidlens", description="Read, study and explain videos with source-linked evidence."
     )
     parser.add_argument("--version", action="version", version=f"vidlens {__version__}")
     _common(parser)
@@ -57,14 +59,72 @@ def build_parser() -> argparse.ArgumentParser:
 
     sub = command("inspect", "Read a video URL once and return original evidence for your question")
     sub.add_argument("url")
-    sub.add_argument("--question", default="", help="Question or learning goal; omit for whole-video reading")
-    sub.add_argument("--languages", default="zh,en", help="Preferred caption languages, comma-separated")
+    sub.add_argument(
+        "--question", default="", help="Question or learning goal; omit for whole-video reading"
+    )
+    sub.add_argument("--intent", choices=("auto", "summary", "question"), default="auto")
+    sub.add_argument(
+        "--languages", default="zh,en", help="Preferred caption languages, comma-separated"
+    )
     sub.add_argument("--refresh", action="store_true")
     _budget(sub, 4000)
 
-    sub = command("open", "Get only metadata and a navigation map (inspect is the usual entry point)")
+    sub = command("study", "Read the chapter plan and progress")
+    sub.add_argument("video_id")
+    sub.add_argument("--cursor", type=int, default=0)
+    _budget(sub, 4000)
+
+    sub = command("section", "Read a chapter's speech and screen images")
+    sub.add_argument("video_id")
+    sub.add_argument("section_id")
+    sub.add_argument("--cursor")
+    sub.add_argument("--no-frames", action="store_true")
+    sub.add_argument("--frame-cursor", type=int)
+    sub.add_argument("--frame-limit", type=int, default=4)
+    sub.add_argument("--frame-view", choices=["navigation", "full"], default="navigation")
+    sub.add_argument("--question", default="")
+    sub.add_argument("--visual-query", action="append", dest="visual_queries")
+    _budget(sub, 6000)
+
+    sub = command("scan", "Index visual changes across the whole video")
+    sub.add_argument("video_id")
+    sub.add_argument("--cursor", type=int, default=0)
+    sub.add_argument("--limit", type=int, default=100)
+    sub.add_argument("--refresh", action="store_true")
+    sub.add_argument("--view", choices=["navigation", "full"], default="navigation")
+
+    for name, help_text in (
+        ("note", "Save a source-linked chapter note"),
+        ("reference", "Attach an external source read by the client"),
+    ):
+        sub = command(name, help_text)
+        sub.add_argument("video_id")
+        sub.add_argument("section_id")
+        sub.add_argument("--revision", required=True)
+        sub.add_argument("--file", type=Path, required=True, help="UTF-8 JSON object")
+
+    sub = command("chapters", "Refine the chapter plan using an ordered JSON section list")
+    sub.add_argument("video_id")
+    sub.add_argument("--revision", required=True)
+    sub.add_argument("--file", type=Path, required=True)
+
+    sub = command("knowledge", "Search saved notes, concepts and external references")
+    sub.add_argument("video_id")
+    sub.add_argument("query")
+    sub.add_argument("--limit", type=int, default=6)
+    _budget(sub, 3000)
+
+    sub = command("export", "Export the current study notes to Markdown")
+    sub.add_argument("video_id")
+    sub.add_argument("--output", type=Path)
+
+    sub = command(
+        "open", "Get only metadata and a navigation map (inspect is the usual entry point)"
+    )
     sub.add_argument("url")
-    sub.add_argument("--languages", default="zh,en", help="Preferred caption languages, comma-separated")
+    sub.add_argument(
+        "--languages", default="zh,en", help="Preferred caption languages, comma-separated"
+    )
     sub.add_argument("--refresh", action="store_true")
     _budget(sub, 2500)
 
@@ -82,7 +142,9 @@ def build_parser() -> argparse.ArgumentParser:
     sub.add_argument("video_id")
     sub.add_argument("start", type=seconds)
     sub.add_argument("end", type=seconds)
-    sub.add_argument("--cursor", default=None, help="Pass next_cursor unchanged to continue reading")
+    sub.add_argument(
+        "--cursor", default=None, help="Pass next_cursor unchanged to continue reading"
+    )
     _budget(sub, 4000)
 
     sub = command("frames", "Read selected frames and local OCR from a time interval")
@@ -92,21 +154,48 @@ def build_parser() -> argparse.ArgumentParser:
     sub.add_argument("--max-frames", type=int, default=4)
     sub.add_argument("--strategy", choices=("changes", "uniform"), default="changes")
     sub.add_argument("--no-ocr", action="store_true")
+    sub.add_argument("--question", default="")
+    sub.add_argument("--visual-query", action="append", dest="visual_queries")
+    sub.add_argument("--preview", action="store_true")
+    sub.add_argument("--timestamps", type=seconds, nargs="+")
 
     sub = command("crop", "Enlarge a cached frame region (normalized x y width height)")
     sub.add_argument("video_id")
     sub.add_argument("timestamp", type=seconds)
     sub.add_argument("box", type=float, nargs=4, metavar=("X", "Y", "WIDTH", "HEIGHT"))
 
+    sub = command("check-facts", "Inspect numeric field bindings and return source crops")
+    sub.add_argument("video_id")
+    sub.add_argument("--file", type=Path, required=True, help="JSON array of figure claims")
+
+    sub = command("detail", "Inspect small text in native source-pixel regions")
+    sub.add_argument("video_id")
+    sub.add_argument("timestamp", type=seconds)
+    sub.add_argument("--box", type=float, nargs=4, action="append", dest="boxes",
+                     metavar=("X", "Y", "WIDTH", "HEIGHT"))
+    sub.add_argument("--upgrade-source", action="store_true")
+    sub.add_argument("--max-tiles", type=int, default=12)
+
     sub = command("coverage", "See which evidence has actually been returned")
     sub.add_argument("video_id")
 
-    sub = command("transcribe", "Run optional local speech recognition; downloads model on first use")
+    sub = command(
+        "transcribe", "Run optional local speech recognition; downloads model on first use"
+    )
     sub.add_argument("video_id")
     sub.add_argument("--start", type=seconds, default=0.0)
     sub.add_argument("--end", type=seconds)
     sub.add_argument("--language")
-    sub.add_argument("--model", default="base")
+    sub.add_argument("--backend", choices=["faster-whisper", "mlx-whisper"], default="faster-whisper")
+    sub.add_argument("--model", help="Defaults to base (CPU) or large-v3-turbo (MLX)")
+    sub.add_argument(
+        "--vocabulary", nargs="+", help="Technical words or quoted phrases to guide local ASR"
+    )
+    sub.add_argument(
+        "--refresh",
+        action="store_true",
+        help="Redo this audio interval even if the configuration is cached",
+    )
 
     sub = command("import", "Import a local subtitle file, optionally paired with a video")
     sub.add_argument("path", type=Path)
@@ -117,7 +206,7 @@ def build_parser() -> argparse.ArgumentParser:
     command("doctor", "Check the local runtime and optional video/OCR/ASR capabilities")
     sub = command("list", "List locally cached videos")
     sub.add_argument("--limit", type=int, default=20)
-    command("mcp", "Run the Astra MCP server over stdio")
+    command("mcp", "Run the MCP server over stdio")
     return parser
 
 
@@ -129,31 +218,102 @@ def dispatch(args: argparse.Namespace, service: Any) -> dict[str, Any]:
             raise VidLensError("invalid_languages", "At least one caption language is required.")
         if command == "inspect":
             return service.read_video(
-                args.url, question=args.question, languages=languages,
-                refresh=args.refresh, max_tokens=args.max_tokens,
+                args.url,
+                question=args.question,
+                languages=languages,
+                refresh=args.refresh,
+                max_tokens=args.max_tokens,
+                intent=args.intent,
             )
         return service.open_video(
             args.url, languages=languages, refresh=args.refresh, max_tokens=args.max_tokens
         )
+    if command == "study":
+        return service.study_status(args.video_id, max_tokens=args.max_tokens, cursor=args.cursor)
+    if command == "section":
+        return service.read_section(
+            args.video_id,
+            args.section_id,
+            max_tokens=args.max_tokens,
+            cursor=args.cursor,
+            include_frames=not args.no_frames,
+            frame_cursor=args.frame_cursor,
+            frame_limit=args.frame_limit,
+            frame_view=args.frame_view,
+            question=args.question,
+            visual_queries=args.visual_queries,
+        )
+    if command == "scan":
+        return service.scan_video(
+            args.video_id, cursor=args.cursor, limit=args.limit, refresh=args.refresh, view=args.view
+        )
+    if command in ("note", "reference", "chapters"):
+        if args.file.stat().st_size > 256 * 1024:
+            raise VidLensError("input_too_large", "Study JSON must be at most 256 KiB.")
+        document = json.loads(args.file.read_text(encoding="utf-8"))
+        if command == "chapters":
+            return service.revise_sections(args.video_id, args.revision, document)
+        operation = service.save_note if command == "note" else service.add_reference
+        return operation(args.video_id, args.section_id, args.revision, document)
+    if command == "knowledge":
+        return service.search_knowledge(
+            args.video_id, args.query, max_tokens=args.max_tokens, limit=args.limit
+        )
+    if command == "export":
+        result = service.export_study(args.video_id)
+        if args.output:
+            args.output.parent.mkdir(parents=True, exist_ok=True)
+            with args.output.open("x", encoding="utf-8") as output:
+                output.write(result.pop("markdown"))
+            result["output"] = str(args.output.resolve())
+        return result
     if command == "overview":
         return service.overview(args.video_id, max_tokens=args.max_tokens)
     if command == "search":
-        return service.search(args.video_id, args.query, max_tokens=args.max_tokens, limit=args.limit)
+        return service.search(
+            args.video_id, args.query, max_tokens=args.max_tokens, limit=args.limit
+        )
     if command == "read":
-        return service.read_interval(args.video_id, args.start, args.end,
-                                     max_tokens=args.max_tokens, cursor=args.cursor)
+        return service.read_interval(
+            args.video_id, args.start, args.end, max_tokens=args.max_tokens, cursor=args.cursor
+        )
     if command == "frames":
         return service.read_frames(
-            args.video_id, args.start, args.end, max_frames=args.max_frames,
-            strategy=args.strategy, ocr=not args.no_ocr,
+            args.video_id,
+            args.start,
+            args.end,
+            max_frames=args.max_frames,
+            strategy=args.strategy,
+            ocr=not args.no_ocr,
+            question=args.question,
+            visual_queries=args.visual_queries,
+            preview=args.preview,
+            timestamps=args.timestamps,
         )
     if command == "crop":
         return service.crop_frame(args.video_id, args.timestamp, tuple(args.box))
+    if command == "check-facts":
+        if args.file.stat().st_size > 64 * 1024:
+            raise VidLensError("input_too_large", "Fact JSON must be at most 64 KiB.")
+        return service.check_facts(args.video_id, json.loads(args.file.read_text(encoding="utf-8")))
+    if command == "detail":
+        return service.read_detail(args.video_id, args.timestamp, args.boxes,
+                                   upgrade_source=args.upgrade_source, max_tiles=args.max_tiles)
     if command == "coverage":
         return service.coverage(args.video_id)
     if command == "transcribe":
+        from .asr import resolve_asr
+
+        backend, model = resolve_asr(args.backend, args.model)
         return service.transcribe(
-            args.video_id, start=args.start, end=args.end, language=args.language, model=args.model
+            args.video_id,
+            start=args.start,
+            end=args.end,
+            language=args.language,
+            model=model,
+            backend=backend,
+            vocabulary=args.vocabulary,
+            refresh=args.refresh,
         )
     if command == "import":
         return service.import_transcript(
@@ -177,8 +337,15 @@ def main(argv: list[str] | None = None) -> int:
         from .service import VideoService
 
         result = dispatch(args, VideoService(home=args.home))
-        print(json.dumps(result, ensure_ascii=False, indent=2 if args.pretty else None,
-                         separators=None if args.pretty else (",", ":"), default=str))
+        print(
+            json.dumps(
+                result,
+                ensure_ascii=False,
+                indent=2 if args.pretty else None,
+                separators=None if args.pretty else (",", ":"),
+                default=str,
+            )
+        )
         return 0
     except VidLensError as exc:
         print(json.dumps({"error": exc.to_dict()}, ensure_ascii=False, separators=(",", ":")))
@@ -187,7 +354,9 @@ def main(argv: list[str] | None = None) -> int:
         print('{"error":{"code":"cancelled","message":"Operation cancelled."}}')
         return 130
     except (OSError, ValueError) as exc:
-        print(json.dumps({"error": {"code": "local_error", "message": str(exc)}}, ensure_ascii=False))
+        print(
+            json.dumps({"error": {"code": "local_error", "message": str(exc)}}, ensure_ascii=False)
+        )
         return 1
 
 

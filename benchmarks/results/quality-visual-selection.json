@@ -1,0 +1,73 @@
+{
+  "scope": "V5 navigation built from existing full 360p media and unchanged complete raw scans. No downloads, OCR, ASR or semantic model in the measured selector time. Actual A/B frames fetched from higher-resolution media; 4 pictures per case/condition.",
+  "cases": [
+    {
+      "case": "bili",
+      "version": 5,
+      "method": "stable_states_pixel_detail_and_local_diversity",
+      "raw_candidate_count": 1565,
+      "probe_count": 318,
+      "decoded_probe_count": 318,
+      "navigation_count": 154,
+      "blank_probes": 0,
+      "elapsed_seconds": 0.763,
+      "candidate_reduction_ratio": 0.9016,
+      "raw_candidates_retained": true
+    },
+    {
+      "case": "tcp",
+      "version": 5,
+      "method": "stable_states_pixel_detail_and_local_diversity",
+      "raw_candidate_count": 3115,
+      "probe_count": 234,
+      "decoded_probe_count": 234,
+      "navigation_count": 201,
+      "blank_probes": 0,
+      "elapsed_seconds": 0.523,
+      "candidate_reduction_ratio": 0.9355,
+      "raw_candidates_retained": true
+    },
+    {
+      "case": "neural",
+      "version": 5,
+      "method": "stable_states_pixel_detail_and_local_diversity",
+      "raw_candidate_count": 4964,
+      "probe_count": 734,
+      "decoded_probe_count": 734,
+      "navigation_count": 689,
+      "blank_probes": 0,
+      "elapsed_seconds": 10.025,
+      "candidate_reduction_ratio": 0.8612,
+      "raw_candidates_retained": true
+    },
+    {
+      "case": "attention",
+      "version": 5,
+      "method": "stable_states_pixel_detail_and_local_diversity",
+      "raw_candidate_count": 6713,
+      "probe_count": 833,
+      "decoded_probe_count": 833,
+      "navigation_count": 764,
+      "blank_probes": 4,
+      "elapsed_seconds": 20.845,
+      "candidate_reduction_ratio": 0.8862,
+      "raw_candidates_retained": true
+    }
+  ],
+  "reviewed_images": 24,
+  "observations": {
+    "bili": "Mixed: new first picture shows K append instead of old Q current-row split; new last picture additionally shows next-round 床前明月光 input. Pixel density is not semantic relevance.",
+    "tcp": "New fourth picture at344.52 adds the third ACK and client seq=8633+1; old339.48 fourth picture has not yet labeled the third arrow. Other first3 pictures have no clear conceptual improvement.",
+    "attention": "New fourth745.17 shows full-screen -infinity to softmax to zero matrices; old749.17 reduces them to the upper-left inset. New third retains the normalization objection. Better matrix readability observed."
+  },
+  "sources": [
+    "https://github.com/Breakthrough/PySceneDetect/blob/main/scenedetect/detectors/adaptive_detector.py",
+    "https://github.com/Breakthrough/PySceneDetect/blob/main/scenedetect/detectors/content_detector.py"
+  ],
+  "tests": "6 selection behavior tests passed; raw source is unchanged, pointer dedup, sparse-code new state, one-frame code amid noise, failed decode, source replacement, bad signature rebuild.",
+  "limits": [
+    "Navigation and four-frame priority are sampling policies, not semantic coverage.",
+    "Short event protection is heuristic; full raw candidates remain accessible.",
+    "No tuning against independent evaluation gold; controlled slide fixture caught global mean failure before final state."
+  ]
+}

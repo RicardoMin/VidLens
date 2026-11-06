@@ -1,7 +1,7 @@
 [project]
-name = "vidlens-astra"
+name = "vidlens"
 version = "0.1.0"
-description = "Evidence-first YouTube and Bilibili reading tools for Astra"
+description = "Multimodal video study, source-linked knowledge and explanations for AI clients"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
@@ -18,6 +18,10 @@ dependencies = [
 
 [project.optional-dependencies]
 asr = ["faster-whisper>=1.1,<2"]
+asr-mlx = [
+  "faster-whisper>=1.2.1,<2",
+  "mlx-whisper>=0.4.3,<0.5; sys_platform == 'darwin' and platform_machine == 'arm64'",
+]
 
 [dependency-groups]
 dev = ["pytest>=8", "pytest-asyncio>=0.24", "ruff>=0.9", "pyyaml>=6"]

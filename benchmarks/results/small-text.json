@@ -1,0 +1,2198 @@
+{
+  "schema_version": 1,
+  "date": "2026-11-06",
+  "version": "0.1.0",
+  "metric": "source facts, full-answer numeric audit and reader reproduction; no total score",
+  "conditions": {
+    "frozen_before_authors": true,
+    "conditions": {
+      "alder": "prior figure-fact workflow; baseline JPEG and crop/check_facts",
+      "birch": "native PNG and source-pixel read_detail plus same figure-fact workflow"
+    },
+    "max_image_views_per_case": 18,
+    "length": "1000-1700 Chinese characters excluding tables/code/math",
+    "common": "same question, timepoints, raw ASR, source interval; primary web definitions allowed; no extra source timepoints",
+    "allow_baseline_crops": true,
+    "allow_deterministic_display_resize_both": true,
+    "no_generative_restoration": true,
+    "claims": "Every material numeric/unit/meaning assertion is judged, including extra claims."
+  },
+  "provenance": {
+    "private_reference_sha256": "29b4c0f3496c6afa22c9ab30e249b7f33874063c46e948059087161097522b1b",
+    "public_reference_sha256": "8f857c561bb1628faf7d0bf9788cfb2c3ffdda9dde298137bbbf9d8b7ce35e85",
+    "reader_questions_sha256": "95b61ebe746f6022e22788adc2bf398503d9ee4c9d9cea8931d0ac4bf3738fcb",
+    "common_expected_sha256": "0d405445aa7c4be0a7843b6b5f41a3dfba7c9aa671c086982f19b7d0f0f9283e",
+    "public_conversion": "private paths and duplicate metadata removed; reader_expected values and questions unchanged"
+  },
+  "cases": [
+    {
+      "case": "mysql_explain_rows_filtered",
+      "url": "https://www.bilibili.com/video/BV11V4y1R73P/?p=8",
+      "interval": [
+        0,
+        138
+      ],
+      "actual_source_size": [
+        808,
+        480
+      ],
+      "timestamps": [
+        21,
+        60,
+        90,
+        124
+      ],
+      "baseline": {
+        "original_writer_sha256": "5a534022f5170d582362693c184c255b546b9975593ca564d4e098d7ca2a9e4e",
+        "provenance": {
+          "reference_sha256": "29b4c0f3496c6afa22c9ab30e249b7f33874063c46e948059087161097522b1b",
+          "reader_questions_sha256": "95b61ebe746f6022e22788adc2bf398503d9ee4c9d9cea8931d0ac4bf3738fcb",
+          "writer_sha256": "bf737777990f33800799c0c101e9fa522ce1927bd479f95b85cbe9ab5e9869fb",
+          "reader_sha256": "ed61c290f692ad9163e4cba64b79b537d21e413d51bbea0db074ecac5828823f",
+          "review_sha256": "531af39e6113454d7d8033419d27fbae3e32780461171852c7e239e58d8cb495"
+        },
+        "required_facts": {
+          "correct": 8,
+          "incorrect": 1,
+          "omitted": 1,
+          "unverifiable": 0
+        },
+        "extra_claims": {
+          "correct": 13,
+          "incorrect": 0,
+          "omitted": 0,
+          "unverifiable": 0
+        },
+        "critical_records_including_repeated_propagation": 0,
+        "dimensions": {
+          "value": {
+            "correct": 9
+          },
+          "unit": {
+            "incorrect": 1,
+            "omitted": 1
+          },
+          "meaning": {
+            "correct": 6
+          },
+          "scope": {
+            "correct": 1
+          },
+          "procedure": {
+            "correct": 2
+          },
+          "source_attribution": {
+            "correct": 3
+          }
+        },
+        "claims": [
+          {
+            "id": "m1",
+            "kind": "required",
+            "dimension": "value",
+            "status": "correct",
+            "critical": false,
+            "reason": "60/90秒源图第一条为 user_id >= 3 AND total_price = 25；SQL及注释的比较符、常数和AND均正确。"
+          },
+          {
+            "id": "m2",
+            "kind": "required",
+            "dimension": "value",
+            "status": "correct",
+            "critical": false,
+            "reason": "60/90秒源图ALL、possible_keys=user_id、key=NULL、rows=5、filtered=20；引文包含各字段，正文和汇总表均匹配。"
+          },
+          {
+            "id": "m3",
+            "kind": "required",
+            "dimension": "value",
+            "status": "correct",
+            "critical": false,
+            "reason": "表第一行把5行、20%算作预计1行，正文20/100及紧随的Python计算支持5×20/100=1。"
+          },
+          {
+            "id": "m4",
+            "kind": "required",
+            "dimension": "value",
+            "status": "correct",
+            "critical": false,
+            "reason": "124秒被选中SQL为 user_id > 3，未附加价格条件；注释也保留严格大于。"
+          },
+          {
+            "id": "m5",
+            "kind": "required",
+            "dimension": "unit",
+            "status": "incorrect",
+            "critical": false,
+            "reason": "124秒源图逐列为 type=range、key=user_id、key_len=4、rows=2、filtered=100，全部字段值恢复正确。但冻结复合断言还要求 key_len 的字节单位，讲解没有写出字节。此 incorrect 仅表示复合断言部分单位说明缺失，不是数值错误或单位写错；不影响本题谓词复现，故非关键错误。"
+          },
+          {
+            "id": "m6",
+            "kind": "required",
+            "dimension": "value",
+            "status": "correct",
+            "critical": false,
+            "reason": "表第二行2行、100%、预计2行以及紧随Python正确表达2×100/100=2。"
+          },
+          {
+            "id": "m7",
+            "kind": "required",
+            "dimension": "meaning",
+            "status": "correct",
+            "critical": false,
+            "reason": "将rows明确解释为预计检查，且估计恰与讲者所称实返一行一致不改变估计性质；第二条范围访问两行的段落和末尾统一估计说明补足不同访问方式，不是固定全表行数。"
+          },
+          {
+            "id": "m8",
+            "kind": "required",
+            "dimension": "meaning",
+            "status": "correct",
+            "critical": false,
+            "reason": "保留百分比而非删除率；范围访问已经取出候选两行，100指两行都留下，而非整张表或准确率。数字100并未被解释成100行。"
+          },
+          {
+            "id": "m9",
+            "kind": "required",
+            "dimension": "scope",
+            "status": "correct",
+            "critical": false,
+            "reason": "明确取消价格条件并把>=3改成>3，查询语义不同，不能把计划变化直接归因于额外筛选；成本段又明确无路径耗时，未宣称同一查询提速。"
+          },
+          {
+            "id": "m10",
+            "kind": "required",
+            "dimension": "unit",
+            "status": "omitted",
+            "critical": false,
+            "reason": "仅写价格字段25，未说明源屏幕未展示币种/金额单位；没有捏造人民币，但单位未知这一冻结信息没有交付。"
+          },
+          {
+            "id": "x_setup",
+            "kind": "extra",
+            "dimension": "procedure",
+            "status": "correct",
+            "critical": false,
+            "reason": "普通EXPLAIN供预计计划，去掉EXPLAIN另行执行SELECT可观察返回行；源包没有完整DDL与订单数据，不能保证换数据后同一计划，边界说明正确。"
+          },
+          {
+            "id": "x_first_image",
+            "kind": "extra",
+            "dimension": "source_attribution",
+            "status": "correct",
+            "critical": false,
+            "reason": "实际打开嵌入image-1，并与60秒源帧核对；该图为第一条SQL及其ALL计划的放大裁剪，图注和所指列一致，未捏造额外截图信息。"
+          },
+          {
+            "id": "x_first_sql_repetition",
+            "kind": "extra",
+            "dimension": "value",
+            "status": "correct",
+            "critical": false,
+            "reason": "再次写出>=3 AND total_price=25、ALL、rows5与filtered20，逐项同60秒源图；分集和时间是来源定位，未用作计量。"
+          },
+          {
+            "id": "x_index_cost",
+            "kind": "extra",
+            "dimension": "source_attribution",
+            "status": "correct",
+            "critical": false,
+            "reason": "possible_keys与实际key的区分正确。原始转写57.27–62.83秒称五条数据及范围命中三条，65.01–70.91秒给成本解释，讲解保持讲者归属且未推算提速倍数。SQL中>=3的重复正确；底部EXPLAIN耗时不构成两条SELECT访问路径实测。"
+          },
+          {
+            "id": "x_percent_and_actual",
+            "kind": "extra",
+            "dimension": "meaning",
+            "status": "correct",
+            "critical": false,
+            "reason": "rows5、filtered20及20/100换算正确，且20%对应整体表条件，未泛化成固定价格命中率。原始转写85.05–97.95秒称实际结果一条；讲解说明这是讲者所述而非把计划认作实际计数。"
+          },
+          {
+            "id": "x_second_image",
+            "kind": "extra",
+            "dimension": "source_attribution",
+            "status": "correct",
+            "critical": false,
+            "reason": "实际打开image-2并与124秒源图核对；选中的确是下方第二条，range计划与该语句对应。放大裁剪没有改变谓词或计划字段。"
+          },
+          {
+            "id": "x_second_sql_repetition",
+            "kind": "extra",
+            "dimension": "value",
+            "status": "correct",
+            "critical": false,
+            "reason": "此处再次写user_id>3且无价格条件，计划值range/user_id/4/2/100均与124秒图一致；key_len字节单位遗漏另在m5记录，这里仅审核重复的字段值及截图对应。"
+          },
+          {
+            "id": "x_table_repetition",
+            "kind": "extra",
+            "dimension": "value",
+            "status": "correct",
+            "critical": false,
+            "reason": "逐格核对两条条件、ALL/range、候选与实际索引、5/2行、20%/100%及1/2行，全与源图和估算换算一致。"
+          },
+          {
+            "id": "x_calculation_code",
+            "kind": "extra",
+            "dimension": "value",
+            "status": "correct",
+            "critical": false,
+            "reason": "Python循环两个源计划(5,20)与(2,100)，除以100，实际算数为1.0与2.0；代码和注释正确，只是估计换算，没有伪称数据库执行。"
+          },
+          {
+            "id": "x_following_join",
+            "kind": "extra",
+            "dimension": "meaning",
+            "status": "correct",
+            "critical": false,
+            "reason": "21秒源文档写前一个表，MySQL官方定义指后续表；本段纠正连接方向并明确rows与filtered是估计，符合官方字段与condition-filtering说明。"
+          },
+          {
+            "id": "x_set_relation",
+            "kind": "extra",
+            "dimension": "meaning",
+            "status": "correct",
+            "critical": false,
+            "reason": "边界等于三且price25可仅属第一条；编号大于三但价格不同可仅属第二条。因此谓词逻辑不保证子集/超集，示例用于关系判断，未声称源表实际含这些具体订单。"
+          },
+          {
+            "id": "x_scan_vs_retained",
+            "kind": "extra",
+            "dimension": "meaning",
+            "status": "correct",
+            "critical": false,
+            "reason": "源估计扫描5降至2而保留1增至2，访问规模与保留比例的变化可同时成立；结果多少本身不足以定效率。"
+          },
+          {
+            "id": "x_check_and_teaching_variant",
+            "kind": "extra",
+            "dimension": "procedure",
+            "status": "correct",
+            "critical": false,
+            "reason": "SHOW INDEX及分别执行SELECT是核对建议；固定一谓词、改变另一谓词可研究语义改变后的计划，未伪称同义测速。五行/范围三行/最终一行归属不同阶段符合转写；rows10、filtered30为明确教学变式，10×30/100=3正确，不冒充源数据或运行耗时。"
+          }
+        ],
+        "numeric_inventory": {
+          "occurrences": 55,
+          "classification": {
+            "claim": 41,
+            "non_claim": 14
+          }
+        },
+        "reader_task_counts": {
+          "passed": 3
+        },
+        "reader_tasks": [
+          {
+            "id": "m_source_reconstruction",
+            "status": "passed",
+            "reason": "独立审核读者文字：两条SELECT精确保留>=3 AND total_price=25及>3，无多余谓词；ALL/NULL/5/20%与range/user_id/2/100%完整正确，预计1与2行且明确均为估计。讲者实际一行被另行归属，未与计划计数混淆。本题不要求key_len单位，故讲解m5部分单位缺失不使本题失败。"
+          },
+          {
+            "id": "m_reproduce_queries",
+            "status": "passed",
+            "reason": "已人工检查冻结函数，仅作有限记录遍历与谓词判断；代码哈希与真实执行日志一致。公开样本及全部三个冻结隐藏输入4/4通过，含等于阈值、额外价格谓词、NULL和空输入；顺序保持。日志是合成记录谓词复现，不是原MySQL执行计划重跑。"
+          },
+          {
+            "id": "m_meaning_trap",
+            "status": "passed",
+            "reason": "独立审核读者第三题：逐项否定filtered大即浪费、rows等于实返、不同查询有索引即证明同一查询提速。明确>=变>并取消价格条件。公平测试要求同SQL/数据、环境或设置与缓存控制，记录实际耗时并重复；条件变化研究另行区分。没有从代码通过反推本题通过。"
+          }
+        ],
+        "execution": {
+          "sha256": "07d70f64377fd3035c4e5c1c7f57349cae3fe5c969904c7b122f4a8a84afc071",
+          "code_sha256": "985b6fb8d59e5778a2f70e58a3d2ff995ac34d935ef9eebfdc388ea6e72f75bd",
+          "reader_sha256": "ed61c290f692ad9163e4cba64b79b537d21e413d51bbea0db074ecac5828823f",
+          "status": "passed",
+          "checks": [
+            {
+              "name": "public_sample",
+              "passed": true
+            },
+            {
+              "name": "hidden_0",
+              "passed": true
+            },
+            {
+              "name": "hidden_1",
+              "passed": true
+            },
+            {
+              "name": "hidden_2",
+              "passed": true
+            }
+          ]
+        },
+        "actual_author_image_views": 10
+      },
+      "source_detail": {
+        "original_writer_sha256": "b6afe77cb6f1951e8740666a3264474d66e7b219d82c81d3f6d5d2fdd47c03b5",
+        "provenance": {
+          "reference_sha256": "29b4c0f3496c6afa22c9ab30e249b7f33874063c46e948059087161097522b1b",
+          "reader_questions_sha256": "95b61ebe746f6022e22788adc2bf398503d9ee4c9d9cea8931d0ac4bf3738fcb",
+          "writer_sha256": "376855d862bc95c8cf2e1e5b8e1aaf3c598f2facf5f01e4f11c2f39a169d9ee0",
+          "reader_sha256": "3432194b4ebe047b21a4e8cac41975449e3890dc66124d665c19bd23e0324780",
+          "review_sha256": "3a23ddced0a61b7df6a987969b027bdeec0bbbd6227251c7d9132a53fa22595e"
+        },
+        "required_facts": {
+          "correct": 8,
+          "incorrect": 1,
+          "omitted": 1,
+          "unverifiable": 0
+        },
+        "extra_claims": {
+          "correct": 9,
+          "incorrect": 0,
+          "omitted": 0,
+          "unverifiable": 0
+        },
+        "critical_records_including_repeated_propagation": 0,
+        "dimensions": {
+          "value": {
+            "correct": 7
+          },
+          "unit": {
+            "incorrect": 1,
+            "omitted": 1
+          },
+          "meaning": {
+            "correct": 4
+          },
+          "scope": {
+            "correct": 1
+          },
+          "source_attribution": {
+            "correct": 2
+          },
+          "procedure": {
+            "correct": 3
+          }
+        },
+        "claims": [
+          {
+            "id": "m1",
+            "kind": "required",
+            "dimension": "value",
+            "status": "correct",
+            "critical": false,
+            "reason": "60/90秒源图第一条为 user_id >= 3 AND total_price = 25；>=、3、25、AND及表名均正确。"
+          },
+          {
+            "id": "m2",
+            "kind": "required",
+            "dimension": "value",
+            "status": "correct",
+            "critical": false,
+            "reason": "60/90秒源图为 ALL、possible_keys=user_id、key=NULL、rows=5、filtered=20；讲解在本引文首末段完整恢复。"
+          },
+          {
+            "id": "m3",
+            "kind": "required",
+            "dimension": "value",
+            "status": "correct",
+            "critical": false,
+            "reason": "源计划为 rows=5、filtered=20%；5×20/100=1行的估算正确，行单位正确。"
+          },
+          {
+            "id": "m4",
+            "kind": "required",
+            "dimension": "value",
+            "status": "correct",
+            "critical": false,
+            "reason": "124秒被选中的第二条为 user_id > 3，无 total_price 谓词；未混用编辑器上方旧语句。"
+          },
+          {
+            "id": "m5",
+            "kind": "required",
+            "dimension": "unit",
+            "status": "incorrect",
+            "critical": false,
+            "reason": "124秒源图逐列为 type=range、key=user_id、key_len=4、rows=2、filtered=100，全部字段值恢复正确。但冻结复合断言还要求 key_len 的字节单位，讲解没有写出字节。此 incorrect 仅表示复合断言部分单位说明缺失，不是数值错误或单位写错；不影响本题谓词复现，故非关键错误。"
+          },
+          {
+            "id": "m6",
+            "kind": "required",
+            "dimension": "value",
+            "status": "correct",
+            "critical": false,
+            "reason": "第二行的 rows=2、filtered=100%、预计保留=2符合2×100/100=2；末尾Python也实际给出此换算。"
+          },
+          {
+            "id": "m7",
+            "kind": "required",
+            "dimension": "meaning",
+            "status": "correct",
+            "critical": false,
+            "reason": "分别把全表访问5行、范围访问2行解释为预计检查行数；另行查询才核对实际结果，没有将rows等同全表总行数或实际返回数。"
+          },
+          {
+            "id": "m8",
+            "kind": "required",
+            "dimension": "meaning",
+            "status": "correct",
+            "critical": false,
+            "reason": "20解释为保留百分比而非删除率或行数；100解释为范围访问所得两行全部保留，范围条件已体现在访问规模中，没有称100行或整表返回。"
+          },
+          {
+            "id": "m9",
+            "kind": "required",
+            "dimension": "scope",
+            "status": "correct",
+            "critical": false,
+            "reason": "明确边界从>=3变为>3，并取消价格限制，因此不同语义查询不能把计划差异归因于有无索引；成本段另明确无实际计时证据。"
+          },
+          {
+            "id": "m10",
+            "kind": "required",
+            "dimension": "unit",
+            "status": "omitted",
+            "critical": false,
+            "reason": "正文只给总价字段值25，没有说明币种/金额单位未展示；没有捏造人民币，但冻结断言的单位未知信息缺失。"
+          },
+          {
+            "id": "x_selection_and_images",
+            "kind": "extra",
+            "dimension": "source_attribution",
+            "status": "correct",
+            "critical": false,
+            "reason": "实看124秒源图与嵌入image-1：旧第一条在上、蓝色选区为下方第二条；其range结果对应所选语句。image-2与60秒第一条及ALL计划匹配；两图图注没有错配或添加值。"
+          },
+          {
+            "id": "x_setup_and_show",
+            "kind": "extra",
+            "dimension": "procedure",
+            "status": "correct",
+            "critical": false,
+            "reason": "源码包未展示完整DDL/逐行数据/数据库版本；SHOW CREATE TABLE和SHOW INDEX分别可检查表定义和索引，所给SQL是新增操作建议，不伪称视频完整环境已复现。"
+          },
+          {
+            "id": "x_index_columns",
+            "kind": "extra",
+            "dimension": "meaning",
+            "status": "correct",
+            "critical": false,
+            "reason": "ALL为全表扫描、possible_keys为候选而key为实际选择，与源帧及MySQL官方字段定义一致；可用于索引的条件不保证采用索引。"
+          },
+          {
+            "id": "x_speaker_cost",
+            "kind": "extra",
+            "dimension": "source_attribution",
+            "status": "correct",
+            "critical": false,
+            "reason": "原始转写57.27–62.83秒称表五行、范围命中三行，65.01–70.91秒称成本选择全表扫描；90秒图也有5、3及1的手写说明。讲解保持讲者归属，没有据此制造计时或固定选择阈值。屏幕底部EXPLAIN耗时不是两条SELECT访问路径的比较实测。"
+          },
+          {
+            "id": "x_actual_result_and_count",
+            "kind": "extra",
+            "dimension": "procedure",
+            "status": "correct",
+            "critical": false,
+            "reason": "转写85.05–97.95秒说结果一条并提出实际执行验证；本讲解归属为讲者的示例结果，没有把EXPLAIN本身称实测。相同WHERE下COUNT(*)可核对匹配数量，是有效的新增操作建议。"
+          },
+          {
+            "id": "x_table_repetition",
+            "kind": "extra",
+            "dimension": "value",
+            "status": "correct",
+            "critical": false,
+            "reason": "表格每格核对：第一条>=3、price=25、ALL、候选user_id、NULL、5、20%、1；第二条>3、range、候选/实际user_id、2、100%、2。全部与源图和算数一致，无货币单位臆造。"
+          },
+          {
+            "id": "x_join_and_efficiency",
+            "kind": "extra",
+            "dimension": "meaning",
+            "status": "correct",
+            "critical": false,
+            "reason": "两种计划可同时出现filtered升高和rows下降；仅凭百分比不能判断效率。21秒文档写前一个表，官方定义为后续表；两条源SQL均为单表，说明其适用范围正确。"
+          },
+          {
+            "id": "x_controlled_design",
+            "kind": "extra",
+            "dimension": "procedure",
+            "status": "correct",
+            "critical": false,
+            "reason": "固定数据/统计信息、一次改变边界或价格谓词并对应保存计划，可研究计划选择变化；明确是建议的对照检查，没有冒充视频第三组结果，也没有把该方法本身称同义查询测速。"
+          },
+          {
+            "id": "x_teaching_code",
+            "kind": "extra",
+            "dimension": "value",
+            "status": "correct",
+            "critical": false,
+            "reason": "代码为有标签的教学演算：5×20/100=1.0，2×100/100=2.0，假设2×50/100=1.0。三组输出及分母100均正确，50明确是假设而非源视频值；该循环不连接数据库。"
+          }
+        ],
+        "numeric_inventory": {
+          "occurrences": 37,
+          "classification": {
+            "claim": 31,
+            "non_claim": 6
+          }
+        },
+        "reader_task_counts": {
+          "passed": 3
+        },
+        "reader_tasks": [
+          {
+            "id": "m_source_reconstruction",
+            "status": "passed",
+            "reason": "独立审核读者文字：两条SELECT精确保留>=3 AND total_price=25及>3，无多余谓词；ALL/NULL/5/20%与range/user_id/2/100%完整正确，预计1与2行且明确均为估计。讲者实际一行被另行归属，未与计划计数混淆。本题不要求key_len单位，故讲解m5部分单位缺失不使本题失败。"
+          },
+          {
+            "id": "m_reproduce_queries",
+            "status": "passed",
+            "reason": "已人工检查冻结函数，仅作有限记录遍历与谓词判断；代码哈希与真实执行日志一致。公开样本及全部三个冻结隐藏输入4/4通过，含等于阈值、额外价格谓词、NULL和空输入；顺序保持。日志是合成记录谓词复现，不是原MySQL执行计划重跑。"
+          },
+          {
+            "id": "m_meaning_trap",
+            "status": "passed",
+            "reason": "独立审核读者第三题：逐项否定filtered大即浪费、rows等于实返、不同查询有索引即证明同一查询提速。明确>=变>并取消价格条件。公平测试要求同SQL/数据、环境或设置与缓存控制，记录实际耗时并重复；条件变化研究另行区分。没有从代码通过反推本题通过。"
+          }
+        ],
+        "execution": {
+          "sha256": "17688cbcaedccfd5e1ec3add7b479756753f099100bba5cfc63b5d686314422d",
+          "code_sha256": "1839eff8c1871172ad7b3620a3a6f505c4db0c4f95d06944818407bfe8409800",
+          "reader_sha256": "3432194b4ebe047b21a4e8cac41975449e3890dc66124d665c19bd23e0324780",
+          "status": "passed",
+          "checks": [
+            {
+              "name": "public_sample",
+              "passed": true
+            },
+            {
+              "name": "hidden_0",
+              "passed": true
+            },
+            {
+              "name": "hidden_1",
+              "passed": true
+            },
+            {
+              "name": "hidden_2",
+              "passed": true
+            }
+          ]
+        },
+        "actual_author_image_views": 9
+      },
+      "task_only_control": {
+        "execution_sha256": "03b191a27adb978770abb0d62954d9c81ae634414ad1195a9fe31a203f46bac2",
+        "reader_sha256": "e58d1e0187acb60465a1eb1e37ea54c8b3856fdfd94faf947d794ca9f115d6c7",
+        "code_sha256": "1af9a33ab996ef8a9e85e41b9244b7b446a3f8bcf6e57a233a0a79f575e247ca",
+        "status": "failed",
+        "checks": [
+          {
+            "name": "public_sample",
+            "passed": false
+          },
+          {
+            "name": "hidden_0",
+            "passed": false
+          },
+          {
+            "name": "hidden_1",
+            "passed": false
+          },
+          {
+            "name": "hidden_2",
+            "passed": true
+          }
+        ]
+      }
+    },
+    {
+      "case": "wireshark_io_graph_units",
+      "url": "https://www.bilibili.com/video/BV1wx1kBvEjq/?p=1",
+      "interval": [
+        68,
+        301
+      ],
+      "actual_source_size": [
+        852,
+        480
+      ],
+      "timestamps": [
+        120,
+        170,
+        210,
+        250
+      ],
+      "baseline": {
+        "original_writer_sha256": "c8fc25f9e4aabd93ac770e5c0af978585456269586eba7275b460800af16949d",
+        "provenance": {
+          "reference_sha256": "29b4c0f3496c6afa22c9ab30e249b7f33874063c46e948059087161097522b1b",
+          "reader_questions_sha256": "95b61ebe746f6022e22788adc2bf398503d9ee4c9d9cea8931d0ac4bf3738fcb",
+          "writer_sha256": "ff8161df03d72699909abba9d35c14bdf93a287cc3d2703bfb56e2b66518bb33",
+          "reader_sha256": "21016b1dc7d33907e03bbd99820a6fe223291ee20e10546a03ef5ce6f46ebeff",
+          "review_sha256": "a7dec0c8ff64a8de3792fdf7bd962604340f0393e9a1f29dfe7e588868041e9b"
+        },
+        "required_facts": {
+          "correct": 8,
+          "incorrect": 0,
+          "omitted": 1,
+          "unverifiable": 0
+        },
+        "extra_claims": {
+          "correct": 18,
+          "incorrect": 0,
+          "omitted": 0,
+          "unverifiable": 0
+        },
+        "critical_records_including_repeated_propagation": 1,
+        "dimensions": {
+          "value": {
+            "correct": 9
+          },
+          "procedure": {
+            "correct": 5
+          },
+          "scope": {
+            "correct": 3
+          },
+          "unit": {
+            "correct": 3
+          },
+          "meaning": {
+            "omitted": 1,
+            "correct": 2
+          },
+          "source_attribution": {
+            "correct": 4
+          }
+        },
+        "claims": [
+          {
+            "id": "w1",
+            "kind": "required",
+            "dimension": "value",
+            "status": "correct",
+            "critical": false,
+            "reason": "已实际打开120秒原帧及其确定性放大图。ACK RTT为0.025540000 seconds，即25.54 ms，字段tcp.analysis.ack_rtt；iRTT为另一个字段，没有用其数值替代ACK RTT。"
+          },
+          {
+            "id": "w2",
+            "kind": "required",
+            "dimension": "value",
+            "status": "correct",
+            "critical": false,
+            "reason": "170秒原帧显示Bytes in flight为29200，字段tcp.analysis.bytes_in_flight；讲解正确解释为未确认的在途字节量，而非比特、包数或每秒速率。"
+          },
+          {
+            "id": "w3",
+            "kind": "required",
+            "dimension": "procedure",
+            "status": "correct",
+            "critical": false,
+            "reason": "210秒和250秒原帧均显示RTT与BIF使用MAX(Y Field)，SMA Period为None。两行统计和None均在全文中正确恢复，且解释为每桶MAX。此项只评统计方式；P若有倍率错误在w6独立记录。"
+          },
+          {
+            "id": "w4",
+            "kind": "required",
+            "dimension": "scope",
+            "status": "correct",
+            "critical": false,
+            "reason": "250秒原帧Send Rate行：ip.src == 10.10.12.1，Bytes，倍率1。完整IP、方向、统计及倍率均一致。"
+          },
+          {
+            "id": "w5",
+            "kind": "required",
+            "dimension": "unit",
+            "status": "correct",
+            "critical": false,
+            "reason": "210秒帧仍为1 sec，250秒帧为50 ms；0.05秒换算正确。最终与中间配置已区分。"
+          },
+          {
+            "id": "w6",
+            "kind": "required",
+            "dimension": "value",
+            "status": "correct",
+            "critical": false,
+            "reason": "250秒原帧三条倍率为17000000、1、1，全部一致。全文说明倍率只改变显示，读取RTT须除倍率，不会把不同量纲变成同一种量。"
+          },
+          {
+            "id": "w7",
+            "kind": "required",
+            "dimension": "procedure",
+            "status": "correct",
+            "critical": false,
+            "reason": "250秒原帧TCP Errors：tcp.analysis.flags、Packets、Bar；编辑框显示600。讲解保留正在编辑这一状态，字段、统计、样式和数值均正确。"
+          },
+          {
+            "id": "w8",
+            "kind": "required",
+            "dimension": "unit",
+            "status": "correct",
+            "critical": false,
+            "reason": "Bytes在本视频配置下是每桶匹配报文字节总量；还原显示倍率后除0.05秒，再乘8得bit/s。全文还明确不能直接等同应用有效载荷goodput。换算方法正确；源图平台误读及其派生值另列额外断言。"
+          },
+          {
+            "id": "w9",
+            "kind": "required",
+            "dimension": "meaning",
+            "status": "omitted",
+            "critical": true,
+            "reason": "虽然讲解给出了BIF为未确认在途字节的定义，但全文没有解释cwnd是发送端拥塞控制上限，也没有明确交代BIF并不普遍等于cwnd。关键比较缺失；该部分按omitted记录而非把已有BIF定义误判为错误。"
+          },
+          {
+            "id": "q_overview",
+            "kind": "extra",
+            "dimension": "meaning",
+            "status": "correct",
+            "critical": false,
+            "reason": "源图三个指标共享时间轴且单位不同；恢复双向TCP确认关系需捕获数据与ACK，换流应更新地址和流号，范围提醒合理。"
+          },
+          {
+            "id": "q_ack_packets_irtt",
+            "kind": "extra",
+            "dimension": "value",
+            "status": "correct",
+            "critical": false,
+            "reason": "120秒源图选中39号ACK，确认frame17；ack_rtt=0.025540000秒=25.54ms，邻行iRTT=0.025772000秒。所有额外包号和iRTT小数均由原帧及放大图核实。"
+          },
+          {
+            "id": "q_ack_image",
+            "kind": "extra",
+            "dimension": "source_attribution",
+            "status": "correct",
+            "critical": false,
+            "reason": "已打开嵌图1，与120秒源帧ACK/iRTT区域一致。"
+          },
+          {
+            "id": "q_bif_neighbors",
+            "kind": "extra",
+            "dimension": "value",
+            "status": "correct",
+            "critical": false,
+            "reason": "170秒原帧选中41号，BIF=29200字节，下一行Bytes sent since last PSH flag=2920，TCP payload=1460字节；逐位核对正确且未混淆统计范围。右键MAX流程由171至180秒转写支持。"
+          },
+          {
+            "id": "q_bif_image",
+            "kind": "extra",
+            "dimension": "source_attribution",
+            "status": "correct",
+            "critical": false,
+            "reason": "已打开嵌图2，来自170秒源帧对应字段；相邻值未被替换。"
+          },
+          {
+            "id": "q_graph_creation",
+            "kind": "extra",
+            "dimension": "procedure",
+            "status": "correct",
+            "critical": false,
+            "reason": "Statistics入口、创建/启用和名称流程符合转写68至72、185至214秒；口述Throughput与画面Send Rate的区别准确，名称不改统计方法。"
+          },
+          {
+            "id": "q_bif_row",
+            "kind": "extra",
+            "dimension": "procedure",
+            "status": "correct",
+            "critical": false,
+            "reason": "空过滤器、Line、MAX、完整字段、None、倍率1均与250秒帧一致。"
+          },
+          {
+            "id": "q_settings_image",
+            "kind": "extra",
+            "dimension": "source_attribution",
+            "status": "correct",
+            "critical": false,
+            "reason": "已打开嵌图3并比对250秒原帧，是配置区确定性放大；字段和倍率位置对应正确。"
+          },
+          {
+            "id": "q_error_edit",
+            "kind": "extra",
+            "dimension": "value",
+            "status": "correct",
+            "critical": false,
+            "reason": "250秒源帧确在编辑TCP Errors倍率且可见600；时间链接04:10定位对应帧。"
+          },
+          {
+            "id": "q_enabled",
+            "kind": "extra",
+            "dimension": "procedure",
+            "status": "correct",
+            "critical": false,
+            "reason": "250秒原图All Packets未勾选、三条主线与错误行勾选。显示命名与源字段独立、颜色为显示选择，流程提醒正确。"
+          },
+          {
+            "id": "q_aggregate_meaning",
+            "kind": "extra",
+            "dimension": "meaning",
+            "status": "correct",
+            "critical": false,
+            "reason": "官方I/O Graphs定义与视频表格支持每桶MAX、None无SMA、Bytes按桶累计报文字节；无与当前文档新增选项混淆。"
+          },
+          {
+            "id": "q_interval_ratio",
+            "kind": "extra",
+            "dimension": "unit",
+            "status": "correct",
+            "critical": false,
+            "reason": "210秒帧1秒，250秒帧50毫秒=0.05秒。每秒20桶及稳定平均速率下50ms累计为1s的1/20，数学正确；是恒定速率假设的教学推导，不声称实际包逐桶绝对均匀。"
+          },
+          {
+            "id": "q_graph_image",
+            "kind": "extra",
+            "dimension": "source_attribution",
+            "status": "correct",
+            "critical": false,
+            "reason": "已打开嵌图4并比对250秒原帧，50ms、三条线及错误标记来源一致。"
+          },
+          {
+            "id": "q_plateau_reading",
+            "kind": "extra",
+            "dimension": "value",
+            "status": "correct",
+            "critical": false,
+            "reason": "250秒原轴明确有750000刻度，Send Rate稳定段附近约为此量级。讲解限定为近似演算，未声称精确平台/峰值；符合冻结未知项禁止从像素推导精确值的界限。"
+          },
+          {
+            "id": "q_code_example",
+            "kind": "extra",
+            "dimension": "value",
+            "status": "correct",
+            "critical": false,
+            "reason": "全部数字逐项核算：50/1000=0.05秒；750000为声明的图上近似示例，factor=1；除0.05得15000000 B/s，乘8再除十进制1000000得120 Mbit/s；0.02554*17000000=434180。后者为单包显示演算，不当作该桶MAX实测。"
+          },
+          {
+            "id": "q_rate_scope",
+            "kind": "extra",
+            "dimension": "scope",
+            "status": "correct",
+            "critical": false,
+            "reason": "约750000字节/0.05秒=15十进制MB/s=120Mb/s。Send Rate源过滤不排除重传，Bytes非goodput。三条曲线使用共同tcp.stream范围是另抓包的条件性建议；原图RTT/BIF过滤栏确为空。"
+          },
+          {
+            "id": "q_rtt_display",
+            "kind": "extra",
+            "dimension": "value",
+            "status": "correct",
+            "critical": false,
+            "reason": "0.02554*17000000=434180，逆向除17000000恢复秒；明确单包演算不保证桶MAX。官方TCP字段表支持flags多类事件，非丢包率；Bar显示倍率不改事件数。"
+          },
+          {
+            "id": "q_congestion_inference",
+            "kind": "extra",
+            "dimension": "scope",
+            "status": "correct",
+            "critical": false,
+            "reason": "转写264至300秒确讨论最优操作点；讲解将交点解释限制为需核对基线RTT、瓶颈速率和时段，没有声称单靠混合纵轴交点就可测得BDP。"
+          }
+        ],
+        "numeric_inventory": {
+          "occurrences": 52,
+          "classification": {
+            "claim": 52
+          }
+        },
+        "reader_task_counts": {
+          "passed": 2,
+          "partial": 1
+        },
+        "reader_tasks": [
+          {
+            "id": "w_source_reconstruction",
+            "status": "passed",
+            "reason": "读者原文第1项正确恢复0.025540000秒=25.54ms、29200字节、50ms=0.05s、tcp.analysis.ack_rtt与tcp.analysis.bytes_in_flight及MAX、ip.src == 10.10.12.1和Bytes、最终三个倍率17000000/1/1。额外39/17/41包号和相邻字段数字也与源图一致；源值重建全部满足。"
+          },
+          {
+            "id": "w_reproduce_bins",
+            "status": "passed",
+            "reason": "已审读冻结的标准库有限计算代码，并核对真实日志reader/code/reference/questions SHA256与当前冻结文件。公开样本及三个原冻结隐藏输入全部通过，包括0.15秒边界、非发送端RTT/BIF、空桶及空输入。输出原始秒/字节并正确计算bit/s，未混入显示倍率；这是synthetic packet records复现，不是原pcap回放。"
+          },
+          {
+            "id": "w_meaning_trap",
+            "status": "partial",
+            "reason": "RTT除17000000恢复秒、单包434180示例范围、Bytes除0.05再乘8，以及750000字节=120Mbit/s和非应用goodput均正确。读者说BIF是未确认数据、无内部cwnd测量或相等条件，正确拒绝精确等同；但没有交代冻结meaning_rubric所要求的cwnd是发送端拥塞控制发送上限，含义对照仍缺一项，故partial而非passed。"
+          }
+        ],
+        "execution": {
+          "sha256": "bbf0204b713c41106403beff0e70dff6d8953fc8aa4a21d8d2f67c2598f814c8",
+          "code_sha256": "6cbbca45025aa024c3c2db093b710c0d5892f457d8e7b70f68fa1bf5a4b87832",
+          "reader_sha256": "21016b1dc7d33907e03bbd99820a6fe223291ee20e10546a03ef5ce6f46ebeff",
+          "status": "passed",
+          "checks": [
+            {
+              "name": "public_sample",
+              "passed": true
+            },
+            {
+              "name": "hidden_0",
+              "passed": true
+            },
+            {
+              "name": "hidden_1",
+              "passed": true
+            },
+            {
+              "name": "hidden_2",
+              "passed": true
+            }
+          ]
+        },
+        "actual_author_image_views": 11
+      },
+      "source_detail": {
+        "original_writer_sha256": "587322fd23696e82ea7131ea4b027a5d615dd547ba9e8277d64883b823c3021e",
+        "provenance": {
+          "reference_sha256": "29b4c0f3496c6afa22c9ab30e249b7f33874063c46e948059087161097522b1b",
+          "reader_questions_sha256": "95b61ebe746f6022e22788adc2bf398503d9ee4c9d9cea8931d0ac4bf3738fcb",
+          "writer_sha256": "5751ba312a7237bffa3cef9c8df66c416b6c9643772a7cffeda457279950fa43",
+          "reader_sha256": "8dbffc1f0e74551446bea9a0016478353f952028330f9df571babffa64197d1e",
+          "review_sha256": "dea133bb543750b75274495cb46f41d9baeb5c7e8f654f524ea21eb943f6e45b"
+        },
+        "required_facts": {
+          "correct": 7,
+          "incorrect": 1,
+          "omitted": 1,
+          "unverifiable": 0
+        },
+        "extra_claims": {
+          "correct": 18,
+          "incorrect": 7,
+          "omitted": 0,
+          "unverifiable": 0
+        },
+        "critical_records_including_repeated_propagation": 9,
+        "dimensions": {
+          "value": {
+            "correct": 7,
+            "incorrect": 8
+          },
+          "procedure": {
+            "correct": 5
+          },
+          "scope": {
+            "correct": 4
+          },
+          "unit": {
+            "correct": 4
+          },
+          "meaning": {
+            "omitted": 1,
+            "correct": 2
+          },
+          "source_attribution": {
+            "correct": 3
+          }
+        },
+        "claims": [
+          {
+            "id": "w1",
+            "kind": "required",
+            "dimension": "value",
+            "status": "correct",
+            "critical": false,
+            "reason": "已实际打开120秒原帧及其确定性放大图。ACK RTT为0.025540000 seconds，即25.54 ms，字段tcp.analysis.ack_rtt；iRTT为另一个字段，没有用其数值替代ACK RTT。"
+          },
+          {
+            "id": "w2",
+            "kind": "required",
+            "dimension": "value",
+            "status": "correct",
+            "critical": false,
+            "reason": "170秒原帧显示Bytes in flight为29200，字段tcp.analysis.bytes_in_flight；讲解正确解释为未确认的在途字节量，而非比特、包数或每秒速率。"
+          },
+          {
+            "id": "w3",
+            "kind": "required",
+            "dimension": "procedure",
+            "status": "correct",
+            "critical": false,
+            "reason": "210秒和250秒原帧均显示RTT与BIF使用MAX(Y Field)，SMA Period为None。两行统计和None均在全文中正确恢复，且解释为每桶MAX。此项只评统计方式；P若有倍率错误在w6独立记录。"
+          },
+          {
+            "id": "w4",
+            "kind": "required",
+            "dimension": "scope",
+            "status": "correct",
+            "critical": false,
+            "reason": "250秒原帧Send Rate行：ip.src == 10.10.12.1，Bytes，倍率1。完整IP、方向、统计及倍率均一致。"
+          },
+          {
+            "id": "w5",
+            "kind": "required",
+            "dimension": "unit",
+            "status": "correct",
+            "critical": false,
+            "reason": "210秒帧仍为1 sec，250秒帧为50 ms；0.05秒换算正确。最终与中间配置已区分。"
+          },
+          {
+            "id": "w6",
+            "kind": "required",
+            "dimension": "value",
+            "status": "incorrect",
+            "critical": true,
+            "reason": "250秒原帧及倍率栏确定性放大可读RTT为17000000，BIF和Send Rate均为1。P把RTT抄成1700000，差十倍；其显示缩放不改变原数据、混合单位不能直接比较的解释正确，但不能抵消核心倍率错。"
+          },
+          {
+            "id": "w7",
+            "kind": "required",
+            "dimension": "procedure",
+            "status": "correct",
+            "critical": false,
+            "reason": "250秒原帧TCP Errors：tcp.analysis.flags、Packets、Bar；编辑框显示600。讲解保留正在编辑这一状态，字段、统计、样式和数值均正确。"
+          },
+          {
+            "id": "w8",
+            "kind": "required",
+            "dimension": "unit",
+            "status": "correct",
+            "critical": false,
+            "reason": "Bytes在本视频配置下是每桶匹配报文字节总量；还原显示倍率后除0.05秒，再乘8得bit/s。全文还明确不能直接等同应用有效载荷goodput。换算方法正确；源图平台误读及其派生值另列额外断言。"
+          },
+          {
+            "id": "w9",
+            "kind": "required",
+            "dimension": "meaning",
+            "status": "omitted",
+            "critical": true,
+            "reason": "虽然讲解给出了BIF为未确认在途字节的定义，但全文没有解释cwnd是发送端拥塞控制上限，也没有明确交代BIF并不普遍等于cwnd。关键比较缺失；该部分按omitted记录而非把已有BIF定义误判为错误。"
+          },
+          {
+            "id": "p_overview",
+            "kind": "extra",
+            "dimension": "meaning",
+            "status": "correct",
+            "critical": false,
+            "reason": "250秒原图显示三种指标共享横轴；缩放和不同量纲的警告正确。"
+          },
+          {
+            "id": "p_ack_packet",
+            "kind": "extra",
+            "dimension": "value",
+            "status": "correct",
+            "critical": false,
+            "reason": "120秒原图选中39号ACK，确认关系为frame 17；这里中文三十九及数字17均实际核对。"
+          },
+          {
+            "id": "p_ack_image",
+            "kind": "extra",
+            "dimension": "source_attribution",
+            "status": "correct",
+            "critical": false,
+            "reason": "已打开嵌图1，内容对应120秒原帧ACK分析区域；图中秒单位和相邻iRTT均未被错配。"
+          },
+          {
+            "id": "p_create_max",
+            "kind": "extra",
+            "dimension": "procedure",
+            "status": "correct",
+            "critical": false,
+            "reason": "转写124.34至131.36秒说明右键I/O Graph→Max，68.52至71.54秒说明Statistics入口；每桶MAX而非全局MAX的含义也符合官方I/O Graphs文档。"
+          },
+          {
+            "id": "p_bif_packet",
+            "kind": "extra",
+            "dimension": "value",
+            "status": "correct",
+            "critical": false,
+            "reason": "170秒原图选中41号发送方数据包，BIF显示29200；中文包号四十一也核对。"
+          },
+          {
+            "id": "p_bif_image",
+            "kind": "extra",
+            "dimension": "source_attribution",
+            "status": "correct",
+            "critical": false,
+            "reason": "已打开嵌图2，对应170秒源帧；29200与下一行Bytes sent since last PSH flag确属不同字段。"
+          },
+          {
+            "id": "p_flow_scope",
+            "kind": "extra",
+            "dimension": "scope",
+            "status": "correct",
+            "critical": false,
+            "reason": "源图RTT/BIF过滤栏为空，Send Rate只限源IP；多连接时需要目标流限定的范围提醒正确。加号和Enabled流程由210/250秒帧及转写191至214秒支持。"
+          },
+          {
+            "id": "p_style_sma",
+            "kind": "extra",
+            "dimension": "procedure",
+            "status": "correct",
+            "critical": false,
+            "reason": "250秒源图三条主曲线为Line、SMA None，All Packets未勾选；None表示无简单移动平均正确。"
+          },
+          {
+            "id": "p_bif_row",
+            "kind": "extra",
+            "dimension": "value",
+            "status": "correct",
+            "critical": false,
+            "reason": "BIF行字段、空过滤器、MAX、Line及倍率1均与250秒原图一致。"
+          },
+          {
+            "id": "p_settings_image",
+            "kind": "extra",
+            "dimension": "source_attribution",
+            "status": "correct",
+            "critical": false,
+            "reason": "嵌图3实际打开，来自250秒配置区，包含50 ms及错误倍率600编辑框；图注这一部分正确。"
+          },
+          {
+            "id": "p_plateau_derived",
+            "kind": "extra",
+            "dimension": "value",
+            "status": "incorrect",
+            "critical": true,
+            "reason": "250秒源轴刻度是750000，稳定段在其附近；七万五千少一个零。基于错误读数推得1500000 B/s、12 Mbit/s算术自洽，却不是此源图近似值；正确相同方法应约15000000 B/s、120 Mbit/s。小数/量级错误影响吞吐解释，critical=true。"
+          },
+          {
+            "id": "p_goodput",
+            "kind": "extra",
+            "dimension": "scope",
+            "status": "correct",
+            "critical": false,
+            "reason": "Bytes累计报文长度而非仅应用有效负载；与源IP过滤范围一致，goodput限制正确。"
+          },
+          {
+            "id": "p_plateau_caption",
+            "kind": "extra",
+            "dimension": "value",
+            "status": "incorrect",
+            "critical": true,
+            "reason": "已打开嵌图4并比对250秒原帧；图本身对应来源，但图注75000错，轴上实际标750000，差十倍。"
+          },
+          {
+            "id": "p_rtt_derived",
+            "kind": "extra",
+            "dimension": "value",
+            "status": "incorrect",
+            "critical": true,
+            "reason": "正确部分：显示倍率不改变延迟物理含义；BIF倍率为1且与累计发送量不同。错误部分：视频RTT倍率是17000000，不是一百七十万；0.02554秒按视频倍率应显示434180，不是43418。算术基于错误源倍率，属于关键量级错误。"
+          },
+          {
+            "id": "p_scaling_example",
+            "kind": "extra",
+            "dimension": "meaning",
+            "status": "correct",
+            "critical": false,
+            "reason": "明确作为变式而非源视频测量：固定桶字节量把显示因子乘2会将高度乘2，还原后速率不变；改桶宽须重新统计；MAX RTT与桶累计字节不等价，均正确。"
+          },
+          {
+            "id": "p_error_scope",
+            "kind": "extra",
+            "dimension": "scope",
+            "status": "correct",
+            "critical": false,
+            "reason": "Packets是每桶匹配包数，倍率不增加包数；tcp.analysis.flags包括多种分析事件，不等于丢包数。排队/拥塞仅作为待核对解释，没有从交点推出相等。"
+          },
+          {
+            "id": "p_code_rtt",
+            "kind": "extra",
+            "dimension": "value",
+            "status": "correct",
+            "critical": false,
+            "reason": "0.025540000秒与120秒源帧ACK RTT一致。"
+          },
+          {
+            "id": "p_code_interval",
+            "kind": "extra",
+            "dimension": "unit",
+            "status": "correct",
+            "critical": false,
+            "reason": "50/1000=0.05秒，毫秒到秒换算与最终桶宽一致。"
+          },
+          {
+            "id": "p_code_plateau",
+            "kind": "extra",
+            "dimension": "value",
+            "status": "incorrect",
+            "critical": true,
+            "reason": "这行明确称来自源图读轴，75000少一个零；250秒源图稳定段约750000。"
+          },
+          {
+            "id": "p_code_factor",
+            "kind": "extra",
+            "dimension": "value",
+            "status": "correct",
+            "critical": false,
+            "reason": "Send Rate显示倍率1与250秒源图一致。"
+          },
+          {
+            "id": "p_code_formula",
+            "kind": "extra",
+            "dimension": "procedure",
+            "status": "correct",
+            "critical": false,
+            "reason": "从显示坐标除倍率再除秒桶宽的算法正确；错误输入在独立断言中记录。"
+          },
+          {
+            "id": "p_code_ms",
+            "kind": "extra",
+            "dimension": "unit",
+            "status": "correct",
+            "critical": false,
+            "reason": "秒乘1000得毫秒：0.02554*1000=25.54。"
+          },
+          {
+            "id": "p_code_rtt_display",
+            "kind": "extra",
+            "dimension": "value",
+            "status": "incorrect",
+            "critical": true,
+            "reason": "乘法1700000*0.02554=43418成立，但视频倍率是17000000，源配置下显示值应434180；这一行传播错误倍率。"
+          },
+          {
+            "id": "p_code_Bps",
+            "kind": "extra",
+            "dimension": "value",
+            "status": "incorrect",
+            "critical": true,
+            "reason": "1500000.0是错误源平台75000的自洽推导；实际约750000/0.05=15000000 B/s，差十倍。"
+          },
+          {
+            "id": "p_code_Mbps",
+            "kind": "extra",
+            "dimension": "value",
+            "status": "incorrect",
+            "critical": true,
+            "reason": "8比特/字节、十进制1_000_000比特/Mbit换算常数正确，但由错误源平台推得12.0 Mbit/s；依源图近似值应120 Mbit/s。"
+          }
+        ],
+        "numeric_inventory": {
+          "occurrences": 38,
+          "classification": {
+            "claim": 38
+          }
+        },
+        "reader_task_counts": {
+          "partial": 2,
+          "passed": 1
+        },
+        "reader_tasks": [
+          {
+            "id": "w_source_reconstruction",
+            "status": "partial",
+            "reason": "读者原文第1节正确恢复ACK RTT=0.025540000秒=25.54ms、BIF=29200字节、50ms桶、两个完整字段及MAX、源IP与Bytes、两个倍率1；但RTT最终倍率重复写1700000，源帧为17000000，关键源值恢复差十倍。因此独立判partial，不能由代码通过改成passed。"
+          },
+          {
+            "id": "w_reproduce_bins",
+            "status": "passed",
+            "reason": "已审读冻结的标准库有限计算代码，并核对真实日志reader/code/reference/questions SHA256与当前冻结文件。公开样本及三个原冻结隐藏输入全部通过，包括0.15秒边界、非发送端RTT/BIF、空桶及空输入。输出原始秒/字节并正确计算bit/s，未混入显示倍率；这是synthetic packet records复现，不是原pcap回放。"
+          },
+          {
+            "id": "w_meaning_trap",
+            "status": "partial",
+            "reason": "读者正确解释Bytes为每50ms桶包字节、按8/0.05换算，题给750000字节得到120Mbit/s，并否定等于应用goodput；也说明没有根据把BIF当cwnd精确值。但RTT解缩放使用1700000而非17000000，显示例43418亦差十倍，关键单位恢复错误；同时未说明cwnd是发送端拥塞控制发送上限。因此partial。"
+          }
+        ],
+        "execution": {
+          "sha256": "8ce470822ab0c9bcf6ce2def781ae943537495314b27a10c4969830a8a3f3d74",
+          "code_sha256": "7236fcf9f570e5241c831fce633a02516316cff93a3a652d9489b0f31432d840",
+          "reader_sha256": "8dbffc1f0e74551446bea9a0016478353f952028330f9df571babffa64197d1e",
+          "status": "passed",
+          "checks": [
+            {
+              "name": "public_sample",
+              "passed": true
+            },
+            {
+              "name": "hidden_0",
+              "passed": true
+            },
+            {
+              "name": "hidden_1",
+              "passed": true
+            },
+            {
+              "name": "hidden_2",
+              "passed": true
+            }
+          ]
+        },
+        "actual_author_image_views": 11
+      },
+      "task_only_control": {
+        "execution_sha256": "7a7e053cf13b6d20d8a95c4c5a5d103bb2b9fab99589a44aeb916f3a70ac589f",
+        "reader_sha256": "7d2f85c5b6e56b893e513627f2b2deb7df96b20efc432a7e78de28d8e76e97aa",
+        "code_sha256": "2d2ffd82e976e2daf1a62076ed0feb17acb728865178935896ef4ca1e4f75f1b",
+        "status": "failed",
+        "checks": [
+          {
+            "name": "public_sample",
+            "passed": false
+          },
+          {
+            "name": "hidden_0",
+            "passed": false
+          },
+          {
+            "name": "hidden_1",
+            "passed": false
+          },
+          {
+            "name": "hidden_2",
+            "passed": true
+          }
+        ]
+      }
+    },
+    {
+      "case": "zh-flower-confusion-smalltext",
+      "url": "https://www.bilibili.com/video/BV1Sq4y1L7B2/?p=1",
+      "interval": [
+        576,
+        876
+      ],
+      "actual_source_size": [
+        852,
+        480
+      ],
+      "timestamps": [
+        580,
+        625,
+        735,
+        790,
+        825,
+        860
+      ],
+      "baseline": {
+        "original_writer_sha256": "c1e6c9cb99f702f4fbd97a3a709f1dbaf83614ed3a5e07bca25006878d340ebf",
+        "provenance": {
+          "reference_sha256": "29b4c0f3496c6afa22c9ab30e249b7f33874063c46e948059087161097522b1b",
+          "reader_questions_sha256": "95b61ebe746f6022e22788adc2bf398503d9ee4c9d9cea8931d0ac4bf3738fcb",
+          "writer_sha256": "f22ffce54d619c870b4785608086d8f5edbff4e0ecf5d34cca4cd7a2abeb82a5",
+          "reader_sha256": "6dc3030c921ad331f2848b9f1e85c86be1af91d69562726672e6b7c9b423e4ba",
+          "review_sha256": "bfd9f67c95ed54ba8ce978368dc9f15c939e2b0f82472853a7ec971585913ab7"
+        },
+        "required_facts": {
+          "correct": 11,
+          "incorrect": 0,
+          "omitted": 1,
+          "unverifiable": 0
+        },
+        "extra_claims": {
+          "correct": 20,
+          "incorrect": 0,
+          "omitted": 0,
+          "unverifiable": 0
+        },
+        "critical_records_including_repeated_propagation": 0,
+        "dimensions": {
+          "value": {
+            "correct": 6
+          },
+          "unit": {
+            "correct": 1
+          },
+          "procedure": {
+            "correct": 9
+          },
+          "source_attribution": {
+            "correct": 9
+          },
+          "scope": {
+            "correct": 1,
+            "omitted": 1
+          },
+          "meaning": {
+            "correct": 5
+          }
+        },
+        "claims": [
+          {
+            "id": "class_order",
+            "kind": "required",
+            "dimension": "value",
+            "status": "correct",
+            "critical": false,
+            "reason": "625秒类名列表、790秒预测列名及860秒图轴均为daisy、dandelion、rose、sunflower、tulip；顺序一致。"
+          },
+          {
+            "id": "printed_matrix",
+            "kind": "required",
+            "dimension": "value",
+            "status": "correct",
+            "critical": false,
+            "reason": "已实际查看冻结 native/0860.png，按画面位置逐格核对全部25格：[132,5,0,5,3]; [10,189,1,10,3]; [2,2,133,2,24]; [6,9,4,122,5]; [4,6,19,8,162]。无错格、无缺格；数值是计数。"
+          },
+          {
+            "id": "matrix_units",
+            "kind": "required",
+            "dimension": "unit",
+            "status": "correct",
+            "critical": false,
+            "reason": "格子是未归一化样本数；正文准确率按正确数/总数计算、乘一百转百分数。没有把计数、无量纲比例、百分数混淆。"
+          },
+          {
+            "id": "micro_selected",
+            "kind": "required",
+            "dimension": "procedure",
+            "status": "correct",
+            "critical": false,
+            "reason": "580秒accuracy_score单独调用；precision_score、recall_score、f1_score三者均显式average='micro'，与图一致。"
+          },
+          {
+            "id": "annotation_code",
+            "kind": "required",
+            "dimension": "procedure",
+            "status": "correct",
+            "critical": false,
+            "reason": "625秒可见源码两层i/j循环把confusion[i,j]标在xy=(i,j)；应换为xy=(j,i)。作者正确区分数组行列和绘图横纵坐标。"
+          },
+          {
+            "id": "saved_matrix_conditional",
+            "kind": "required",
+            "dimension": "source_attribution",
+            "status": "correct",
+            "critical": false,
+            "reason": "625秒源码确实以 confusion[i,j] 放到 xy=(i,j)，matshow 的行i列j位置是(x=j,y=i)。860秒打开预存图片，不能证明生成版本相同；作者保留了同一注释代码的条件。在该条件下完整D的转置唯一给出C各行：[132,10,2,6,4]; [5,189,2,9,6]; [0,1,133,4,19]; [5,10,2,122,8]; [3,3,24,5,162]，全部25格正确。"
+          },
+          {
+            "id": "total_and_correct",
+            "kind": "required",
+            "dimension": "value",
+            "status": "correct",
+            "critical": false,
+            "reason": "独立对25格求和866；对角线132+189+133+122+162=738。单位样本；转置不改变这两个和。"
+          },
+          {
+            "id": "accuracy",
+            "kind": "required",
+            "dimension": "value",
+            "status": "correct",
+            "critical": false,
+            "reason": "738/866=0.8521939953810623；作者比例和85.2194%均为正确舍入，没有借用控制台数。"
+          },
+          {
+            "id": "daisy_metrics_conditional",
+            "kind": "required",
+            "dimension": "value",
+            "status": "correct",
+            "critical": false,
+            "reason": "同一绘图代码条件下，真实daisy支持数154、预测daisy数145、TP132，P=132/145=0.9103448275862069，R=132/154=0.8571428571428571，百分数舍入正确。两个方向错分量没有另写成自然语言，但由完整D和明确转置规则唯一编码：真daisy→预测dandelion=10，反向=5；未把按轴直接读D的另一组数当作已恢复真C。"
+          },
+          {
+            "id": "micro_scope",
+            "kind": "required",
+            "dimension": "scope",
+            "status": "correct",
+            "critical": false,
+            "reason": "作者明确每样本单真类、单预测类、全五类纳入统计；此时全局FP=FN=错误样本数，所以micro P/R/F1=accuracy。macro等权、weighted按真实支持数的区别也正确。没有宣称每类表现相同；其后具体daisy P/R已不同，macro定义也不保证保持micro等式。"
+          },
+          {
+            "id": "saved_vs_console",
+            "kind": "required",
+            "dimension": "source_attribution",
+            "status": "correct",
+            "critical": false,
+            "reason": "冻结speech 809.71–823.96秒明确说提前保存；825/860秒是文件查看器。作者拒绝以同屏绑定来源，保留了文件/模型/运行身份缺口。"
+          },
+          {
+            "id": "generalization",
+            "kind": "required",
+            "dimension": "scope",
+            "status": "omitted",
+            "critical": false,
+            "reason": "全文没有回答更高训练准确率是否必然提升新的测试集准确率，也没有说明独立留出集与分布条件。只说无需重新训练不构成该泛化结论。记录遗漏；作者并未反向断言必然提升。"
+          },
+          {
+            "id": "input_pipeline",
+            "kind": "extra",
+            "dimension": "procedure",
+            "status": "correct",
+            "critical": false,
+            "reason": "735秒屏幕test.txt按tab读loc/type、true_label取type，预测CSV用index_col=0；同屏注释argmax(...,axis=1)。580秒预测分数沿axis=1。五类固定顺序和逐样本对齐、索引列排除均正确；这是对已有预测文件的离线复算，不需要再训练。"
+          },
+          {
+            "id": "averaging_alternatives",
+            "kind": "extra",
+            "dimension": "meaning",
+            "status": "correct",
+            "critical": false,
+            "reason": "三种平均方式表述正确：micro先合并计数、macro各类指标等权、weighted按真实支持数。F1名称中的1不是独立数值事实。"
+          },
+          {
+            "id": "table_margins",
+            "kind": "extra",
+            "dimension": "value",
+            "status": "correct",
+            "critical": false,
+            "reason": "由源25格独立相加：D行和[145,213,163,146,199]、列和[154,211,157,147,197]，总计866；这些是显示文字表D的边际和，作者没有把它们不加条件地当作真值支持数。"
+          },
+          {
+            "id": "micro_image_provenance",
+            "kind": "extra",
+            "dimension": "source_attribution",
+            "status": "correct",
+            "critical": false,
+            "reason": "已实际查看嵌图，580秒三处micro与单独accuracy_score均可见。"
+          },
+          {
+            "id": "micro_timestamp",
+            "kind": "extra",
+            "dimension": "source_attribution",
+            "status": "correct",
+            "critical": false,
+            "reason": "标签约09:40与冻结579.996083秒对应，画面三次micro可核对；链接579为邻近秒级起点。"
+          },
+          {
+            "id": "count_color_warning",
+            "kind": "extra",
+            "dimension": "meaning",
+            "status": "correct",
+            "critical": false,
+            "reason": "图中132是计数而非132%；色条未归一化，深色本身不能证明该类召回率高，必须有对应真类分母。"
+          },
+          {
+            "id": "saved_image_provenance",
+            "kind": "extra",
+            "dimension": "source_attribution",
+            "status": "correct",
+            "critical": false,
+            "reason": "已实际查看嵌图，确为860秒最后保存图数字区域，全部25格与原图吻合。"
+          },
+          {
+            "id": "saved_image_timestamp",
+            "kind": "extra",
+            "dimension": "source_attribution",
+            "status": "correct",
+            "critical": false,
+            "reason": "约14:20对应859.984125秒源图；横轴确有Predicted label。"
+          },
+          {
+            "id": "sample_counting",
+            "kind": "extra",
+            "dimension": "meaning",
+            "status": "correct",
+            "critical": false,
+            "reason": "单标签混淆矩阵每样本一格、对角线正确、非对角线错分、总和不重复计样本；百分数需乘100的说明均正确。"
+          },
+          {
+            "id": "transpose_invariance",
+            "kind": "extra",
+            "dimension": "meaning",
+            "status": "correct",
+            "critical": false,
+            "reason": "转置逐一保留对角线元素并重排全部格子，故总和、正确数、整体准确率不变。"
+          },
+          {
+            "id": "annotation_image_provenance",
+            "kind": "extra",
+            "dimension": "source_attribution",
+            "status": "correct",
+            "critical": false,
+            "reason": "已实际查看嵌图，625秒源码确有xy=(i,j)、True label/Predicted label及matshow。"
+          },
+          {
+            "id": "annotation_timestamp",
+            "kind": "extra",
+            "dimension": "procedure",
+            "status": "correct",
+            "critical": false,
+            "reason": "约10:25与624.999375秒对应，xy换为(j,i)修正正确。"
+          },
+          {
+            "id": "literal_axes_alternative",
+            "kind": "extra",
+            "dimension": "source_attribution",
+            "status": "correct",
+            "critical": false,
+            "reason": "第二组85.7143%/91.0345%明确限定保存前已修复落点，因此可以直接读取D；来源未证实的限制清楚，未把两种解释混成真值。"
+          },
+          {
+            "id": "per_class_denominators",
+            "kind": "extra",
+            "dimension": "meaning",
+            "status": "correct",
+            "critical": false,
+            "reason": "precision以预测daisy汇总为分母、recall以真实daisy汇总为分母；对角线分子相同而分母一般不同，不能用整体率替代，均正确。"
+          },
+          {
+            "id": "fresh_matrix_plotting",
+            "kind": "extra",
+            "dimension": "procedure",
+            "status": "correct",
+            "critical": false,
+            "reason": "由真实/预测标签重算出的sklearn矩阵C已是行真列预测，正确画C而无需另做转置。"
+          },
+          {
+            "id": "calculation_code",
+            "kind": "extra",
+            "dimension": "procedure",
+            "status": "correct",
+            "critical": false,
+            "reason": "NumPy教学代码中的25格D均与源图一致；sum/trace正确计算总数/正确数；C[0,0]、C[:,0]和C[0,:]分别为daisy TP、预测数、真实支持数，两个条件分支D.T/D方向正确。NumPy依赖显式写出；作者代码不是读者题要求的纯标准库提交。"
+          },
+          {
+            "id": "plot_dependency",
+            "kind": "extra",
+            "dimension": "procedure",
+            "status": "correct",
+            "critical": false,
+            "reason": "绘图调用matplotlib并依赖前段已定义D/names，依赖关系已明确交代。"
+          },
+          {
+            "id": "plot_code",
+            "kind": "extra",
+            "dimension": "procedure",
+            "status": "correct",
+            "critical": false,
+            "reason": "示例明确C=D.T的来源条件；matshow(C)后ax.text(j,i,str(C[i,j]))位置与同格背景一致，range(5)覆盖五类，刻度名及横预测/纵真实正确。plt.show()被注释，代码能构建图对象但脚本不会自行弹窗；正文未承诺自动显示。"
+          },
+          {
+            "id": "console_and_speech_numbers",
+            "kind": "extra",
+            "dimension": "source_attribution",
+            "status": "correct",
+            "critical": false,
+            "reason": "860秒背景可辨0.78785前缀，保存图738/866约0.85219；speech 809.71–823.96秒说提前保存，对应13:29后。speech 851.96–857.56确有85.2，作者只作近似呼应而不证明同源，限制正确。"
+          },
+          {
+            "id": "run_metadata",
+            "kind": "extra",
+            "dimension": "procedure",
+            "status": "correct",
+            "critical": false,
+            "reason": "给CSV、矩阵、图片共用运行标识，并保存标签顺序/平均方式/归一化信息，是合理可复算流程建议，不冒充源视频已有元数据。"
+          }
+        ],
+        "numeric_inventory": {
+          "occurrences": 102,
+          "classification": {
+            "non_claim": 2,
+            "claim": 100
+          }
+        },
+        "reader_task_counts": {
+          "passed": 3
+        },
+        "reader_tasks": [
+          {
+            "id": "1",
+            "status": "passed",
+            "reason": "独立审阅读者原文：25个显示数字A逐格正确，五类顺序和样本计数单位正确；完整列出C=A.T且明确保存图沿用同一代码只是题设条件。报告真daisy→预测dandelion=10、反向=5，P=132/145、R=132/154及小数均正确。没有把来源条件改写为已证实事实。"
+          },
+          {
+            "id": "2",
+            "status": "passed",
+            "reason": "已人工检查实际提交Python：只有有限矩阵/比例计算和标准库JSON输出，无网络或数据文件依赖。绑定root实际执行的冻结harness日志；本裁判核对reader/code/reference/questions全部SHA256、case/task归属、四个原样输入和每个嵌套指标结果。video_case恢复源C、源C八指标与25坐标全部通过，原非对称二类、零支持三类、全零单类三变体也全部通过。未替换失败样例；这是数值复现，不是原训练重跑。"
+          },
+          {
+            "id": "3",
+            "status": "passed",
+            "reason": "独立审阅文字：读者区分保存图85.2194%与控制台约0.78785，指出缺乏同次运行来源关系且转置不能解释总体差异；限定单标签、每样本一个真/预测、全类micro才有四指标相等。以daisy P约91.03%、R约85.71%说明不能推广到每类，说明macro不保证相等。对训练→新测试准确率明确否认必然性，并指出讲解缺少泛化比较、需独立测试。此题正确不倒推作者已教到该内容，也不排除读者先验知识。"
+          }
+        ],
+        "execution": {
+          "sha256": "4d7902ef53aa30978fefd3e782e0bb30ae336824882cc756b85916874b6f001f",
+          "code_sha256": "2be27385b99dea907f54358795fa31b628af9f63af40c605a5d5ff3f27bfc911",
+          "reader_sha256": "6dc3030c921ad331f2848b9f1e85c86be1af91d69562726672e6b7c9b423e4ba",
+          "status": "passed",
+          "checks": [
+            {
+              "name": "source_video",
+              "passed": true
+            },
+            {
+              "name": "hidden_0",
+              "passed": true
+            },
+            {
+              "name": "hidden_1",
+              "passed": true
+            },
+            {
+              "name": "hidden_2",
+              "passed": true
+            }
+          ]
+        },
+        "actual_author_image_views": 16
+      },
+      "source_detail": {
+        "original_writer_sha256": "e559d21a6d35d8e01ffa983af1612362a63d6217579b1c40f957d7524277213f",
+        "provenance": {
+          "reference_sha256": "29b4c0f3496c6afa22c9ab30e249b7f33874063c46e948059087161097522b1b",
+          "reader_questions_sha256": "95b61ebe746f6022e22788adc2bf398503d9ee4c9d9cea8931d0ac4bf3738fcb",
+          "writer_sha256": "287e19edf255568729602f40620935585c71857efb8568d220654086d967342a",
+          "reader_sha256": "4acce6c96238052c542fd496fe82ab47acc42f81c05a79dd5efb94188efd30b1",
+          "review_sha256": "2ddb3fe3b4cd99af264512462131f776b29410c4a7cb82898f7e9b0ea967b76d"
+        },
+        "required_facts": {
+          "correct": 11,
+          "incorrect": 0,
+          "omitted": 1,
+          "unverifiable": 0
+        },
+        "extra_claims": {
+          "correct": 15,
+          "incorrect": 0,
+          "omitted": 0,
+          "unverifiable": 0
+        },
+        "critical_records_including_repeated_propagation": 0,
+        "dimensions": {
+          "value": {
+            "correct": 7
+          },
+          "unit": {
+            "correct": 1
+          },
+          "procedure": {
+            "correct": 7
+          },
+          "source_attribution": {
+            "correct": 7
+          },
+          "scope": {
+            "correct": 1,
+            "omitted": 1
+          },
+          "meaning": {
+            "correct": 3
+          }
+        },
+        "claims": [
+          {
+            "id": "class_order",
+            "kind": "required",
+            "dimension": "value",
+            "status": "correct",
+            "critical": false,
+            "reason": "625秒类名列表、790秒预测列名及860秒图轴均为daisy、dandelion、rose、sunflower、tulip；顺序一致。"
+          },
+          {
+            "id": "printed_matrix",
+            "kind": "required",
+            "dimension": "value",
+            "status": "correct",
+            "critical": false,
+            "reason": "已实际查看冻结 native/0860.png，按画面位置逐格核对全部25格：[132,5,0,5,3]; [10,189,1,10,3]; [2,2,133,2,24]; [6,9,4,122,5]; [4,6,19,8,162]。无错格、无缺格；数值是计数。"
+          },
+          {
+            "id": "matrix_units",
+            "kind": "required",
+            "dimension": "unit",
+            "status": "correct",
+            "critical": false,
+            "reason": "格子是未归一化样本数；正文准确率按正确数/总数计算、乘一百转百分数。没有把计数、无量纲比例、百分数混淆。"
+          },
+          {
+            "id": "micro_selected",
+            "kind": "required",
+            "dimension": "procedure",
+            "status": "correct",
+            "critical": false,
+            "reason": "580秒accuracy_score单独调用；precision_score、recall_score、f1_score三者均显式average='micro'，与图一致。"
+          },
+          {
+            "id": "annotation_code",
+            "kind": "required",
+            "dimension": "procedure",
+            "status": "correct",
+            "critical": false,
+            "reason": "625秒可见源码两层i/j循环把confusion[i,j]标在xy=(i,j)；应换为xy=(j,i)。作者正确区分数组行列和绘图横纵坐标。"
+          },
+          {
+            "id": "saved_matrix_conditional",
+            "kind": "required",
+            "dimension": "source_attribution",
+            "status": "correct",
+            "critical": false,
+            "reason": "625秒源码确实以 confusion[i,j] 放到 xy=(i,j)，matshow 的行i列j位置是(x=j,y=i)。860秒打开预存图片，不能证明生成版本相同；作者保留了同一注释代码的条件。在该条件下完整D的转置唯一给出C各行：[132,10,2,6,4]; [5,189,2,9,6]; [0,1,133,4,19]; [5,10,2,122,8]; [3,3,24,5,162]，全部25格正确。"
+          },
+          {
+            "id": "total_and_correct",
+            "kind": "required",
+            "dimension": "value",
+            "status": "correct",
+            "critical": false,
+            "reason": "独立对25格求和866；对角线132+189+133+122+162=738。单位样本；转置不改变这两个和。"
+          },
+          {
+            "id": "accuracy",
+            "kind": "required",
+            "dimension": "value",
+            "status": "correct",
+            "critical": false,
+            "reason": "738/866=0.8521939953810623；作者比例和85.2194%均为正确舍入，没有借用控制台数。"
+          },
+          {
+            "id": "daisy_metrics_conditional",
+            "kind": "required",
+            "dimension": "value",
+            "status": "correct",
+            "critical": false,
+            "reason": "同一绘图代码条件下，真实daisy支持数154、预测daisy数145、TP132，P=132/145=0.9103448275862069，R=132/154=0.8571428571428571，百分数舍入正确。两个方向错分量没有另写成自然语言，但由完整D和明确转置规则唯一编码：真daisy→预测dandelion=10，反向=5；未把按轴直接读D的另一组数当作已恢复真C。"
+          },
+          {
+            "id": "micro_scope",
+            "kind": "required",
+            "dimension": "scope",
+            "status": "correct",
+            "critical": false,
+            "reason": "作者明确每样本单真类、单预测类、全五类纳入统计；此时全局FP=FN=错误样本数，所以micro P/R/F1=accuracy。macro等权、weighted按真实支持数的区别也正确。没有宣称每类表现相同；其后具体daisy P/R已不同，macro定义也不保证保持micro等式。"
+          },
+          {
+            "id": "saved_vs_console",
+            "kind": "required",
+            "dimension": "source_attribution",
+            "status": "correct",
+            "critical": false,
+            "reason": "冻结speech 809.71–823.96秒明确说提前保存；825/860秒是文件查看器。作者拒绝以同屏绑定来源，保留了文件/模型/运行身份缺口。"
+          },
+          {
+            "id": "generalization",
+            "kind": "required",
+            "dimension": "scope",
+            "status": "omitted",
+            "critical": false,
+            "reason": "全文没有回答更高训练准确率是否必然提升新的测试集准确率，也没有说明独立留出集与分布条件。只说无需重新训练不构成该泛化结论。记录遗漏；作者并未反向断言必然提升。"
+          },
+          {
+            "id": "input_pipeline",
+            "kind": "extra",
+            "dimension": "procedure",
+            "status": "correct",
+            "critical": false,
+            "reason": "735秒屏幕test.txt按tab读loc/type、true_label取type，预测CSV用index_col=0；同屏注释argmax(...,axis=1)。580秒预测分数沿axis=1。五类固定顺序和逐样本对齐、索引列排除均正确；这是对已有预测文件的离线复算，不需要再训练。"
+          },
+          {
+            "id": "averaging_alternatives",
+            "kind": "extra",
+            "dimension": "meaning",
+            "status": "correct",
+            "critical": false,
+            "reason": "三种平均方式表述正确：micro先合并计数、macro各类指标等权、weighted按真实支持数。F1名称中的1不是独立数值事实。"
+          },
+          {
+            "id": "table_margins",
+            "kind": "extra",
+            "dimension": "value",
+            "status": "correct",
+            "critical": false,
+            "reason": "由源25格独立相加：D行和[145,213,163,146,199]、列和[154,211,157,147,197]，总计866；这些是显示文字表D的边际和，作者没有把它们不加条件地当作真值支持数。"
+          },
+          {
+            "id": "saved_text_reading",
+            "kind": "extra",
+            "dimension": "source_attribution",
+            "status": "correct",
+            "critical": false,
+            "reason": "说预存图及按屏幕文字位置抄录正确；这一表述先把D与真正行真列预测C分开。"
+          },
+          {
+            "id": "image1_provenance",
+            "kind": "extra",
+            "dimension": "source_attribution",
+            "status": "correct",
+            "critical": false,
+            "reason": "已实际查看嵌图；另用Pillow逐像素核对，该图恰为native/0860.png的(340,115,257,188)裁剪以nearest放大3倍，原像素确定性放大说法可验证。"
+          },
+          {
+            "id": "saved_image_timestamp",
+            "kind": "extra",
+            "dimension": "source_attribution",
+            "status": "correct",
+            "critical": false,
+            "reason": "链接标签14:19对应859秒，实际冻结帧859.984125秒；展示的确是最后保存图。这里是秒级定位而非逐帧断言。"
+          },
+          {
+            "id": "counts_color_and_percent",
+            "kind": "extra",
+            "dimension": "meaning",
+            "status": "correct",
+            "critical": false,
+            "reason": "计数求和、正确率公式、乘一百转百分数正确；对角线较深仅是可视提示而不能替代计数复算。"
+          },
+          {
+            "id": "annotation_image_timestamp",
+            "kind": "extra",
+            "dimension": "source_attribution",
+            "status": "correct",
+            "critical": false,
+            "reason": "已实际查看嵌图，确实显示625秒附近的矩阵调用、annotate与轴标签；标签10:24对应624秒，与冻结624.999375秒同一秒级定位。"
+          },
+          {
+            "id": "literal_axes_alternative",
+            "kind": "extra",
+            "dimension": "meaning",
+            "status": "correct",
+            "critical": false,
+            "reason": "作者将直接按D行真列预测的P=132/154、R=132/145明确标为另一读法，并指出与可见错误注释代码的条件冲突；没有用它取代条件C。转置保留总数和对角线正确。"
+          },
+          {
+            "id": "console_leading_digits",
+            "kind": "extra",
+            "dimension": "value",
+            "status": "correct",
+            "critical": false,
+            "reason": "860秒源图背景准确率可辨前缀0.787852（完整尾数不评分），换算78.7852%正确；与保存图85.2194%不同。没有将其认成同一运行。"
+          },
+          {
+            "id": "console_image_provenance",
+            "kind": "extra",
+            "dimension": "source_attribution",
+            "status": "correct",
+            "critical": false,
+            "reason": "已实际查看嵌图，确为860秒保存图覆盖于控制台；同屏不能证明来源关系的说明正确。"
+          },
+          {
+            "id": "alignment_checks",
+            "kind": "extra",
+            "dimension": "procedure",
+            "status": "correct",
+            "critical": false,
+            "reason": "长度相同不能证明顺序相同，路径抽查、保留类别映射、固定顺序后核对C行和与真标签支持数均是有效复算检查。交换分数列会影响相应列的类别解释；不解读为每个样本都会改预测。"
+          },
+          {
+            "id": "plotting_conditions",
+            "kind": "extra",
+            "dimension": "procedure",
+            "status": "correct",
+            "critical": false,
+            "reason": "明确选择未修复注释条件而转置D；若数据已按正确行列标注则直接使用D，坐标x取列j、y取行i正确。"
+          },
+          {
+            "id": "calculation_code",
+            "kind": "extra",
+            "dimension": "procedure",
+            "status": "correct",
+            "critical": false,
+            "reason": "代码中的25个D值均与860秒源图逐格相符；range(5)涵盖五类对角线，100把比例转百分数；索引0确为daisy，列和作P分母、行和作R分母。两个分支分别D与D.T，均与已陈述条件一致。本段是该非零源矩阵示例，不自称任意矩阵接口。"
+          },
+          {
+            "id": "svg_code",
+            "kind": "extra",
+            "dimension": "procedure",
+            "status": "correct",
+            "critical": false,
+            "reason": "教学SVG代码，不是视频源数值：画布720×450，格宽105/高65，x=130+j*105、y=60+i*65，文本偏移52/36落在同格，标签坐标随对应行列变化；C用D转置，完整25格与轴方向一致。全部尺寸和位置常数已审核。颜色字符串是样式标识，不是测量数字。"
+          }
+        ],
+        "numeric_inventory": {
+          "occurrences": 124,
+          "classification": {
+            "claim": 120,
+            "non_claim": 4
+          }
+        },
+        "reader_task_counts": {
+          "passed": 3
+        },
+        "reader_tasks": [
+          {
+            "id": "1",
+            "status": "passed",
+            "reason": "独立审阅读者原文：25个显示数字A逐格正确，五类顺序和样本计数单位正确；完整列出C=A.T且明确保存图沿用同一代码只是题设条件。报告真daisy→预测dandelion=10、反向=5，P=132/145、R=132/154及小数均正确。没有把来源条件改写为已证实事实。"
+          },
+          {
+            "id": "2",
+            "status": "passed",
+            "reason": "已人工检查实际提交Python：只有有限矩阵/比例计算和标准库JSON输出，无网络或数据文件依赖。绑定root实际执行的冻结harness日志；本裁判核对reader/code/reference/questions全部SHA256、case/task归属、四个原样输入和每个嵌套指标结果。video_case恢复源C、源C八指标与25坐标全部通过，原非对称二类、零支持三类、全零单类三变体也全部通过。未替换失败样例；这是数值复现，不是原训练重跑。"
+          },
+          {
+            "id": "3",
+            "status": "passed",
+            "reason": "独立审阅文字：读者区分保存图85.2194%与控制台约0.78785，指出缺乏同次运行来源关系且转置不能解释总体差异；限定单标签、每样本一个真/预测、全类micro才有四指标相等。以daisy P约91.03%、R约85.71%说明不能推广到每类，说明macro不保证相等。对训练→新测试准确率明确否认必然性，并指出讲解缺少泛化比较、需独立测试。此题正确不倒推作者已教到该内容，也不排除读者先验知识。"
+          }
+        ],
+        "execution": {
+          "sha256": "567ac35ea10cd49b94873af32a44edaa51add70749a2ed1212e0b6b0d5120b3e",
+          "code_sha256": "0dbae3d711ded7c5114b737223af5a944125b42a45b81bde7aee00fbc20315dc",
+          "reader_sha256": "4acce6c96238052c542fd496fe82ab47acc42f81c05a79dd5efb94188efd30b1",
+          "status": "passed",
+          "checks": [
+            {
+              "name": "source_video",
+              "passed": true
+            },
+            {
+              "name": "hidden_0",
+              "passed": true
+            },
+            {
+              "name": "hidden_1",
+              "passed": true
+            },
+            {
+              "name": "hidden_2",
+              "passed": true
+            }
+          ]
+        },
+        "actual_author_image_views": 12
+      },
+      "task_only_control": {
+        "execution_sha256": "7844c23035f3c8ed94c53398abd8eed8be0d1d15e653efa0d73822b1450b2a2c",
+        "reader_sha256": "bc42c5a84e02b6b47950334ca5719559e61ff4367efe5784668954378bf4403a",
+        "code_sha256": "c91ba663d3fb870a2b2af70492035cfcde43fc642ae7beaebac8d13ba4ad3736",
+        "status": "failed",
+        "checks": [
+          {
+            "name": "source_video",
+            "passed": false
+          },
+          {
+            "name": "hidden_0",
+            "passed": true
+          },
+          {
+            "name": "hidden_1",
+            "passed": true
+          },
+          {
+            "name": "hidden_2",
+            "passed": true
+          }
+        ]
+      }
+    }
+  ],
+  "interpretation": {
+    "source_value_gain": "not demonstrated; SQL and classification equal, network treatment had two tenfold transcription errors",
+    "shared_gaps": [
+      "key_len byte unit",
+      "unprovided currency not explicitly discussed",
+      "BIF versus cwnd",
+      "training accuracy versus test generalization"
+    ],
+    "root_causes": "network treatment misread 17000000 as 1700000 and approximately 750000 as 75000; propagated errors counted individually in raw records",
+    "code_scope": "each condition passed all 12 frozen inputs across three tasks; display multipliers are outside network raw-bin code and assessed separately",
+    "reader_scope": "independent AI readers, not a human learning study",
+    "image_views": "observed counts, not API billing or a speed benchmark",
+    "source_quality": "all actual available public tracks 480p; higher requested profile supplied no extra pixels",
+    "ocr": "blind authors hit macOS Vision -6662 in sandbox and used actual images; later isolated host OCR ran but still missed or misread critical glyphs; no backfill"
+  },
+  "development": {
+    "fixture": "3840x2160 mixed Chinese/English table with 24px text",
+    "full_figure_rows": 0,
+    "source_roi_correct_numeric_unit_rows": 7,
+    "not_shipped": [
+      "lower minimumTextHeight without benefit",
+      "English-first languages",
+      "automatic interpolation or generated super-resolution"
+    ],
+    "heldout_videos_used_for_tuning": false
+  },
+  "post_audit": {
+    "scope": "Additional source-only readback, draft comparison and independent pixel-character adjudication; does not replace frozen study scores or share its image budget.",
+    "source_ledger_sha256": "de6e287d94226d1f3ff670a430cf7e75819d2f03797ea9ae212457f7c048f31f",
+    "conflict_record_sha256": "55ecf809f31b4fdaf90fff28e0781001ae88b1ea17400bfdedcbb40c547f23f2",
+    "independent_pixel_record_sha256": "8ea49fafec1f1a8086f8306cb6e789be55545a10fcdc76f7960167164d9f7f3b",
+    "source_readback_image_views": 34,
+    "draft_comparison_additional_image_views": 14,
+    "resolved_network_literals": {
+      "rtt_display_factor": "17000000",
+      "rtt_zero_character_x_intervals": [
+        [
+          522,
+          525
+        ],
+        [
+          526,
+          529
+        ],
+        [
+          530,
+          532
+        ],
+        [
+          533,
+          536
+        ],
+        [
+          537,
+          539
+        ],
+        [
+          540,
+          543
+        ]
+      ],
+      "neighbor_tick": "750000",
+      "tick_character_x_intervals": [
+        [
+          12,
+          15
+        ],
+        [
+          16,
+          18
+        ],
+        [
+          19,
+          22
+        ],
+        [
+          23,
+          26
+        ],
+        [
+          27,
+          29
+        ],
+        [
+          30,
+          33
+        ]
+      ],
+      "source_dimensions": [
+        852,
+        480
+      ]
+    },
+    "readback_failure_preserved": "The second pass temporarily adopted the draft's wrong digit count. Original ledger and contradictory candidates were preserved; a separate source-only reader plus glyph positions resolved the network values.",
+    "precision_decision": "Console decimal reading was disputed in post-audit; corrected lesson removes the unnecessary precise value and retains the provenance distinction. Original blind-judge records remain unchanged.",
+    "corrected_lessons": {
+      "zh-flower-confusion-smalltext": "e1c2bfcf0ad5ebc8eaa0f5b746f72069c3935dad20b8941d9d2769d2dc7c23ef",
+      "wireshark_io_graph_units": "a16ce552f22ef415f0e58f7ea4e5e98a023ef8d7e7dac7c0cc4fd406860a7430",
+      "mysql_explain_rows_filtered": "bec85c023a83eb2a618d9bfc4c5a67594da3603bbd2170af911d083ad909b366"
+    },
+    "calculation_record_sha256": "894e498328559f6b00ee61fcf91d70fc69aeb9a8c1fb54d27283da253a1f0e7c",
+    "calculations": {
+      "mysql_first_retained": 1.0,
+      "mysql_second_retained": 2.0,
+      "mysql_teaching_variant_retained": 1.0,
+      "rtt_ms": 25.54,
+      "rtt_display_y": 434180.0,
+      "send_bytes_per_second": 15000000.0,
+      "send_bits_per_second": 120000000.0,
+      "send_decimal_Mbit_per_second": 120.0,
+      "send_double_factor_same_rate": 120.0,
+      "final_matrix_total": 866,
+      "final_matrix_diagonal": 738,
+      "final_matrix_row_sums": [
+        145,
+        213,
+        163,
+        146,
+        199
+      ],
+      "final_matrix_column_sums": [
+        154,
+        211,
+        157,
+        147,
+        197
+      ],
+      "final_matrix_accuracy": 0.8521939953810623,
+      "final_matrix_accuracy_percent": 85.21939953810623,
+      "daisy_direct_precision_percent": 85.71428571428571,
+      "daisy_direct_recall_percent": 91.0344827586207,
+      "daisy_transposed_precision_percent": 91.0344827586207,
+      "daisy_transposed_recall_percent": 85.71428571428571,
+      "0625_matrix_total": 866,
+      "0625_matrix_diagonal": 340,
+      "0625_matrix_accuracy": 0.39260969976905313
+    },
+    "common_omissions_addressed": [
+      "key_len byte unit",
+      "BIF versus cwnd",
+      "training accuracy versus unseen test performance"
+    ]
+  },
+  "validation": {
+    "offline_tests_passed": 483,
+    "ruff": "passed",
+    "skill_validation": "passed",
+    "installed_stdio": "passed",
+    "default_tools": 15,
+    "advanced_tools": 20,
+    "installed_package_version": "0.1.0",
+    "isolated_site_packages_source_files_matching_workspace": 27,
+    "context_plus_two_tiles_full_frame_deliveries": 1,
+    "failed_context_successful_tiles_full_frame_deliveries": 0,
+    "installed_check_sha256": "4a3806f8b09395669499d2e6f4f6fead08dcb7de4f0cb9885f22c3841fcf1794"
+  }
+}

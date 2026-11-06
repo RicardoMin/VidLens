@@ -243,6 +243,8 @@ def test_damaged_cached_image_is_rebuilt_and_duplicates_share_ocr(
         seen.extend(f.timestamp for f in frames)
         for frame in frames:
             frame.ocr = "SLIDE"
+            frame.ocr_regions = [{"text": "SLIDE", "confidence": 0.9,
+                                  "box": [0.1, 0.1, 0.4, 0.2]}]
 
     monkeypatch.setattr(reader, "_ocr", recognize)
     second = reader.read(asset, 0, 6, max_frames=2, strategy="uniform")
@@ -250,9 +252,11 @@ def test_damaged_cached_image_is_rebuilt_and_duplicates_share_ocr(
     assert second[1].path.is_file()
     assert second[1].duplicate_of == first[0].timestamp
     assert all(frame.ocr == "SLIDE" for frame in second)
+    assert second[0].ocr_regions and second[1].ocr_regions == second[0].ocr_regions
 
 
 def test_crop_reuses_saved_image_and_successful_ocr(tmp_path, clip, monkeypatch):
+    import hashlib
     import json
 
     reader = VisualReader(tmp_path / "cache")
@@ -263,7 +267,13 @@ def test_crop_reuses_saved_image_and_successful_ocr(tmp_path, clip, monkeypatch)
         crop = reader.crop(frame, box)
     sidecar = reader._sidecar(crop.path)
     metadata = json.loads(sidecar.read_text())
-    metadata.update(ocr="SLIDE", ocr_complete=True)
+    stat = crop.path.stat()
+    identity = hashlib.sha256(
+        f"{crop.path.resolve()}:{stat.st_size}:{stat.st_mtime_ns}".encode()
+    ).hexdigest()
+    metadata.update(ocr="SLIDE", ocr_complete=True,
+                    ocr_version=reader.OCR_VERSION, ocr_regions=[],
+                    ocr_input_identity=identity, ocr_input_size=[crop.width, crop.height])
     sidecar.write_text(json.dumps(metadata))
 
     def unexpected(*args, **kwargs):

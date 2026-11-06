@@ -1,0 +1,106 @@
+{
+  "mysql_explain_rows_filtered": [
+    {
+      "id": "m_source_reconstruction",
+      "task": "仅根据讲解还原视频两条 SELECT（不含 EXPLAIN），以及各自的 type、key、rows、filtered。计算各自预计保留的行数；说明这些行数是估计还是实际测量。不要访问视频或评测目录。"
+    },
+    {
+      "id": "m_reproduce_queries",
+      "task": "写一个纯 Python 函数 select_video_queries(rows)，返回 {\"first_ids\":[...],\"second_ids\":[...]}，按输入顺序列出满足视频两条查询条件的 id。比较符、常数及是否存在额外过滤条件要从讲解中恢复，不在此题提供。输入行只有 id、user_id、total_price，后两个字段可为 None；按 SQL WHERE 的 NULL 不通过语义处理。给出下列公开样本的输出，并保留函数供隐藏样本运行。",
+      "input": [
+        {
+          "id": "A",
+          "user_id": 2,
+          "total_price": 25
+        },
+        {
+          "id": "B",
+          "user_id": 3,
+          "total_price": 25
+        },
+        {
+          "id": "C",
+          "user_id": 4,
+          "total_price": 20
+        },
+        {
+          "id": "D",
+          "user_id": 5,
+          "total_price": 25
+        },
+        {
+          "id": "E",
+          "user_id": 3,
+          "total_price": 20
+        }
+      ]
+    },
+    {
+      "id": "m_meaning_trap",
+      "task": "有人据视频说：“filtered 从 20 变成 100，说明第二条浪费更多扫描；第一条 EXPLAIN rows=5，所以它实际返回 5 行；第二条有索引，因此已经证明同一个查询提速。”逐项解释哪里错，指出两条 SQL 的语义差异，以及怎样设计公平的实测。"
+    }
+  ],
+  "wireshark_io_graph_units": [
+    {
+      "id": "w_source_reconstruction",
+      "task": "仅根据讲解还原视频演示的 ACK RTT 源值（秒及毫秒）、BIF 源值及单位、最终 interval、RTT/BIF 的完整字段与统计方法、Send Rate 的完整过滤条件和统计方式；列出三条曲线的最终 Y Axis Factor。不要访问视频或评测目录。"
+    },
+    {
+      "id": "w_reproduce_bins",
+      "task": "写纯 Python 函数 summarize_io(records)，使用视频最终的 interval、源 IP 过滤条件和统计方法，从 records 重建三个指标。不要把 Send Rate 的方向过滤施加到 RTT/BIF。每条记录含 t（秒，从零起）、src、frame_len（字节），可选 ack_rtt（秒）、bytes_in_flight（字节）。按 [n*interval,(n+1)*interval) 分桶，返回从 0 到最大 t 所在桶的列表，每项为 {\"bin\":n,\"rtt_seconds\":MAX或None,\"bif_bytes\":MAX或None,\"sender_bytes\":整数,\"sender_bits_per_second\":数值}。不把视觉缩放混进原始指标。请给出公开样本输出，并保留函数供隐藏样本运行。",
+      "input": [
+        {
+          "t": 0.01,
+          "src": "10.10.12.1",
+          "frame_len": 1000,
+          "bytes_in_flight": 29200
+        },
+        {
+          "t": 0.025,
+          "src": "10.10.12.2",
+          "frame_len": 60,
+          "ack_rtt": 0.02554
+        },
+        {
+          "t": 0.049,
+          "src": "10.10.12.1",
+          "frame_len": 500,
+          "bytes_in_flight": 40000
+        },
+        {
+          "t": 0.05,
+          "src": "10.10.12.2",
+          "frame_len": 60,
+          "ack_rtt": 0.03
+        },
+        {
+          "t": 0.075,
+          "src": "10.10.12.1",
+          "frame_len": 800,
+          "bytes_in_flight": 20000
+        }
+      ]
+    },
+    {
+      "id": "w_meaning_trap",
+      "task": "有人直接把 RTT 曲线的共享纵轴读数当成秒，把 Send Rate 的 Bytes 数值当成字节/秒，并把 BIF 当成发送端 cwnd 的精确值。分别解释错误在哪里，给出按视频设置应采用的换算或含义。若一段区间累计 750000 个匹配包字节，依据视频最终 interval 计算平均 Mbit/s，并说明它是否等于应用有效载荷吞吐。"
+    }
+  ],
+  "zh-flower-confusion-smalltext": [
+    {
+      "id": "1",
+      "source_number": 1,
+      "task": "逐行恢复最后打开的保存混淆矩阵中的 25 个显示数字，记作 A，按图上从上到下、从左到右排列。列出类名顺序，指出其数值单位。若讲解提供了足够信息，说明在“保存图由演示中的同一绘图代码生成”的条件下，真正的 sklearn 行真值、列预测矩阵 C 应怎样从 A 得到。报告真实 daisy→预测 dandelion 和真实 dandelion→预测 daisy 的数量，以及 daisy 的 precision/recall；没提供就明确写缺失。"
+    },
+    {
+      "id": "2",
+      "source_number": 2,
+      "task": "提交可独立执行的 Python 文件，不依赖视频库、NumPy 或 sklearn。实现 video_case() 返回上述条件下由视频数据恢复的 C；metrics(C,k) 接受任意非空方形非负整数矩阵 C 和合法类别索引 k，返回字典 n、correct、accuracy、micro_precision、micro_recall、micro_f1、class_precision、class_recall。这些指标用 0–1 比例；除数为 0 时返回 0。另实现 annotation_cells(C)，按行序返回每格的 (x,y,text)，text 是对应整数转字符串，坐标要能正确叠在 matshow(C) 上。运行 video_case() 的结果，并说明你的程序是否适用于非对称两类矩阵以及含全零类别的三类矩阵。"
+    },
+    {
+      "id": "3",
+      "source_number": 3,
+      "task": "最后保存图中的整体准确率能否直接等同于背景控制台数值？这段演示里四个总体指标相同，是否意味着每个类别表现都一样、改成 macro 后还一定相同？若以后训练准确率更高，是否必然提高新的测试集准确率？分别说明成立条件，至少用讲解中的一个具体类别数值来说明。"
+    }
+  ]
+}

@@ -341,3 +341,202 @@ def test_process_errors_do_not_expose_signed_urls(tmp_path):
         )
     assert "SECRET" not in str(error.value.to_dict())
     assert "cookie" in error.value.hint
+
+
+def bili_tracks():
+    def track(name, height, codec, bandwidth):
+        return {
+            "baseUrl": f"https://cdn.bilivideo.com/{name}?signature=PRIVATE",
+            "height": height,
+            "codecs": codec,
+            "bandwidth": bandwidth,
+        }
+
+    return {
+        "code": 0,
+        "data": {
+            "dash": {
+                "duration": 100,
+                "video": [
+                    track("v360", 360, "avc1", 300_000),
+                    track("v720-av1", 720, "av01", 700_000),
+                    track("v720-avc", 720, "avc1", 800_000),
+                    track("v1080", 1080, "avc1", 1_200_000),
+                ],
+                "audio": [
+                    track("a64", 0, "mp4a.40.2", 64_000),
+                    track("a192", 0, "mp4a.40.2", 192_000),
+                    track("lossless", 0, "flac", 1_000_000),
+                ],
+            }
+        },
+    }
+
+
+@pytest.mark.parametrize("audio_only,expected", [(False, "/v720-avc?"), (True, "/a192?")])
+def test_bilibili_public_playback_selects_bounded_tracks_and_precise_interval(
+    tmp_path, monkeypatch, audio_only, expected
+):
+    provider = SourceProvider(tmp_path / "cache")
+    commands, api_calls = [], []
+
+    def api(url, params):
+        api_calls.append((url, params))
+        return bili_tracks()
+
+    def run(command, timeout):
+        commands.append(command)
+        assert timeout == 300
+        Path(command[-1]).write_bytes(b"finished media")
+        return ""
+
+    monkeypatch.setattr(provider, "_json", api)
+    monkeypatch.setattr(provider, "_run", run)
+    monkeypatch.setattr(provider, "_ffmpeg", lambda: "/fake/ffmpeg")
+    video = Video(
+        "bilibili:BV1xx411c7mD:p2",
+        BILI,
+        "bilibili",
+        "Lesson",
+        100,
+        metadata={"cid": 222, "part": 2},
+    )
+    asset = provider.fetch_media(
+        video, tmp_path / "media" / "clip.mp4", 12.5, 18.5, audio_only=audio_only, max_height=720
+    )
+    assert asset.offset == 12.5 and asset.duration == 6
+    assert asset.audio_only == audio_only
+    assert len(commands) == 1 and "yt_dlp" not in commands[0]
+    command = commands[0]
+    assert expected in command[command.index("-i") + 1]
+    assert float(command[command.index("-ss") + 1]) == 12.5
+    assert float(command[command.index("-t") + 1]) == 6
+    assert "Referer: " + BILI in command[command.index("-headers") + 1]
+    assert "-cookies" not in command
+    assert "httpproxy" in command[command.index("-protocol_whitelist") + 1]
+    assert api_calls[0][1] == {
+        "bvid": "BV1xx411c7mD",
+        "cid": 222,
+        "qn": 64,
+        "fnval": 16,
+        "fourk": 0,
+    }
+
+
+def test_bilibili_media_missing_cid_resolves_requested_part(tmp_path, monkeypatch):
+    provider = SourceProvider(tmp_path)
+
+    def api(url, params):
+        if "web-interface/view" in url:
+            return {
+                "code": 0,
+                "data": {"pages": [{"page": 1, "cid": 111}, {"page": 2, "cid": 222}]},
+            }
+        assert params["cid"] == 222
+        return bili_tracks()
+
+    monkeypatch.setattr(provider, "_json", api)
+    video = Video("bili", BILI, "bilibili", "Lesson", 100)
+    assert provider._bilibili_playback(video, BILI, 360)["dash"]["audio"]
+
+
+@pytest.mark.parametrize(
+    "url",
+    [
+        "http://cdn.bilivideo.com/stream",
+        "https://bilivideo.com.evil.test/stream",
+        "https://user:secret@cdn.bilivideo.com/stream",
+        "https://127.0.0.1/stream",
+        "https://cdn.bilivideo.com:444/stream",
+        "file:///tmp/video.mp4",
+    ],
+)
+def test_native_media_urls_require_platform_https_without_credentials(url):
+    assert SourceProvider._bilibili_media_url(url) is None
+
+
+def test_bilibili_media_can_use_safe_backup_without_accepting_unsafe_primary(tmp_path, monkeypatch):
+    provider = SourceProvider(tmp_path)
+    data = bili_tracks()
+    data["data"]["dash"]["video"] = [
+        {
+            "height": 360,
+            "base_url": "http://127.0.0.1/private",
+            "backup_url": ["https://backup.bilivideo.cn/public"],
+        }
+    ]
+    monkeypatch.setattr(provider, "_json", lambda *_: data)
+    monkeypatch.setattr(provider, "_ffmpeg", lambda: "/fake/ffmpeg")
+
+    def run(command, timeout):
+        assert command[command.index("-i") + 1] == "https://backup.bilivideo.cn/public"
+        Path(command[-1]).write_bytes(b"completed")
+        return ""
+
+    monkeypatch.setattr(provider, "_run", run)
+    video = Video("bili", BILI, "bilibili", "Lesson", 100, metadata={"cid": 222})
+    assert provider.fetch_media(video, tmp_path / "video.mp4", end=1, max_height=360).path.is_file()
+
+
+def test_public_media_failure_falls_back_without_publishing_partial_native_file(
+    tmp_path, monkeypatch
+):
+    provider = SourceProvider(tmp_path / "cache")
+    monkeypatch.setattr(provider, "_json", lambda *_: bili_tracks())
+    monkeypatch.setattr(provider, "_ffmpeg", lambda: "/fake/ffmpeg")
+    calls = []
+
+    def run(command, timeout):
+        calls.append(command)
+        if command[0] == "/fake/ffmpeg":
+            Path(command[-1]).write_bytes(b"partial media")
+            raise VidLensError("SOURCE_FAILED", "CDN unavailable")
+        template = command[command.index("-o") + 1]
+        path = Path(template.replace("%(ext)s", "webm"))
+        path.write_bytes(b"completed fallback")
+        return str(path)
+
+    monkeypatch.setattr(provider, "_run", run)
+    video = Video("bili", BILI, "bilibili", "Lesson", 100, metadata={"cid": 222})
+    asset = provider.fetch_media(video, tmp_path / "video.mp4", start=5, end=6)
+    assert len(calls) == 2 and asset.path.suffix == ".webm"
+    assert not (tmp_path / "video.native.mp4").exists()
+
+
+def test_no_public_stream_and_failed_downloader_return_structured_error(tmp_path, monkeypatch):
+    provider = SourceProvider(tmp_path)
+    monkeypatch.setattr(provider, "_json", lambda *_: {"code": -10403, "message": "PRIVATE"})
+    monkeypatch.setattr(provider, "_ffmpeg", lambda: "/fake/ffmpeg")
+
+    def fail(*_args, **_kwargs):
+        raise VidLensError("SOURCE_FAILED", "PRIVATE signed URL must not propagate")
+
+    monkeypatch.setattr(provider, "_run", fail)
+    video = Video("bili", BILI, "bilibili", "Lesson", 100, metadata={"cid": 222})
+    with pytest.raises(VidLensError) as error:
+        provider.fetch_media(video, tmp_path / "video.mp4", end=1)
+    assert error.value.code == "BILI_MEDIA_UNAVAILABLE"
+    assert "BILI_MEDIA_ACCESS" in error.value.hint
+    assert "PRIVATE" not in str(error.value.to_dict())
+
+
+def test_interrupt_kills_only_the_owned_process_group_and_reraises(tmp_path, monkeypatch):
+    class InterruptedProcess:
+        pid = 123456
+        returncode = -9
+        calls = 0
+
+        def communicate(self, **_kwargs):
+            self.calls += 1
+            if self.calls == 1:
+                raise KeyboardInterrupt
+            return "", ""
+
+    process = InterruptedProcess()
+    killed = []
+    monkeypatch.setattr("vidlens.sources.subprocess.Popen", lambda *_args, **_kwargs: process)
+    monkeypatch.setattr("vidlens.sources.os.killpg", lambda pid, signal: killed.append(pid))
+    with pytest.raises(KeyboardInterrupt):
+        SourceProvider(tmp_path)._run(["own-child"])
+    assert killed == [process.pid]
+    assert process.calls == 2
