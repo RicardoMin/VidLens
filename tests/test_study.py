@@ -139,6 +139,52 @@ def test_topic_changes_can_split_before_capacity_limit(tmp_path):
     assert plan["sections"][1]["boundary_reason"] == "topic_change"
 
 
+def test_continuous_chinese_asr_finds_topics_without_punctuation_or_pauses(tmp_path):
+    topics = [
+        "缓存复用历史键值可以减少解码阶段的重复计算但是需要保留显存中的上下文数据",
+        "数据库事务使用日志记录提交和回滚持久性依靠磁盘恢复并发操作需要隔离控制",
+        "网络拥塞窗口决定发送数据的数量确认报文和重传影响吞吐速率以及往返延迟",
+    ]
+    cues = [
+        Segment(i * 5, (i + 1) * 5, topics[i // 36], source="asr") for i in range(108)
+    ]
+    _, study, _, _ = seed(tmp_path, duration=540, segments=cues)
+    plan = study.plan("lesson")
+    check_partition(plan, cues)
+    assert [s["start"] for s in plan["sections"]] == [0, 180, 360]
+    assert all(s["boundary_reason"] == "topic_change" for s in plan["sections"][1:])
+    delivered = [
+        e for section in plan["sections"]
+        for e in study.get_section("lesson", section["id"])["evidence"]
+    ]
+    assert {e["id"]: e["text"] for e in delivered} == {s.id: s.text for s in cues}
+
+
+def test_spoken_transition_can_split_related_topics_before_capacity(tmp_path):
+    # The vocabulary intentionally overlaps: a transition can introduce a
+    # different part of a mechanism even without a large lexical change.
+    text = "缓存中的键和值会参与当前解码步骤计算已有内容能够复用"
+    cues = [Segment(i * 5, (i + 1) * 5, text, source="asr") for i in range(72)]
+    cues[30].text = "接下来我们分析缓存的内存开销以及计算量随序列增长的变化"
+    _, study, _, _ = seed(tmp_path, duration=360, segments=cues)
+    plan = study.plan("lesson")
+    assert [s["start"] for s in plan["sections"]] == [0, 150]
+    assert plan["sections"][1]["boundary_reason"] == "topic_transition"
+
+
+def test_short_asr_steps_with_transition_words_do_not_fragment_one_explanation(tmp_path):
+    steps = [
+        "下面我们计算当前缓存里的键向量和查询向量的匹配分数",
+        "然后把这些分数归一化以便得到每个位置对应的注意力权重",
+        "接下来我们使用这些权重来加权缓存中的值向量",
+        "现在我们把每一个加权后的向量相加得到这个位置的输出",
+    ]
+    cues = [Segment(i * 3, (i + 1) * 3, steps[i % 4], source="asr") for i in range(120)]
+    _, study, _, _ = seed(tmp_path, duration=360, segments=cues)
+    plan = study.plan("lesson")
+    assert len(plan["sections"]) == 1
+
+
 def test_platform_marker_in_tiny_caption_gap_keeps_original_position(tmp_path):
     cues = [Segment(0, 59.8, "This premise"), Segment(60.2, 120, "needs a qualification.")]
     _, study, _, _ = seed(
@@ -209,10 +255,62 @@ def test_layout_algorithm_upgrade_preserves_matching_v2_source_notes(tmp_path):
             ),
         )
     upgraded = study.plan("lesson")
-    assert upgraded["algorithm"] == "study-v3"
+    assert upgraded["algorithm"] == "study-v4"
+    assert upgraded["layout_policy"] == "preserved_on_upgrade"
     assert upgraded["source_revision"] == historical_source
     assert upgraded["progress"]["notes_saved"] == 1
     assert study.notes("lesson")["notes"][0]["summary"] == note(cues)["summary"]
+
+
+@pytest.mark.parametrize("has_note", [False, True])
+def test_algorithm_upgrade_keeps_authored_scopes_and_existing_notes(tmp_path, has_note):
+    store, study, _, cues = seed(tmp_path)
+    plan = study.plan("lesson")
+    authored = study.revise_sections("lesson", plan["revision"], [
+        {"start": 0, "end": 60, "title": "Cached state"},
+        {"start": 60, "end": 120, "title": "Cold request"},
+    ])
+    if has_note:
+        study.save_note("lesson", authored["sections"][0]["id"], authored["revision"], note(cues))
+    with store.connect() as db:
+        db.execute("UPDATE study_plans SET algorithm='study-v3' WHERE video_id='lesson'")
+    upgraded = study.plan("lesson")
+    assert upgraded["revision"] == authored["revision"]
+    assert [s["id"] for s in upgraded["sections"]] == [s["id"] for s in authored["sections"]]
+    assert upgraded["layout_policy"] == "preserved_on_upgrade"
+    assert upgraded["progress"]["notes_saved"] == int(has_note)
+    assert study.plan("lesson")["revision"] == authored["revision"]
+
+
+@pytest.mark.parametrize("has_note", [False, True])
+def test_algorithm_upgrade_only_replaces_unannotated_auto_layout(tmp_path, has_note):
+    text = "缓存中的键和值会参与当前解码步骤计算已有内容能够复用"
+    cues = [Segment(i * 5, (i + 1) * 5, text, source="asr") for i in range(72)]
+    cues[30].text = "接下来我们分析缓存的内存开销以及计算量随序列增长的变化"
+    store, study, _, _ = seed(tmp_path, duration=360, segments=cues)
+    current = study.plan("lesson")
+    old_sections = [study._section(current["source_revision"], 0, 360, "Old candidate", "candidate", "start")]
+    with store.connect() as db:
+        db.execute(
+            "UPDATE study_plans SET algorithm='study-v3',sections=?,revision='old' WHERE video_id='lesson'",
+            (json.dumps(old_sections),),
+        )
+        if has_note:
+            db.execute(
+                "INSERT INTO study_notes VALUES (?,?,?,?,?,?)",
+                ("lesson", current["source_revision"], old_sections[0]["id"], "old",
+                 json.dumps(note(cues)), 1),
+            )
+    updated = study.plan("lesson")
+    if has_note:
+        assert updated["revision"] == "old"
+        assert updated["layout_policy"] == "preserved_on_upgrade"
+        assert [s["start"] for s in updated["sections"]] == [0]
+        assert study.notes("lesson")["notes"][0]["summary"] == note(cues)["summary"]
+    else:
+        assert updated["revision"] != "old"
+        assert updated["layout_policy"] == "automatic"
+        assert [s["start"] for s in updated["sections"]] == [0, 150]
 
 
 def test_ai_can_group_unpunctuated_captions_after_reading_without_cutting_cues(tmp_path):

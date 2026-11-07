@@ -20,6 +20,7 @@ from .models import MediaAsset, Segment, Video, VidLensError
 from .reading import EvidenceReader, validate_budget, validate_interval
 from .retrieval import source_link
 from .store import Store, frame_source_revision, union_intervals
+from .telemetry import measured
 
 
 class VideoService:
@@ -30,6 +31,7 @@ class VideoService:
             .resolve()
         )
         self.store = Store(self.home)
+        self.run_id = os.environ.get("VIDLENS_RUN_ID") or uuid.uuid4().hex
         self.budget = TokenBudget(self.home)
         self.media = MediaCache(self.store)
         self.reader = EvidenceReader(self.store, self.budget)
@@ -39,6 +41,15 @@ class VideoService:
         self._provider = None
         self._visual = None
         self._learning = None
+        self._curriculum = None
+
+    @property
+    def curriculum(self):
+        if self._curriculum is None:
+            from .curriculum import Curriculum
+
+            self._curriculum = Curriculum(self.store, self.learning.study)
+        return self._curriculum
 
     @property
     def learning(self):
@@ -122,6 +133,7 @@ class VideoService:
         key = hashlib.sha256(value.encode()).hexdigest()[:24]
         return FileLock(str(self._locks / f"{scope}-{key}.lock"), timeout=1500)
 
+    @measured
     def read_video(
         self,
         url,
@@ -130,9 +142,12 @@ class VideoService:
         languages=("zh", "en"),
         refresh=False,
         intent="auto",
+        prepare=False,
     ):
         """One-call evidence entry point: no intermediate outline/search payload duplication."""
         validate_budget(max_tokens)
+        if not isinstance(prepare, bool):
+            raise VidLensError("invalid_prepare", "prepare must be a boolean.")
         if not isinstance(question, str) or len(question) > 2000:
             raise VidLensError("invalid_query", "question must be text up to 2000 characters.")
         from .learning import reading_intent
@@ -140,8 +155,26 @@ class VideoService:
         selected_intent = reading_intent(question, intent)
         started = time.perf_counter()
         video, hit = self._ensure_video(url, languages, refresh)
+        if prepare and selected_intent == "summary":
+            scope = self.reader._speech_scope(video, self.store.segments(video.id))
+            if scope == "no_transcript" or (isinstance(scope, dict)
+                                            and not scope["whole_video_processed"]):
+                suggested = self.transcription_options().get("suggested")
+                if suggested:
+                    self.transcribe(video.id, language=languages[0], **suggested)
+                    video = self.store.get(video.id)
         if selected_intent == "summary":
             return self.learning.summary(video, question, max_tokens, hit, started)
+        if max_tokens >= 1800:
+            units = self.query_knowledge(video.id, question, limit=3,
+                                         max_tokens=min(2500, max_tokens // 2))
+            if units["units"]:
+                reserved = self.budget.count(compact_json({"knowledge_units": units})) + 32
+                if reserved < max_tokens - 768:
+                    result = self.reader.read(video, question, max_tokens - reserved, hit, started)
+                    result["knowledge_units"] = units
+                    result["accounting"]["budget"] = max_tokens
+                    return self.budget.recount(result)
         knowledge = self.learning.search(video.id, question, max_tokens=max_tokens, limit=3)
         if knowledge["matches"]:
             matches = knowledge["matches"]
@@ -151,8 +184,6 @@ class VideoService:
                         match[field] = self.budget.truncate(match[field], 180)
                 if match.get("match_scope") != "relation_path":
                     match.pop("relations", None)
-            from .budget import compact_json
-
             reserved = self.budget.count(compact_json({"knowledge": matches})) + 32
             if reserved < max_tokens - 768:
                 result = self.reader.read(video, question, max_tokens - reserved, hit, started)
@@ -164,6 +195,7 @@ class VideoService:
     def study_status(self, video_id, max_tokens=4000, cursor=0):
         return self.learning.status(video_id, max_tokens=max_tokens, cursor=cursor)
 
+    @measured
     def read_section(
         self,
         video_id,
@@ -178,6 +210,7 @@ class VideoService:
         question="",
         visual_queries=None,
         record_delivery=True,
+        representation="verbose",
     ):
         return self.learning.section(
             video_id,
@@ -191,13 +224,43 @@ class VideoService:
             question=question,
             visual_queries=visual_queries,
             record_delivery=record_delivery,
+            representation=representation,
         )
 
     def record_section_delivery(self, payload, frames=None):
         return self.learning.record_delivery(payload, frames=frames)
 
-    def scan_video(self, video_id, cursor=0, limit=100, refresh=False, view="navigation"):
-        return self.learning.scan(video_id, cursor=cursor, limit=limit, refresh=refresh, view=view)
+    @measured
+    def scan_video(self, video_id, cursor=0, limit=100, refresh=False, view="navigation",
+                   diagnostics=True):
+        return self.learning.scan(video_id, cursor=cursor, limit=limit, refresh=refresh,
+                                  view=view, diagnostics=diagnostics)
+
+    @measured
+    def save_knowledge(self, video_id, revision, units, replace=False):
+        with self._file_lock("content", video_id):
+            return self.curriculum.save(video_id, revision, units, replace=replace)
+
+    def query_knowledge(self, video_id, query="", roles=None, limit=12, max_tokens=6000):
+        return self.curriculum.query(video_id, query, roles, limit, max_tokens)
+
+    def article_plan(self, video_id, revision, plan=None):
+        with self._file_lock("content", video_id):
+            return self.curriculum.plan(video_id, revision, plan)
+
+    def audit_article(self, video_id, revision, draft):
+        return self.curriculum.audit(video_id, revision, draft)
+
+    @measured
+    def export_article(self, video_id, revision, draft, output):
+        from .article import export_article
+
+        return export_article(self, video_id, revision, draft, output)
+
+    def operation_metrics(self, run_id=None, limit=100):
+        from .telemetry import operation_metrics
+
+        return operation_metrics(self.home, run_id, limit)
 
     def save_note(self, video_id, section_id, revision, note):
         with self._file_lock("content", video_id):
@@ -226,12 +289,16 @@ class VideoService:
     def search(self, video_id, query, max_tokens=3000, limit=6):
         return self.reader.search(video_id, query, max_tokens, limit)
 
-    def read_interval(self, video_id, start, end, max_tokens=4000, cursor=None):
-        return self.reader.read_interval(video_id, start, end, max_tokens, cursor)
+    @measured
+    def read_interval(self, video_id, start, end, max_tokens=4000, cursor=None,
+                      representation="verbose"):
+        return self.reader.read_interval(video_id, start, end, max_tokens, cursor,
+                                         representation=representation)
 
     def _asset(self, video: Video, start: float, end: float, audio_only=False) -> MediaAsset:
         return self.media.get(video, start, end, audio_only, lambda: self.provider)
 
+    @measured
     def read_frames(
         self,
         video_id,
@@ -450,6 +517,7 @@ class VideoService:
                 "warnings": list(getattr(self.visual, "last_warnings", [])),
             }
 
+    @measured
     def read_detail(self, video_id, timestamp, boxes=None, *, upgrade_source=False, max_tiles=12,
                     record_delivery=True):
         """Read source-pixel regions with their surrounding figure and provenance."""
@@ -556,6 +624,7 @@ class VideoService:
             self.store.delivered(video.id, [f for f in visible if f.get("role") == "context"], "frame")
         return payload
 
+    @measured
     def check_facts(self, video_id, claims):
         """Reopen cited figures and check literal field bindings before explanation.
 
@@ -655,6 +724,7 @@ class VideoService:
             "warnings": self.store.warnings(video_id),
         }
 
+    @measured
     def transcribe(
         self,
         video_id,

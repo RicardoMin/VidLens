@@ -67,6 +67,7 @@ def build_parser() -> argparse.ArgumentParser:
         "--languages", default="zh,en", help="Preferred caption languages, comma-separated"
     )
     sub.add_argument("--refresh", action="store_true")
+    sub.add_argument("--prepare", action="store_true", help="For summaries, transcribe missing speech before returning the current plan")
     _budget(sub, 4000)
 
     sub = command("study", "Read the chapter plan and progress")
@@ -84,6 +85,7 @@ def build_parser() -> argparse.ArgumentParser:
     sub.add_argument("--frame-view", choices=["navigation", "full"], default="navigation")
     sub.add_argument("--question", default="")
     sub.add_argument("--visual-query", action="append", dest="visual_queries")
+    sub.add_argument("--representation", choices=["compact", "verbose"], default="compact")
     _budget(sub, 6000)
 
     sub = command("scan", "Index visual changes across the whole video")
@@ -92,6 +94,31 @@ def build_parser() -> argparse.ArgumentParser:
     sub.add_argument("--limit", type=int, default=100)
     sub.add_argument("--refresh", action="store_true")
     sub.add_argument("--view", choices=["navigation", "full"], default="navigation")
+    sub.add_argument("--diagnostics", action="store_true")
+
+    sub = command("units", "Query reusable knowledge units and their prerequisites")
+    sub.add_argument("video_id")
+    sub.add_argument("--query", default="")
+    sub.add_argument("--role", action="append", dest="roles")
+    sub.add_argument("--limit", type=int, default=12)
+    _budget(sub, 6000)
+
+    for name, help_text in (("save-units", "Save source-linked knowledge units"),
+                            ("article-plan", "Save or inspect a teaching plan"),
+                            ("audit-article", "Check article coverage against the teaching plan"),
+                            ("article", "Export a portable Markdown lesson and HTML preview")):
+        sub = command(name, help_text)
+        sub.add_argument("video_id")
+        sub.add_argument("--revision", required=True)
+        sub.add_argument("--file", type=Path, required=name != "article-plan")
+        if name == "save-units":
+            sub.add_argument("--replace", action="store_true")
+        if name == "article":
+            sub.add_argument("--output", type=Path, required=True)
+
+    sub = command("metrics", "Inspect local operation times and text estimates, not model billing")
+    sub.add_argument("--run-id")
+    sub.add_argument("--limit", type=int, default=100)
 
     for name, help_text in (
         ("note", "Save a source-linked chapter note"),
@@ -146,6 +173,7 @@ def build_parser() -> argparse.ArgumentParser:
         "--cursor", default=None, help="Pass next_cursor unchanged to continue reading"
     )
     _budget(sub, 4000)
+    sub.add_argument("--representation", choices=["compact", "verbose"], default="compact")
 
     sub = command("frames", "Read selected frames and local OCR from a time interval")
     sub.add_argument("video_id")
@@ -224,6 +252,7 @@ def dispatch(args: argparse.Namespace, service: Any) -> dict[str, Any]:
                 refresh=args.refresh,
                 max_tokens=args.max_tokens,
                 intent=args.intent,
+                **({"prepare": True} if args.prepare else {}),
             )
         return service.open_video(
             args.url, languages=languages, refresh=args.refresh, max_tokens=args.max_tokens
@@ -242,11 +271,30 @@ def dispatch(args: argparse.Namespace, service: Any) -> dict[str, Any]:
             frame_view=args.frame_view,
             question=args.question,
             visual_queries=args.visual_queries,
+            representation=args.representation,
         )
     if command == "scan":
         return service.scan_video(
-            args.video_id, cursor=args.cursor, limit=args.limit, refresh=args.refresh, view=args.view
+            args.video_id, cursor=args.cursor, limit=args.limit, refresh=args.refresh, view=args.view,
+            diagnostics=args.diagnostics,
         )
+    if command == "metrics":
+        return service.operation_metrics(args.run_id, args.limit)
+    if command == "units":
+        return service.query_knowledge(args.video_id, args.query, args.roles, args.limit, args.max_tokens)
+    if command in {"save-units", "article-plan", "audit-article", "article"}:
+        document = None
+        if args.file:
+            if args.file.stat().st_size > 8 * 1024 * 1024:
+                raise VidLensError("input_too_large", "Article JSON must be at most 8 MiB.")
+            document = json.loads(args.file.read_text(encoding="utf-8"))
+        if command == "save-units":
+            return service.save_knowledge(args.video_id, args.revision, document, args.replace)
+        if command == "article-plan":
+            return service.article_plan(args.video_id, args.revision, document)
+        if command == "audit-article":
+            return service.audit_article(args.video_id, args.revision, document)
+        return service.export_article(args.video_id, args.revision, document, args.output)
     if command in ("note", "reference", "chapters"):
         if args.file.stat().st_size > 256 * 1024:
             raise VidLensError("input_too_large", "Study JSON must be at most 256 KiB.")
@@ -275,7 +323,8 @@ def dispatch(args: argparse.Namespace, service: Any) -> dict[str, Any]:
         )
     if command == "read":
         return service.read_interval(
-            args.video_id, args.start, args.end, max_tokens=args.max_tokens, cursor=args.cursor
+            args.video_id, args.start, args.end, max_tokens=args.max_tokens, cursor=args.cursor,
+            representation=args.representation,
         )
     if command == "frames":
         return service.read_frames(

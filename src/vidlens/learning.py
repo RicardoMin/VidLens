@@ -8,6 +8,7 @@ import re
 import time
 
 from .budget import compact_json
+from .evidence_format import expand_evidence, validate_representation
 from .models import VidLensError
 from .reading import validate_budget
 from .retrieval import query_tokens, source_link, tokenize
@@ -205,8 +206,11 @@ class LearningReader:
             })
         return raw, metadata, None
 
-    def scan(self, video_id, cursor=0, limit=100, refresh=False, view="navigation"):
+    def scan(self, video_id, cursor=0, limit=100, refresh=False, view="navigation", *,
+             diagnostics=False):
         self._validate_view(view)
+        if not isinstance(diagnostics, bool):
+            raise VidLensError("invalid_diagnostics", "diagnostics must be a boolean.")
         if isinstance(cursor, bool) or not isinstance(cursor, int) or cursor < 0:
             raise VidLensError("invalid_cursor", "cursor must be a nonnegative integer.")
         if isinstance(limit, bool) or not isinstance(limit, int) or not 1 <= limit <= 1000:
@@ -278,7 +282,7 @@ class LearningReader:
         candidates, selection, _ = self._candidate_view(video_id, data, view)
         if cursor > len(candidates):
             raise VidLensError("invalid_cursor", "cursor is past the last visual candidate.")
-        return {
+        result = {
             **data,
             "video_id": video_id,
             "cached": cache_hit,
@@ -291,6 +295,17 @@ class LearningReader:
             "candidates": candidates[cursor : cursor + limit],
             "next_cursor": cursor + limit if cursor + limit < len(candidates) else None,
         }
+        if not diagnostics:
+            for key in ("rules", "scan_stats", "selection_metrics", "selection_method"):
+                result.pop(key, None)
+            result["candidates"] = [
+                {key: row[key] for key in (
+                    "timestamp", "source_timestamp", "hold_seconds", "reasons",
+                    "source_candidate_cursor",
+                ) if key in row}
+                for row in result["candidates"]
+            ]
+        return result
 
     def _frames(self, video_id, section, frame_cursor, frame_limit, frame_view="navigation"):
         _, _, scan = self._scan_data(video_id)
@@ -434,10 +449,12 @@ class LearningReader:
         question="",
         visual_queries=None,
         record_delivery=True,
+        representation="verbose",
     ):
         from .visual_query import validate_visual_query
 
         question, visual_queries = validate_visual_query(question, visual_queries)
+        validate_representation(representation)
         if question and frame_cursor is not None:
             raise VidLensError("invalid_cursor", "Question selection has no frame cursor; use navigation separately.")
         validate_budget(max_tokens)
@@ -484,6 +501,9 @@ class LearningReader:
                     )
             except VidLensError as exc:
                 payload["visual"] = {"status": "unavailable", "error": exc.to_dict()}
+        if representation == "compact":
+            payload["visual"] = {key: value for key, value in payload["visual"].items()
+                                 if key not in {"selection_metrics", "selection_method"}}
         overhead = self.budget.count(compact_json(payload)) + 100
         if max_tokens - overhead < 768:
             raise VidLensError(
@@ -497,6 +517,7 @@ class LearningReader:
             cursor=cursor,
             speech_only=True,
             record_delivery=False,
+            representation=representation,
         )
         payload.update(
             evidence=page["evidence"],
@@ -505,6 +526,9 @@ class LearningReader:
             accounting=page["accounting"],
             truncated=page["truncated"],
         )
+        if representation == "compact":
+            for key in ("representation", "source_url", "ref_format", "tracks"):
+                payload[key] = page[key]
         payload["accounting"]["budget"] = max_tokens
         self.budget.recount(payload)
         return self.record_delivery(payload) if record_delivery else payload
@@ -559,7 +583,7 @@ class LearningReader:
                 },
             }
             self.budget.recount(maximum)
-            self.store.delivered_text(video_id, result["evidence"])
+            self.store.delivered_text(video_id, expand_evidence(result))
             self.store.delivered(video_id, result["frames"] if frames is None else frames, "frame")
             result["progress"] = self._compact_progress(
                 self.study.get_section(video_id, section_id)["progress"]

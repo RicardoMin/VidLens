@@ -11,6 +11,7 @@ from dataclasses import dataclass
 from functools import cached_property
 
 from .budget import TokenBudget, compact_json
+from .evidence_format import compact_paragraphs, expand_evidence, validate_representation
 from .models import Segment, Video, VidLensError
 from .retrieval import PassageIndex, navigation, source_link
 from .store import Store, union_intervals
@@ -216,8 +217,9 @@ class EvidenceReader:
         return result
 
     def read_interval(self, video_id, start, end, max_tokens=4000, cursor=None, *,
-                      speech_only=False, record_delivery=True):
+                      speech_only=False, record_delivery=True, representation="verbose"):
         validate_budget(max_tokens)
+        validate_representation(representation)
         snapshot = self._snapshot(video_id)
         video = snapshot.video
         start, end = validate_interval(video, start, end,
@@ -266,6 +268,13 @@ class EvidenceReader:
             for n, s in enumerate(segments)
             if n >= index
         ]
+        if representation == "compact":
+            for item, segment in zip(items, segments[index:]):
+                item["language"] = segment.language
+            return self._compact_interval(
+                video, start, end, cursor, revision, segments, index, items,
+                max_tokens, record_delivery,
+            )
         result = {
             "video_id": video_id,
             "start": start,
@@ -305,3 +314,74 @@ class EvidenceReader:
         if record_delivery:
             self.store.delivered_text(video_id, result["evidence"])
         return result
+
+    def _compact_interval(
+        self, video, start, end, cursor, revision, segments, index, items,
+        max_tokens, record_delivery,
+    ):
+        """Budget the compact representation itself, then record exact source ranges."""
+        payload = {
+            "video_id": video.id, "start": start, "end": end, "cursor": cursor,
+            "representation": "compact", "source_url": video.url,
+            "ref_format": ["evidence_id", "text_offset", "length"],
+            "tracks": [], "evidence": [], "next_cursor": None, "truncated": False,
+            "warnings": [], "available_items": len(segments),
+            "accounting": {
+                "text_tokens_estimate": max_tokens, "budget": max_tokens,
+                "method": self.budget.method,
+                "excludes": "images, model reasoning, transport envelope",
+            },
+        }
+        if not items:
+            payload["warnings"] = [
+                "No indexed text in this interval; visual/audio content may still contain information."
+            ]
+            return self.budget.recount(payload)
+
+        def set_page(selected, next_cursor):
+            payload["tracks"], payload["evidence"] = compact_paragraphs(selected)
+            payload["next_cursor"] = next_cursor
+            payload["truncated"] = next_cursor is not None
+
+        def full_page(count):
+            set_page(
+                items[:count],
+                f"{revision}:{index + count}:0" if index + count < len(segments) else None,
+            )
+            return self.budget.count(compact_json(payload)) <= max_tokens - 32
+
+        # Count whole cues first. The source cursor remains independent of transport
+        # format, allowing callers to change representation between pages.
+        left, right = 0, len(items)
+        while left < right:
+            middle = (left + right + 1) // 2
+            if full_page(middle):
+                left = middle
+            else:
+                right = middle - 1
+        if left:
+            full_page(left)
+        else:
+            # A long single cue must remain resumable without inventing punctuation
+            # or claiming that its unseen suffix has been delivered.
+            first = items[0]
+            low, high = 0, len(first["text"])
+
+            def partial_page(length):
+                piece = {**first, "text": first["text"][:length]}
+                set_page([piece], f"{revision}:{index}:{first['text_offset'] + length}")
+                return self.budget.count(compact_json(payload)) <= max_tokens - 32
+
+            while low < high:
+                middle = (low + high + 1) // 2
+                if partial_page(middle):
+                    low = middle
+                else:
+                    high = middle - 1
+            if not low:
+                raise VidLensError("budget_too_small", "Increase max_tokens to read this evidence.")
+            partial_page(low)
+        self.budget.recount(payload)
+        if record_delivery:
+            self.store.delivered_text(video.id, expand_evidence(payload))
+        return payload

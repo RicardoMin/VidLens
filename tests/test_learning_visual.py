@@ -15,6 +15,7 @@ from PIL import Image
 from test_storyboard import lecture as synthetic_lecture
 
 from vidlens import mcp_server
+from vidlens.evidence_format import expand_evidence
 from vidlens.mcp_server import create_server
 from vidlens.media_cache import MediaCache
 from vidlens.models import MediaAsset, Segment, Video, VidLensError
@@ -129,11 +130,11 @@ async def test_mcp_section_returns_real_flash_pixels_and_original_speech_togethe
         assert result.content[0].type == "text"
         assert all(item.type == "image" for item in result.content[1:])
         payload = json.loads(result.content[0].text)
-        assert [item["text"] for item in payload["evidence"]] == [
+        assert [item["text"] for item in expand_evidence(payload)] == [
             "The equation is shown briefly.",
             "The caveat is stated aloud.",
         ]
-        assert all(item["kind"] != "ocr" for item in payload["evidence"])
+        assert all(item["kind"] != "ocr" for item in payload["tracks"])
         frame = min(payload["frames"], key=lambda item: abs(item["timestamp"] - 32 / 30))
         assert frame["timestamp"] == pytest.approx(32 / 30, abs=0.000001)
         assert frame["evidence_id"] == f"frame:{frame['timestamp']}"

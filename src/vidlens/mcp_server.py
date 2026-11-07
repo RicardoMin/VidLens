@@ -111,9 +111,12 @@ def create_server(home: Path | str | None = None, *, service: Any = None) -> Fas
         "VidLens",
         instructions=(
             "Read YouTube and Bilibili with the connected AI client. For summaries, start with "
-            "read_video(intent='summary'), scan_video, then read every chapter using read_section. "
+            "read_video(intent='summary', prepare=True), then read every chapter using read_section. "
             "Continue text cursors, inspect the returned images, and save source-linked chapter "
-            "notes before synthesizing the course's argument. For specific questions use "
+            "notes. For a substantial lesson, save cross-chapter knowledge units with save_knowledge, "
+            "build an article_plan, and audit_article for missing core concepts before delivery. "
+            "The audit checks structural coverage, not truth or understanding. Use compact evidence "
+            "refs as original source IDs. For specific questions use "
             "read_video(intent='question') and search_knowledge. Explain mechanisms and examples "
             "directly, using diagrams or interactive illustrations when they help. Resolve "
             "material evidence gaps through tools; describe any remaining gap at the relevant "
@@ -191,6 +194,7 @@ def create_server(home: Path | str | None = None, *, service: Any = None) -> Fas
         languages: list[str] | None = None,
         refresh: bool = False,
         intent: str = "auto",
+        prepare: bool = False,
     ) -> CallToolResult:
         """Start reading a video. intent is summary, question, or auto.
 
@@ -198,6 +202,8 @@ def create_server(home: Path | str | None = None, *, service: Any = None) -> Fas
         every chapter, then synthesize the notes. A learning goal can accompany summary.
         Question returns relevant original passages for a specific question. Auto recognizes
         common summary requests. Reuses acquired material unless refresh is true.
+        prepare=True uses the suggested local ASR when speech is missing, then returns
+        the refreshed plan. First ASR may download its model. Never reuse pre-ASR section IDs.
         """
         return await call(
             "read_video",
@@ -207,6 +213,7 @@ def create_server(home: Path | str | None = None, *, service: Any = None) -> Fas
             languages=tuple(languages or ["zh", "en"]),
             refresh=refresh,
             intent=intent,
+            **({"prepare": True} if prepare else {}),
         )
 
     @server.tool(annotations=read_only)
@@ -220,6 +227,7 @@ def create_server(home: Path | str | None = None, *, service: Any = None) -> Fas
     async def scan_video(
         video_id: str, cursor: int = 0, limit: int = 100, refresh: bool = False,
         view: str = "navigation",
+        diagnostics: bool = False,
     ) -> CallToolResult:
         """Index visual changes across the entire video using a low-resolution media copy.
 
@@ -227,7 +235,8 @@ def create_server(home: Path | str | None = None, *, service: Any = None) -> Fas
         all raw change candidates, including brief events. Continue with the returned view
         and next_cursor. read_section retrieves actual images. First scan downloads media.
         """
-        return await call("scan_video", video_id, cursor=cursor, limit=limit, refresh=refresh, view=view)
+        return await call("scan_video", video_id, cursor=cursor, limit=limit, refresh=refresh,
+                          view=view, diagnostics=diagnostics)
 
     @server.tool(annotations=source_read)
     async def read_section(
@@ -241,6 +250,7 @@ def create_server(home: Path | str | None = None, *, service: Any = None) -> Fas
         frame_view: str = "navigation",
         question: str = "",
         visual_queries: list[str] | None = None,
+        representation: str = "compact",
     ) -> CallToolResult:
         """Read a chapter's original speech, evidence IDs and actual screen images.
 
@@ -252,6 +262,9 @@ def create_server(home: Path | str | None = None, *, service: Any = None) -> Fas
         nearby changes. Do not combine question selection with frame_cursor.
         On text-only continuation use include_frames=false. Figures, code and equations
         require inspecting pixels; crop small details. Keep revision for save_note.
+        Compact paragraphs preserve every source character; refs contain original evidence
+        IDs, character offsets and lengths. Copy those IDs into notes/knowledge units.
+        representation='verbose' exposes the legacy per-cue fields for diagnosis.
         """
         return await call(
             "read_section",
@@ -265,6 +278,7 @@ def create_server(home: Path | str | None = None, *, service: Any = None) -> Fas
             frame_view=frame_view,
             question=question,
             visual_queries=visual_queries,
+            representation=representation,
             images=True,
         )
 
@@ -310,6 +324,61 @@ def create_server(home: Path | str | None = None, *, service: Any = None) -> Fas
         """
         return await call("search_knowledge", video_id, query, max_tokens=max_tokens, limit=limit)
 
+    @server.tool(annotations=local_write)
+    async def save_knowledge(video_id: str, revision: str, units: list[dict],
+                             replace: bool = False) -> CallToolResult:
+        """Save reusable cross-chapter knowledge units after reading original evidence.
+
+        Units have id,title,roles,concepts,explanation,evidence_ids,requires (unit IDs),
+        importance (core/supporting), optional relations/questions/example. Use multi-label
+        roles and real evidence IDs. Default upserts; replace=True explicitly replaces all
+        units. Source changes invalidate the units; chapter rearrangement does not.
+        """
+        return await call("save_knowledge", video_id, revision, units, replace=replace)
+
+    @server.tool(annotations=read_only)
+    async def query_knowledge(video_id: str, query: str = "", roles: list[str] | None = None,
+                              limit: int = 12, max_tokens: int = 6000) -> CallToolResult:
+        """Retrieve knowledge by concepts, explanation and roles, with prerequisite closure.
+
+        Empty query browses units. Inspect truncated and omitted dependencies; retrieve
+        smaller groups when the budget cannot fit a prerequisite group. Return to source
+        evidence for omitted detail. This does not replace whole-video first reading.
+        """
+        return await call("query_knowledge", video_id, query, roles, limit, max_tokens)
+
+    @server.tool(annotations=local_write)
+    async def article_plan(video_id: str, revision: str, plan: dict | None = None) -> CallToolResult:
+        """Save or get a teaching plan grounded in knowledge units.
+
+        plan: title,goal,sections[{id,title,objective,unit_ids,visuals:[{purpose,evidence_ids}],
+        exercises:[{question,unit_ids}]}],omissions:[{unit_id,reason}]. Article order follows
+        learning dependencies, not necessarily video chronology. Knowledge edits stale plans.
+        """
+        return await call("article_plan", video_id, revision, plan)
+
+    @server.tool(annotations=read_only)
+    async def audit_article(video_id: str, revision: str, draft: dict) -> CallToolResult:
+        """Check structural coverage before delivering an article, not semantic correctness.
+
+        draft: markdown,coverage[{unit_id,section_id,excerpt}],omissions[{unit_id,reason}],
+        assets[{name,kind,svg?,evidence_id?,box?}],
+        visual_coverage[{section_id,visual_index,asset_name}],
+        exercise_coverage[{section_id,exercise_index,excerpt}],attachments[{name,text}].
+        Task indexes are zero-based within each section's saved plan. Every planned task
+        needs a mapping: the registered asset must appear as a Markdown image in that
+        section, and exercise excerpts must occur there. Sections with no tasks need no mappings.
+        Use standalone <!-- section:ID --> markers; core omissions block readiness.
+        Source assets use .png plus frame:TIME; diagrams use passive .svg text.
+        CLI article creates portable Markdown/assets/preview and real #ID link targets
+        from validated markers, retaining markers in Markdown. Arbitrary input HTML stays
+        rejected. Optional attachments use relative prose links and plain .py/.json/.txt/.csv
+        filenames, at most 10 files of 100000 UTF-8 bytes each; export never executes them.
+        The CLI validates assets and attachments. Review source facts, figures and worked
+        calculations separately; this audit checks structure, not teaching effectiveness.
+        """
+        return await call("audit_article", video_id, revision, draft)
+
     @server.tool(annotations=source_read)
     async def open_video(
         url: str, languages: list[str] | None = None, refresh: bool = False, max_tokens: int = 2500
@@ -346,7 +415,8 @@ def create_server(home: Path | str | None = None, *, service: Any = None) -> Fas
 
     @server.tool(annotations=read_only)
     async def read_interval(
-        video_id: str, start: float, end: float, max_tokens: int = 4000, cursor: str | None = None
+        video_id: str, start: float, end: float, max_tokens: int = 4000, cursor: str | None = None,
+        representation: str = "compact",
     ) -> CallToolResult:
         """Expand original text evidence between start/end seconds on the source timeline.
 
@@ -354,7 +424,8 @@ def create_server(home: Path | str | None = None, *, service: Any = None) -> Fas
         Keep video_id, interval and budget unchanged while paging.
         """
         return await call(
-            "read_interval", video_id, start, end, max_tokens=max_tokens, cursor=cursor
+            "read_interval", video_id, start, end, max_tokens=max_tokens, cursor=cursor,
+            representation=representation,
         )
 
     @server.tool(annotations=source_read)

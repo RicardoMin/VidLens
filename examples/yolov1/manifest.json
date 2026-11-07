@@ -1,0 +1,247 @@
+{
+  "video_id": "bilibili:BV1KT2yBJESn:p1",
+  "revision": "414a66ae3e4efa560c39e869",
+  "markdown_sha256": "d2cdf8c7a5864657b5911c29cc5749beb29cbc5d02213d365c6199a63c675dff",
+  "preview_sha256": "54ae10e1fa86d7a0760b94f1dcb4ee76db3daf9a47c12257d760843673890b89",
+  "assets": [
+    {
+      "path": "assets/flow.svg",
+      "kind": "diagram",
+      "sha256": "e0dc00bf18ad466b43e0327630aaabcbaa84b83f2bae93716f6e6e7b7eb5bfcc",
+      "bytes": 2062
+    },
+    {
+      "path": "assets/grid.svg",
+      "kind": "diagram",
+      "sha256": "d210d35a5406aa815a7bb4f8c77380fe1eab677d9ccc9c5a5719c7fa529aae3c",
+      "bytes": 2864
+    },
+    {
+      "path": "assets/output.svg",
+      "kind": "diagram",
+      "sha256": "a1681ad9391448df879198c21a6907781581837d74711360005fbfaae51c56e7",
+      "bytes": 2764
+    },
+    {
+      "path": "assets/assignment.svg",
+      "kind": "diagram",
+      "sha256": "721e7d5c443416ae168a6fc750680811cf1f80d010eabd76f135737a1f22ae92",
+      "bytes": 1732
+    },
+    {
+      "path": "assets/nms.svg",
+      "kind": "diagram",
+      "sha256": "80b80935e1a15ca366b61d041b76bb25e501e22464ba42b05c37dcc3c3744c01",
+      "bytes": 1971
+    },
+    {
+      "path": "assets/loss-source.png",
+      "kind": "source",
+      "sha256": "490e6947125e30243cc7a64398798f974ee935542602ffe9c60ca45455c4fab9",
+      "bytes": 40297,
+      "evidence_id": "frame:1517.0",
+      "timestamp": 1517.0,
+      "crop_box": [
+        0.09389671361502347,
+        0.13333333333333333,
+        0.392018779342723,
+        0.47291666666666665
+      ],
+      "source_sha256": "40e9f384afe2c2a7555c96fbe0bc54916638b1dde6a81c2431351e853c95bbbc",
+      "pixel_size": [
+        334,
+        227
+      ]
+    },
+    {
+      "path": "assets/speed-source.png",
+      "kind": "source",
+      "sha256": "fed6c5f24c0ba8b5dd6575501ada6436e02f469187a64e914be7db53fdeb4aa9",
+      "bytes": 28467,
+      "evidence_id": "frame:1872.0",
+      "timestamp": 1872.0,
+      "crop_box": [
+        0.09976525821596244,
+        0.08333333333333333,
+        0.40023474178403756,
+        0.18333333333333332
+      ],
+      "source_sha256": "69b1c43bfc0bcdecbc78fe63f33740ed8fde9ee19220de1682c3ed106184600a",
+      "pixel_size": [
+        341,
+        88
+      ]
+    },
+    {
+      "path": "assets/errors-source.png",
+      "kind": "source",
+      "sha256": "1eb54f12bd8a3e8348ec719837df2a811564c0327b77d2c327169960aa47d533",
+      "bytes": 56616,
+      "evidence_id": "frame:1872.0",
+      "timestamp": 1872.0,
+      "crop_box": [
+        0.5093896713615024,
+        0.08333333333333333,
+        0.4014084507042254,
+        0.3729166666666667
+      ],
+      "source_sha256": "69b1c43bfc0bcdecbc78fe63f33740ed8fde9ee19220de1682c3ed106184600a",
+      "pixel_size": [
+        342,
+        179
+      ]
+    }
+  ],
+  "attachments": [
+    {
+      "path": "calculations.py",
+      "bytes": 2215,
+      "sha256": "70b2554fc562524465f8312368605c06af6eb6c88ed6a9806d7158aa752402e5"
+    }
+  ],
+  "coverage_audit": {
+    "video_id": "bilibili:BV1KT2yBJESn:p1",
+    "revision": "414a66ae3e4efa560c39e869",
+    "knowledge_revision": "aed9dda645ba71efa8d83485",
+    "markdown_sha256": "8dfa99e18790e5ab4761a0fde77109115037ef891cc85e2624d070cf0ba913bb",
+    "ready_for_review": true,
+    "issues": [],
+    "coverage": [
+      {
+        "unit_id": "unified",
+        "section_id": "flow"
+      },
+      {
+        "unit_id": "grid",
+        "section_id": "grid"
+      },
+      {
+        "unit_id": "coordinates",
+        "section_id": "grid"
+      },
+      {
+        "unit_id": "outputs",
+        "section_id": "output"
+      },
+      {
+        "unit_id": "confidence",
+        "section_id": "output"
+      },
+      {
+        "unit_id": "architecture",
+        "section_id": "network"
+      },
+      {
+        "unit_id": "responsibility",
+        "section_id": "assignment"
+      },
+      {
+        "unit_id": "loss-masks",
+        "section_id": "loss"
+      },
+      {
+        "unit_id": "sqrt-loss",
+        "section_id": "loss"
+      },
+      {
+        "unit_id": "loss-weights",
+        "section_id": "loss"
+      },
+      {
+        "unit_id": "nms",
+        "section_id": "nms"
+      },
+      {
+        "unit_id": "pretraining",
+        "section_id": "training"
+      },
+      {
+        "unit_id": "training",
+        "section_id": "training"
+      },
+      {
+        "unit_id": "speed",
+        "section_id": "experiments"
+      },
+      {
+        "unit_id": "errors",
+        "section_id": "experiments"
+      },
+      {
+        "unit_id": "ensemble",
+        "section_id": "experiments"
+      },
+      {
+        "unit_id": "voc2012",
+        "section_id": "experiments"
+      },
+      {
+        "unit_id": "generalization",
+        "section_id": "experiments"
+      },
+      {
+        "unit_id": "limitations",
+        "section_id": "experiments"
+      }
+    ],
+    "core_unit_count": 19,
+    "covered_core_count": 19,
+    "uncovered_core": [],
+    "uncovered_dependencies": [],
+    "omissions": [],
+    "unaccounted_units": [],
+    "visual_coverage": [
+      {
+        "section_id": "flow",
+        "visual_index": 0,
+        "asset_name": "flow.svg"
+      },
+      {
+        "section_id": "grid",
+        "visual_index": 0,
+        "asset_name": "grid.svg"
+      },
+      {
+        "section_id": "output",
+        "visual_index": 0,
+        "asset_name": "output.svg"
+      },
+      {
+        "section_id": "assignment",
+        "visual_index": 0,
+        "asset_name": "assignment.svg"
+      },
+      {
+        "section_id": "loss",
+        "visual_index": 0,
+        "asset_name": "loss-source.png"
+      },
+      {
+        "section_id": "nms",
+        "visual_index": 0,
+        "asset_name": "nms.svg"
+      },
+      {
+        "section_id": "experiments",
+        "visual_index": 0,
+        "asset_name": "speed-source.png"
+      },
+      {
+        "section_id": "experiments",
+        "visual_index": 1,
+        "asset_name": "errors-source.png"
+      }
+    ],
+    "uncovered_visuals": [],
+    "exercise_coverage": [
+      {
+        "section_id": "practice",
+        "exercise_index": 0
+      }
+    ],
+    "uncovered_exercises": [],
+    "semantic_validation": "not_performed",
+    "review_scope": "Exact excerpts and evidence references are checked; facts, visual explanations and learning outcomes require reader review."
+  },
+  "review_scope": "Structural coverage only; author must inspect facts, figures and rendered output."
+}

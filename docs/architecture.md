@@ -4,9 +4,11 @@ MCP 和 CLI 共用 [VideoService](../src/vidlens/service.py)。服务负责取�
 
 ## 两种阅读入口
 
-`read_video(url, intent="summary")` 返回 `study_plan`，包含当前 `revision`、章节范围和进度。章节列表可以通过 `study_status` 继续分页。这个响应建立阅读任务；原文和实际图片从后续 `read_section` 获取。
+`read_video(url, intent="summary")` 返回 `study_plan`，包含当前 `revision`、章节范围和进度。章节列表可以通过 `study_status` 继续分页。这个响应建立阅读任务；原文和实际图片从后续 `read_section` 获取。显式 `prepare=True` 时，若当前没有可用语音文字，或仅有未覆盖全片的本地 ASR，服务使用本机建议的后端准备全片转写，再返回新的章节版本。已有平台或导入字幕不因时间戳间隙而被判为缺失；真实缺项需结合材料按区间补读。
 
 `read_video(url, question=..., intent="question")` 返回与具体问题相关的原始段落。检索使用本地 BM25、简繁归一和技术术语别名；引用保留原始文字。限定名同时按整体与组成部分检索，例如 `model.summary()` 可以通过 `summary` 找到。若答案依赖段落前后的条件，用 `read_interval` 展开；依赖公式、图表或代码时，取相应画面。`intent="auto"` 将空问题和常见总结请求导向全片流程，识别意图时跳过代码标识符，避免把函数名中的 `summary` 当成总结请求。
+
+问题入口在预算允许时优先查询已保存的知识单元，把匹配项及其前置依赖与原文一起返回；没有匹配或预算不足时继续使用章节笔记和原始证据路径。知识单元不会取代原文引用。
 
 ## 全片阅读的数据流
 
@@ -18,19 +20,26 @@ flowchart TD
     Scan --> Candidates[变化候选与时间定位]
     Plan --> Section[逐章阅读]
     Candidates --> Section
-    Section --> Evidence[分页原文与高清图片]
+    Section --> Evidence[分页原文与来源图片]
     Evidence --> AI[客户端 AI]
     AI --> Notes[(章节笔记、概念与证据引用)]
+    AI --> Units[(跨章节知识单元与前置依赖)]
     Research[宿主检索并阅读外部主源] --> References[(外部资料与章节关联)]
-    Notes --> Followup[追问、综合讲解、导出]
+    Notes --> Followup[追问与原始笔记导出]
     References --> Followup
+    Units --> Query[主题和角色检索、补齐前置依赖]
+    Units --> Article[文章计划与成稿映射]
+    Article --> Audit[结构覆盖检查]
+    Audit --> Bundle[Markdown、配图与 HTML 预览]
 ```
 
 ### 1. 建立章节计划
 
-[StudyEngine](../src/vidlens/study.py) 结合平台章节、句子结束、停顿和局部词汇变化生成候选范围，保留整条时间轴。候选标题与边界是导航信息；AI 阅读后可用 `revise_sections` 重组章节，或通过章节笔记给出更贴切的标题。
+[StudyEngine](../src/vidlens/study.py) 结合平台章节、句子结束、停顿、局部词汇变化和讲解转折生成候选范围，保留整条时间轴。无标点且没有明显停顿的 ASR 也会计算话题变化；“接下来”等转折还需有上下文变化支持，时长、字数和剩余内容约束避免把每个操作切成一章。候选标题与边界是导航信息；AI 阅读后可用 `revise_sections` 重组章节，或通过章节笔记给出更贴切的标题。
 
 章节计划与源材料都有版本。字幕、时长或平台章节变化会影响源版本；仅添加 OCR 和画面不改变语音材料的版本。重新划分范围会产生新的章节身份，保持相同范围的改名可以保留已有笔记。保存笔记时必须携带当前 `revision`，以免将旧材料的解释写入新计划。
+
+分章算法升级时，未注释的自动计划可重新生成；同源已有笔记或 AI 修订的布局保留原来的范围、ID 和 revision。`layout_policy` 记录 `automatic`、`authored` 或 `preserved_on_upgrade`。这项保留策略保护已完成的阅读工作；需要采用新边界时显式修订，原始材料本身改变仍会触发来源版本更新。
 
 ### 2. 建立全片视觉索引
 
@@ -40,6 +49,8 @@ flowchart TD
 
 索引保留时间点，供后续高清阅读使用。低清帧差不判断图里讲了什么，也不能保证发现每处小字改动。扫描过程的 `complete` 表示该媒体范围的处理完成；部分失败和未完成的扫描会保留相应状态。
 
+MCP 与 CLI 的默认扫描响应保留导航所需信息，详细扫描规则、探测指标等通过 `diagnostics=True`／`--diagnostics` 展开。精简响应不改变扫描算法或候选集合。
+
 [VisualSelector](../src/vidlens/selection.py) 在原始索引之上建立独立版本的精简导航：先取稳定保持段、局部变化峰值和短事件探针，再比较低清图的局部块差异、细节与空白状态。每条导航项保留原始候选游标；原始列表不被删改。`scan_video(view="navigation")` 返回精简地图，`view="full"` 返回全集。选择器失败或超过探针上限时明确返回完整视图；后续游标按响应中的视图继续。
 
 局部像素差异有助于保留细小代码改动，全局均差容易把不同公式合并。像素细节密度仍不等于讲解相关性：本轮独立实验没有证实用它替换首批四图会改善最终答案，因此默认首批图片继续按时间与稳定性覆盖章节。像素优先级代表图保留在评测脚本中作实验，导航用于后续展开。
@@ -47,6 +58,8 @@ flowchart TD
 ### 3. 分别推进文字和画面阅读
 
 `read_section(video_id, section_id)` 返回本章原始语音文本、证据 ID 和实际图片。文字分页使用 `next_cursor`，按原始顺序读到末尾。仅继续文字时可设置 `include_frames=False`，避免重复传图。
+
+MCP 和 CLI 默认使用 `representation="compact"`，由 [evidence_format](../src/vidlens/evidence_format.py) 把相邻、同来源的短句合成阅读段落，共享来源轨道和视频链接。正文中的原始字符不被改写；每段 `refs` 保留原始证据 ID、字符偏移与长度，能够恢复本页实际交付的语句范围并用于保存笔记。段落只是传输组织，不声明语义章节。需要逐句字段时使用 `representation="verbose"`；底层 Python 接口保留兼容默认值。两种表示都遵守完整响应的预算与分页游标，省略重复字段不等于截去原文。
 
 默认图片覆盖章节中的代表性时间点。需要细读视觉变化时，设置 `frame_cursor=0`，再使用 `visual.next_frame_cursor` 继续候选序列；它与文字游标独立。每次最多返回 12 帧，默认 4 帧。`read_frames` 可直接读取特定区间，`crop_frame` 返回缓存原帧的局部。
 
@@ -80,7 +93,27 @@ Vision 的逐行区域与 Tesseract 的逐词区域统一为左上角归一化 `
 
 问答返回的 `knowledge` 是已保存笔记和外部资料的检索摘录；原始视频材料仍在 `evidence` 中。追问涉及笔记未覆盖的细节时，回到原文或画面。CLI 的 `export` 在一致快照中导出章节标题、解释、事实、关系和来源，并嵌入引用过的本地原帧。Markdown 保留本地图片路径；需要便携文件时使用下面的 HTML helper。
 
-### 5. 形成可交付讲解
+### 5. 把知识与时间章节分开
+
+[Curriculum](../src/vidlens/curriculum.py) 保存 AI 阅读后形成的知识单元。每个单元包含稳定 ID、解释、角色、概念、原始证据、重要性、前置单元 `requires`，也可附例子、问题和带证据的关系。单元可引用同一视频中多个章节的语音或原帧，因此一项机制的定义、示例和局限不必被时间切片拆散。
+
+`save_knowledge` 校验证据属于当前视频与来源版本、依赖存在且没有环，再原子保存。它不自动推断分类或认证解释；这些内容由宿主 AI 提交。来源版本未变时，单纯修订时间章节不会丢失知识单元。更新知识会改变 `knowledge_revision`，使旧文章计划显式过期。
+
+`query_knowledge` 按关键词和术语别名匹配知识单元，可用 `roles` 筛选命中的角色。返回命中单元前，按依赖顺序补齐其完整前置闭包；前置单元可以不符合角色过滤，因为它们承担理解所需的背景。预算不足以容纳某个命中及其依赖时跳过这一整组并标记 `truncated`，不返回貌似完整的半条推导。这里仍是词项检索与显式依赖遍历，没有自动 embedding 分类或自动生成因果边。
+
+原有章节笔记、`search_knowledge` 和外部引用继续保留；它们与知识单元服务于不同用途。章节笔记记录阅读范围，知识单元组织可复用的解释对象。具体问答可先查询知识单元，再按证据回读原文和图片；完整总结则需要核对全片的核心单元覆盖。
+
+### 6. 形成可交付讲解
+
+`article_plan` 保存面向读者的文章计划：目标、正文段落、关联知识单元、每张图要解释什么、练习所涉及的知识，以及有理由省略的辅助内容。它绑定当前知识版本，与时间章节可以采用不同的顺序。
+
+`audit_article` 检查草稿中 `<!-- section:ID -->` 标记下的实际摘录是否与声明的知识映射相符，检查核心单元及其前置依赖是否覆盖，并识别过期计划。`visual_coverage` 和 `exercise_coverage` 用从 0 开始的索引对应本节计划中的图与练习：图片必须是该节正文中实际引用的资产，练习摘录必须出现在该节。代码围栏里的示例标记和图片语法不计入交付。`ready_for_review` 只表示这组结构检查通过；并不证明摘录表达正确、公式推导成立、图示准确或读者已经理解，仍需看图、事实核对与阅读审查。
+
+[article](../src/vidlens/article.py) 将通过结构检查的草稿导出为新目录：`README.md` 使用 `assets/` 相对图片路径，`preview.html` 用于浏览器检查，`manifest.json` 记录来源版本、文件摘要和覆盖检查。来源图片通过本视频的 `frame:TIME` 证据 ID 定位，可用归一化 `box` 裁剪，导出为 PNG；自绘图使用被动 SVG 图形与文字。草稿里的 `asset:NAME` 被替换为相对路径，清单不需要本机私有缓存路径。图稿是 AI 编写的教学材料，需与源图区分。
+
+导出器将已验证的 section 标记转换为实际 `<a id="ID"></a>` 锚点，使 Markdown 与 HTML 的目录链接都能跳转；Markdown 保留原标记，输入中的任意 HTML 仍被拒绝。`attachments:[{name,text}]` 可附带正文相对链接引用的教学脚本或数据，限定最多 10 个 `.py/.json/.txt/.csv` 文件，每份最多 100,000 UTF-8 字节；导出不执行附件。所有内容先在临时目录组装，再独占创建输出目录，最后写入清单作为完成标志。已有目录不会被覆盖；发布目录前再次检查知识、计划和源图像素是否变化。
+
+CLI 的 `save-units`、`units`、`article-plan`、`audit-article`、`article` 对应这些步骤，输入 JSON 由阅读材料的 AI 编写。旧 `export` 保留为章节笔记的 Markdown 导出，不自动改写成完整文章。
 
 文字解释由 AI 按问题与因果关系组织。适合逐步演示的流程可以整理为 JSON，再由 skill 的 [build_lesson.py](../skills/read-video/scripts/build_lesson.py) 生成单文件 HTML。页面逐步显示字幕、原视频图片、解释和状态卡片，支持按钮、选择器和键盘导航。图片先经 Pillow 解码校验、限制尺寸、去除元数据，再以内嵌资产保存；相同图片去重，不依赖原文件位置或网络。每张图保留图注与原片时间链接。
 
@@ -97,11 +130,15 @@ Vision 的逐行区域与 Tesseract 的逐词区域统一为左上角归一化 `
 | [LearningReader](../src/vidlens/learning.py) | 连接章节计划、视觉索引、章节阅读、笔记检索和导出。 |
 | [StudyEngine](../src/vidlens/study.py) | 生成和修订章节，维护源版本、阅读状态和有证据引用的笔记。 |
 | [ReferenceStore](../src/vidlens/references.py) | 保存宿主读过的外部来源，并与章节笔记一起检索。 |
+| [Curriculum](../src/vidlens/curriculum.py) | 跨章节知识单元、依赖检索、文章计划及结构覆盖检查。 |
+| [Article export](../src/vidlens/article.py) | 打包 Markdown、来源图片与自绘 SVG、HTML 预览和摘要清单。 |
+| [Evidence format](../src/vidlens/evidence_format.py) | 无损段落传输与原始证据字符范围映射。 |
 | [MediaCache](../src/vidlens/media_cache.py) | 按来源版本、音视频类型和分辨率复用覆盖请求区间的媒体。 |
 | [VisualReader](../src/vidlens/visual.py) 与 [StoryboardScanner](../src/vidlens/storyboard.py) | 全片视觉索引、局部选帧、高清图片、OCR 和裁剪。 |
 | [VisualSelector](../src/vidlens/selection.py) | 保留全集的精简视觉导航、局部像素比较和来源游标映射。 |
 | [Figure fact checks](../src/vidlens/fact_check.py) | 按几何行核对字段、数字及单位，返回需看图处理的歧义；不认证指标含义。 |
 | [TokenBudget](../src/vidlens/budget.py) | 控制完整文本 JSON 的预算，保留后续可继续读取的游标。 |
+| [Telemetry](../src/vidlens/telemetry.py) | 本地操作耗时、文本估算与返回图片元数据。 |
 
 字幕、媒体、扫描索引和模型运行缓存默认位于 `.vidlens`。音轨与视频独立缓存：具体问题可以只取局部区间，全片扫描需要覆盖全片的媒体。成功取得的媒体才进入可复用目录；已覆盖请求的缓存可用于后续更小的区间。
 
@@ -111,8 +148,10 @@ ASR 后端和模型由 [asr.py](../src/vidlens/asr.py) 解析，推理在独立 
 
 文字分页游标绑定原始区间和证据状态。超长单条字幕可从字符位置继续；材料改变后需要重新取得当前游标。服务的本地 token 估算用于约束工具文本，图像输入、客户端模型推理和最终回答的成本由宿主分别承担。
 
+启用测量的服务调用将操作名、运行 ID、耗时、状态、可用的缓存命中信息、文本估算及返回图片尺寸写入 `.vidlens/metrics/operations.jsonl`；`metrics --run-id ID` 可按运行读取。日志不保存正文。嵌套或并行操作的时间不能相加作为任务总时长，这些记录也不包含模型真实账单。服务返回的图片元数据与客户端最终收到的图像数量需要按各自测量位置解释。
+
 ## 接入边界
 
-默认 MCP 提供 15 个阅读与学习工具。设置 `VIDLENS_ADVANCED_TOOLS=1` 后增加导航和诊断入口，共 20 个；CLI 不受该开关影响。标准 stdio 客户端可以读取文字，画面核对需要支持 MCP 图片内容的客户端。安装器生成通用 MCP 与 Codex 配置片段，只有显式选项才写入项目配置和 skill。
+默认 MCP 提供 19 个阅读与学习工具，包括 `save_knowledge`、`query_knowledge`、`article_plan` 和 `audit_article`。设置 `VIDLENS_ADVANCED_TOOLS=1` 后增加导航和诊断入口，共 24 个；CLI 不受该开关影响。文章目录导出通过 CLI `article` 执行。标准 stdio 客户端可以读取文字，画面核对需要支持 MCP 图片内容的客户端。安装器生成通用 MCP 与 Codex 配置片段，只有显式选项才写入项目配置和 skill。
 
 配置、依赖与排查见 [AI 接入](ai-setup.md)。历史开发基线和测量条件见 [验证记录](validation.md)；其中的已缓存检索、下载、解码、OCR 和 ASR 耗时应按各自条件理解。

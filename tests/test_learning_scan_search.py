@@ -7,6 +7,7 @@ from mcp.shared.memory import create_connected_server_and_client_session
 
 from vidlens import visual
 from vidlens.budget import compact_json
+from vidlens.evidence_format import expand_evidence
 from vidlens.mcp_server import create_server
 from vidlens.models import Frame, MediaAsset, Segment, Video, VidLensError
 from vidlens.service import VideoService
@@ -90,8 +91,9 @@ async def test_missing_local_media_keeps_imported_speech_readable_in_mcp(tmp_pat
         )
     assert not result.isError, result
     payload = json.loads(result.content[0].text)
-    assert payload["evidence"][0]["id"] == cue.id
-    assert payload["evidence"][0]["text"] == cue.text
+    assert payload["representation"] == "compact"
+    assert expand_evidence(payload)[0]["id"] == cue.id
+    assert expand_evidence(payload)[0]["text"] == cue.text
     assert payload["frames"] == []
     assert payload["visual"]["status"] == "unavailable"
     assert payload["visual"]["error"]["code"] == "media_missing"

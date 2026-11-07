@@ -1,0 +1,38 @@
+{
+  "benchmark": "cached_lossless_evidence_protocol_v1",
+  "video_id": "bilibili:BV1KT2yBJESn:p1",
+  "duration_seconds": 2367.0,
+  "source_sha256": "8d4645c65e44c19276040605bce79dd31737d75c67072fb743adb2c10cfea6a8",
+  "speech_segments": 596,
+  "source_characters": 9067,
+  "budget_per_page": 6000,
+  "token_method": "o200k_base_estimate",
+  "raw_text_tokens_estimate": 6894,
+  "scope": "Existing cached speech; read-only snapshot; no pictures or acquisition.",
+  "model_usage": "not_measured",
+  "excludes": [
+    "images",
+    "model reasoning",
+    "tool schemas",
+    "conversation history",
+    "transport envelopes",
+    "download and ASR time"
+  ],
+  "results": {
+    "verbose": {
+      "pages": 10,
+      "serialized_text_tokens_estimate": 54041,
+      "paragraphs_or_cues": 596,
+      "source_characters_reconstructed": 9067,
+      "exact_source_reconstruction": true
+    },
+    "compact": {
+      "pages": 4,
+      "serialized_text_tokens_estimate": 18058,
+      "paragraphs_or_cues": 57,
+      "source_characters_reconstructed": 9067,
+      "exact_source_reconstruction": true
+    }
+  },
+  "estimated_text_reduction_fraction": 0.6658463018819045
+}

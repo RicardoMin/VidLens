@@ -43,8 +43,10 @@ class EvidenceService:
     def search(self, video_id, query, **kwargs):
         raise VidLensError("not_found", "Video not cached.", "Call open_video first.")
 
-    def read_interval(self, video_id, start, end, max_tokens, cursor=None):
-        return {"interval": [start, end], "cursor": cursor, "budget": max_tokens}
+    def read_interval(self, video_id, start, end, max_tokens, cursor=None,
+                      representation="verbose"):
+        return {"interval": [start, end], "cursor": cursor, "budget": max_tokens,
+                "representation": representation}
 
 
 @pytest.mark.asyncio
@@ -58,7 +60,8 @@ async def test_mcp_protocol_returns_images_without_duplicate_structured_text(tmp
         assert {"read_video", "read_interval", "read_frames", "crop_frame",
                 "transcribe_video", "video_coverage", "study_status", "scan_video",
                 "read_section", "save_note", "revise_sections", "add_reference",
-                "search_knowledge", "check_facts", "read_detail"} == {t.name for t in tools.tools}
+                "search_knowledge", "check_facts", "read_detail", "save_knowledge",
+                "query_knowledge", "article_plan", "audit_article"} == {t.name for t in tools.tools}
         result = await client.call_tool("read_frames", {
             "video_id": "lecture", "start": 120.0, "end": 130.0,
         })
@@ -107,7 +110,7 @@ async def test_advanced_mcp_tools_are_opt_in(tmp_path, monkeypatch, advanced):
         tools = await client.list_tools()
         names = {tool.name for tool in tools.tools}
         extra = {"open_video", "video_overview", "find_evidence", "list_videos", "doctor"}
-        assert len(names) == (20 if advanced else 15)
+        assert len(names) == (24 if advanced else 19)
         assert extra <= names if advanced else not names.intersection(extra)
         result = await client.call_tool("video_overview", {"video_id": "lecture"})
         if advanced:
@@ -157,9 +160,12 @@ def test_cli_preserves_time_interval_pagination_and_home(tmp_path):
     assert args.home == tmp_path
     assert dispatch(args, EvidenceService(tmp_path / "frame.png")) == {
         "interval": [80.0, 150.0], "cursor": "revision:7:0", "budget": 4000,
+        "representation": "compact",
     }
-    args = parser.parse_args(["read", "lecture", "80", "150", "--home", str(tmp_path)])
+    args = parser.parse_args(["read", "lecture", "80", "150", "--home", str(tmp_path),
+                              "--representation", "verbose"])
     assert args.home == tmp_path
+    assert dispatch(args, EvidenceService(tmp_path / "frame.png"))["representation"] == "verbose"
 
 
 @pytest.mark.parametrize("value", ["nan", "inf", "-1", "1:60", "1:2:3:4"])

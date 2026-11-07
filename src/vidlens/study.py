@@ -20,8 +20,19 @@ from .models import Segment, Video, VidLensError
 from .retrieval import source_link, tokenize
 from .store import Store, frame_interval, union_intervals
 
-_ALGORITHM = "study-v3"
+_ALGORITHM = "study-v4"
 _SENTENCE_END = re.compile(r"[.!?。！？][\"'”’）)\]]*\s*$")
+# Navigation language is a candidate signal, not a semantic chapter label.
+# Unlike punctuation, these cues survive many continuous Chinese ASR tracks.
+_TOPIC_TRANSITION = re.compile(
+    r"^\s*(?:(?:那么|好了?|所以|现在)[,，]?\s*)?"
+    r"(?:(?:在)?(?:接下来|下面)(?:的|我们|来看|来|将|要|就|开始|分析|讨论|介绍|学习)|"
+    r"(?:让我们|我们)?(?:回到|进入)(?:第|[0-9])|"
+    r"(?:在|进入|来到)?(?:第[一二三四五六七八九十百0-9]+章|"
+    r"[0-9]+(?:\.[0-9]+)+\s*(?:小节|节))|"
+    r"(?:next|now|turning to|moving on to)\b.*\b(?:discuss|consider|look at|section|chapter|topic)\b)",
+    re.IGNORECASE,
+)
 _ROLES = {"definition", "mechanism", "derivation", "code", "example", "experiment", "correction"}
 _EPSILON = 1e-6
 
@@ -99,6 +110,10 @@ class StudyEngine:
             columns = {r["name"] for r in db.execute("PRAGMA table_info(study_plans)")}
             if "algorithm" not in columns:
                 db.execute("ALTER TABLE study_plans ADD COLUMN algorithm TEXT NOT NULL DEFAULT ''")
+            if "layout_policy" not in columns:
+                db.execute(
+                    "ALTER TABLE study_plans ADD COLUMN layout_policy TEXT NOT NULL DEFAULT 'automatic'"
+                )
 
     def _state(self, db, video_id):
         row = db.execute("SELECT data FROM videos WHERE id=?", (video_id,)).fetchone()
@@ -155,11 +170,25 @@ class StudyEngine:
         # upgrades should not invalidate notes on unchanged chapter scopes.
         if row and row["source_revision"] == _digest(["study-v2", *source_data]):
             source_revision = row["source_revision"]
-        if (
-            row is None
-            or row["source_revision"] != source_revision
-            or row["algorithm"] != _ALGORITHM
-        ):
+        source_changed = row is None or row["source_revision"] != source_revision
+        layout_upgrade = row is not None and row["algorithm"] != _ALGORITHM
+        if not source_changed and layout_upgrade:
+            previous = json.loads(row["sections"])
+            has_notes = db.execute(
+                "SELECT 1 FROM study_notes WHERE video_id=? AND source_revision=? LIMIT 1",
+                (video_id, source_revision),
+            ).fetchone()
+            if has_notes or any(s.get("title_source") == "ai" for s in previous):
+                # A better automatic splitter must not detach an authored note
+                # from its scope. Keep the exact IDs and revision; an explicit
+                # revise_sections call can adopt different boundaries later.
+                db.execute(
+                    "UPDATE study_plans SET algorithm=?,layout_policy='preserved_on_upgrade' "
+                    "WHERE video_id=?",
+                    (_ALGORITHM, video_id),
+                )
+                return video, segments, duration, source_revision, row["revision"], previous
+        if source_changed or layout_upgrade:
             sections = self._generate(video, speech, duration, source_revision)
             revision = self._write_plan(db, video_id, source_revision, sections)
         else:
@@ -181,13 +210,14 @@ class StudyEngine:
             return [str(path), "missing"]
 
     @staticmethod
-    def _write_plan(db, video_id, source_revision, sections):
+    def _write_plan(db, video_id, source_revision, sections, layout_policy="automatic"):
         revision = _digest([source_revision, sections])
         db.execute(
-            "INSERT INTO study_plans(video_id,source_revision,revision,sections,updated,algorithm) "
-            "VALUES (?,?,?,?,?,?) ON CONFLICT(video_id) DO UPDATE SET "
+            "INSERT INTO study_plans(video_id,source_revision,revision,sections,updated,algorithm,layout_policy) "
+            "VALUES (?,?,?,?,?,?,?) ON CONFLICT(video_id) DO UPDATE SET "
             "source_revision=excluded.source_revision,revision=excluded.revision,"
-            "sections=excluded.sections,updated=excluded.updated,algorithm=excluded.algorithm",
+            "sections=excluded.sections,updated=excluded.updated,algorithm=excluded.algorithm,"
+            "layout_policy=excluded.layout_policy",
             (
                 video_id,
                 source_revision,
@@ -195,6 +225,7 @@ class StudyEngine:
                 json.dumps(sections, ensure_ascii=False),
                 time.time(),
                 _ALGORITHM,
+                layout_policy,
             ),
         )
         return revision
@@ -242,16 +273,30 @@ class StudyEngine:
             )
             if not 0 < point < duration:
                 continue
-            if continuation:
-                boundaries[point] = {"reason": "capacity_continuation", "pause": 0, "shift": 0}
-                continue
             before = set(tokenize(" ".join(s.text for s in primary[max(0, i - 3) : i + 1])))
             after = set(tokenize(" ".join(s.text for s in primary[i + 1 : i + 5])))
             shift = 1 - len(before & after) / max(1, len(before | after))
+            # Repeated "next we calculate ..." instructions inside the same
+            # derivation are not chapters. Require some changed context too.
+            transition = bool(_TOPIC_TRANSITION.search(following.text)) and shift >= 0.35
+            # Short, unrelated phrases naturally have little token overlap.
+            # Require context on both sides and a stronger change when there
+            # is no sentence end, while keeping every original cue intact.
+            topic_change = min(len(before), len(after)) >= 5 and shift >= (
+                0.9 if continuation else 0.8
+            )
+            reason = (
+                "pause" if pause >= 4
+                else "topic_transition" if transition
+                else "topic_change" if topic_change
+                else "capacity_continuation" if continuation
+                else "sentence"
+            )
             boundaries[point] = {
-                "reason": "pause" if pause >= 4 else "topic_change" if shift >= 0.8 else "sentence",
+                "reason": reason,
                 "pause": max(0, pause),
                 "shift": shift,
+                "transition": transition,
             }
         for point in range(300, math.ceil(duration), 300):
             index = bisect_right(starts, point + 5) - 1
@@ -323,9 +368,9 @@ class StudyEngine:
                         capacity = False
                 natural = (
                     elapsed >= 90
-                    and count >= 1200
+                    and count >= (400 if info.get("transition") else 1200)
                     and remaining >= 500
-                    and (info.get("pause", 0) >= 4 or info.get("shift", 0) >= 0.8)
+                    and info.get("reason") in {"pause", "topic_transition", "topic_change"}
                 )
                 if point != end and not (capacity or natural):
                     continue
@@ -435,11 +480,15 @@ class StudyEngine:
             item["url"] = source_link(video, section["start"])
             rendered.append(item)
         speech = [s for s in segments if s.kind != "ocr"]
+        layout = db.execute(
+            "SELECT layout_policy FROM study_plans WHERE video_id=?", (video.id,)
+        ).fetchone()
         return {
             "video_id": video.id,
             "revision": revision,
             "source_revision": source_revision,
             "algorithm": _ALGORITHM,
+            "layout_policy": layout["layout_policy"],
             "duration": duration,
             "method": "candidate chapters from platform markers, sentence boundaries, pauses and lexical changes; not a summary",
             "sections": rendered,
@@ -713,7 +762,9 @@ class StudyEngine:
                 raise VidLensError(
                     "invalid_sections", "Sections must cover the entire video duration."
                 )
-            new_revision = self._write_plan(db, video_id, source_revision, cleaned)
+            new_revision = self._write_plan(
+                db, video_id, source_revision, cleaned, layout_policy="authored"
+            )
             # An explicit rename should also rename a retained note. Otherwise
             # its title would hide the user's requested chapter title in plans.
             for section in cleaned:

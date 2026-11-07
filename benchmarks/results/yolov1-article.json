@@ -1,0 +1,468 @@
+{
+  "date": "2026-11-06",
+  "video_id": "bilibili:BV1KT2yBJESn:p1",
+  "url": "https://www.bilibili.com/video/BV1KT2yBJESn/?p=1",
+  "duration_seconds": 2367,
+  "condition": "cached transcript and video evidence reread; no external factual sources",
+  "article": {
+    "path": "examples/yolov1/README.md",
+    "sha256": "d2cdf8c7a5864657b5911c29cc5749beb29cbc5d02213d365c6199a63c675dff",
+    "han_characters": 4621,
+    "sections": 10,
+    "core_units": 19,
+    "diagrams": 5,
+    "source_crops": 3,
+    "exercise_questions": 5,
+    "attachments": [
+      "calculations.py"
+    ]
+  },
+  "reading": {
+    "source_segments": 596,
+    "source_characters": 9067,
+    "preserved_sections": 6,
+    "raw_characters_and_ids_preserved": true,
+    "new_boundary_candidates_in_readonly_trial": 11
+  },
+  "fact_check": {
+    "automatic": {
+      "ambiguous": 5,
+      "unreadable": 1,
+      "passed": 0
+    },
+    "visual_review": {
+      "claims_checked": [
+        "YOLO VOC2007 63.4 mAP",
+        "YOLO 45 FPS",
+        "weight decay 0.0005",
+        "VOC2007 combination baseline 71.8 mAP",
+        "VOC2007 combination result 75.0 mAP",
+        "YOLO VOC2012 57.9 mAP"
+      ],
+      "result": "consistent with viewed source pixels; metric definitions reviewed separately"
+    },
+    "source_review_corrections": [
+      "learning-rate stages and augmentation limits",
+      "train/val/test split distinction",
+      "error-pie top-N denominator and average",
+      "source does not fully specify nonresponsible confidence mask"
+    ]
+  },
+  "coverage_audit": {
+    "video_id": "bilibili:BV1KT2yBJESn:p1",
+    "revision": "414a66ae3e4efa560c39e869",
+    "knowledge_revision": "aed9dda645ba71efa8d83485",
+    "markdown_sha256": "8dfa99e18790e5ab4761a0fde77109115037ef891cc85e2624d070cf0ba913bb",
+    "ready_for_review": true,
+    "issues": [],
+    "coverage": [
+      {
+        "unit_id": "unified",
+        "section_id": "flow"
+      },
+      {
+        "unit_id": "grid",
+        "section_id": "grid"
+      },
+      {
+        "unit_id": "coordinates",
+        "section_id": "grid"
+      },
+      {
+        "unit_id": "outputs",
+        "section_id": "output"
+      },
+      {
+        "unit_id": "confidence",
+        "section_id": "output"
+      },
+      {
+        "unit_id": "architecture",
+        "section_id": "network"
+      },
+      {
+        "unit_id": "responsibility",
+        "section_id": "assignment"
+      },
+      {
+        "unit_id": "loss-masks",
+        "section_id": "loss"
+      },
+      {
+        "unit_id": "sqrt-loss",
+        "section_id": "loss"
+      },
+      {
+        "unit_id": "loss-weights",
+        "section_id": "loss"
+      },
+      {
+        "unit_id": "nms",
+        "section_id": "nms"
+      },
+      {
+        "unit_id": "pretraining",
+        "section_id": "training"
+      },
+      {
+        "unit_id": "training",
+        "section_id": "training"
+      },
+      {
+        "unit_id": "speed",
+        "section_id": "experiments"
+      },
+      {
+        "unit_id": "errors",
+        "section_id": "experiments"
+      },
+      {
+        "unit_id": "ensemble",
+        "section_id": "experiments"
+      },
+      {
+        "unit_id": "voc2012",
+        "section_id": "experiments"
+      },
+      {
+        "unit_id": "generalization",
+        "section_id": "experiments"
+      },
+      {
+        "unit_id": "limitations",
+        "section_id": "experiments"
+      }
+    ],
+    "core_unit_count": 19,
+    "covered_core_count": 19,
+    "uncovered_core": [],
+    "uncovered_dependencies": [],
+    "omissions": [],
+    "unaccounted_units": [],
+    "visual_coverage": [
+      {
+        "section_id": "flow",
+        "visual_index": 0,
+        "asset_name": "flow.svg"
+      },
+      {
+        "section_id": "grid",
+        "visual_index": 0,
+        "asset_name": "grid.svg"
+      },
+      {
+        "section_id": "output",
+        "visual_index": 0,
+        "asset_name": "output.svg"
+      },
+      {
+        "section_id": "assignment",
+        "visual_index": 0,
+        "asset_name": "assignment.svg"
+      },
+      {
+        "section_id": "loss",
+        "visual_index": 0,
+        "asset_name": "loss-source.png"
+      },
+      {
+        "section_id": "nms",
+        "visual_index": 0,
+        "asset_name": "nms.svg"
+      },
+      {
+        "section_id": "experiments",
+        "visual_index": 0,
+        "asset_name": "speed-source.png"
+      },
+      {
+        "section_id": "experiments",
+        "visual_index": 1,
+        "asset_name": "errors-source.png"
+      }
+    ],
+    "uncovered_visuals": [],
+    "exercise_coverage": [
+      {
+        "section_id": "practice",
+        "exercise_index": 0
+      }
+    ],
+    "uncovered_exercises": [],
+    "semantic_validation": "not_performed",
+    "review_scope": "Exact excerpts and evidence references are checked; facts, visual explanations and learning outcomes require reader review."
+  },
+  "independent_reader": {
+    "conditions": "AI reader with no inherited conversation, article only; changed inputs; frozen reference before task; no old-article or no-article control",
+    "reference_sha256": "30a53d2ad6c396344fb5c1fd5e6fc2d0ec35b0c6a8686d1f4fc439455272a395",
+    "reference": {
+      "output": {
+        "shape": [
+          5,
+          5,
+          23
+        ],
+        "candidates": 100,
+        "class_vectors_per_cell": 1
+      },
+      "coordinates": {
+        "center": [
+          297.14285714285717,
+          125.71428571428571
+        ],
+        "xyxy": [
+          233.14285714285717,
+          77.71428571428571,
+          361.14285714285717,
+          173.71428571428572
+        ]
+      },
+      "responsibility": {
+        "predictor": "B",
+        "target_confidence": 0.72,
+        "class_score": 0.46799999999999997
+      },
+      "nms": {
+        "intersection": 9000,
+        "union": 11000,
+        "iou": 0.8181818181818182,
+        "at_0_5": [
+          "A",
+          "C"
+        ],
+        "at_0_85": [
+          "A",
+          "C",
+          "B"
+        ]
+      },
+      "metrics": {
+        "meaning": "mAP averages class AP, not image accuracy; mistake pie includes correct detections",
+        "combination_gain_points": 3.200000000000003,
+        "cannot_infer_new_hardware_fps": true
+      }
+    },
+    "task_groups": 5,
+    "checks": {
+      "output_dimensions": true,
+      "coordinate_scales": true,
+      "responsibility_and_prediction": true,
+      "nms_threshold_changes": true,
+      "metric_scope_and_baseline": true
+    },
+    "reader_response": {
+      "role": "独立文章阅读评测者",
+      "evidence_scope": {
+        "read": [
+          "article Markdown only"
+        ],
+        "basis": "仅依据文章正文与基础算术；未查看图片附件、视频、项目源码、其他文件或外网；未用模型已有 YOLO 知识填补缺口。"
+      },
+      "answers": [
+        {
+          "question": 1,
+          "source_sections": [
+            "第 3 节：每格 30 个数，各自做什么？",
+            "第 10 节：第 1 题答案给出的通式"
+          ],
+          "derivation": [
+            "每框含 x、y、w、h、confidence 共 5 个数；每格另有一组共享的 C 类条件概率。",
+            "每格输出数量 = B×5+C = 4×5+3 = 23。",
+            "输出形状 = S×S×(B×5+C) = 5×5×23；总标量数量为 575。",
+            "总候选框数 = S×S×B = 5×5×4 = 100。"
+          ],
+          "answer": {
+            "output_shape": [
+              5,
+              5,
+              23
+            ],
+            "total_candidate_boxes": 100,
+            "class_vectors_per_cell": 1,
+            "values_per_class_vector": 3
+          },
+          "missing_information": "无。文章没有规定具体实现中的张量排列顺序，但题目只要求按文中网格形式表达形状，不受影响。"
+        },
+        {
+          "question": 2,
+          "source_sections": [
+            "第 2 节：网格决定谁负责，框可以跨越网格"
+          ],
+          "assumptions_from_article": [
+            "列号 c 和行号 r 从 0 开始。",
+            "按题目指定的 640×320 坐标空间解码，S=7。"
+          ],
+          "derivation": [
+            "横向每格宽度 = W/S = 640/7 ≈ 91.428571 像素；纵向每格高度 = H/S = 320/7 ≈ 45.714286 像素。非正方形图片的两个尺度不同。",
+            "x 相对所在格子的宽度，y 相对所在格子的高度；先分别加列号和行号，再按对应网格尺度转成像素。",
+            "cx = (c+x)/S×W = (3+0.25)/7×640 = 2080/7 ≈ 297.142857。",
+            "cy = (r+y)/S×H = (2+0.75)/7×320 = 880/7 ≈ 125.714286。",
+            "w 相对整图宽 W，h 相对整图高 H：bw = 0.2×640 = 128；bh = 0.3×320 = 96。",
+            "xmin = cx−64 = 1632/7 ≈ 233.142857；ymin = cy−48 = 544/7 ≈ 77.714286。",
+            "xmax = cx+64 = 2528/7 ≈ 361.142857；ymax = cy+48 = 1216/7 ≈ 173.714286。"
+          ],
+          "answer": {
+            "center_pixels": [
+              297.14285714285717,
+              125.71428571428571
+            ],
+            "width_height_pixels": [
+              128,
+              96
+            ],
+            "xyxy_pixels": [
+              233.14285714285714,
+              77.71428571428571,
+              361.14285714285717,
+              173.71428571428572
+            ],
+            "exact_center": [
+              "2080/7",
+              "880/7"
+            ],
+            "exact_xyxy": [
+              "1632/7",
+              "544/7",
+              "2528/7",
+              "1216/7"
+            ]
+          },
+          "missing_information": "本题无缺口。若另问实际网络如何预处理非正方形输入、如何从预处理坐标映射回原图，文章没有给出相应约定；本题已指定图片宽高和网格，不需要这些信息。"
+        },
+        {
+          "question": 3,
+          "source_sections": [
+            "第 5 节：训练前先分工",
+            "第 3 节：类别概率、置信度与类别得分"
+          ],
+          "derivation": [
+            "B 与真值的 IoU=0.72，大于 A 的 0.41，因此 B 负责该目标的坐标学习。",
+            "文章说明负责框的训练置信度目标为其与真值的 IoU，因此 B 当前的训练目标为 0.72。",
+            "只有额外给定模型预测置信度也恰好为 0.72，才可用这个预测值算猫类别得分：0.65×0.72=0.468。",
+            "训练目标与网络当前预测值是不同的量，数值相等是题目额外提供的条件。仅给出 IoU，不能确定推理时网络实际输出的 confidence；文章明确说推理时没有真实框，使用网络预测置信度。"
+          ],
+          "answer": {
+            "responsible_predictor": "B",
+            "responsible_confidence_target": 0.72,
+            "cat_score_given_predicted_confidence_0_72": 0.468,
+            "can_infer_actual_prediction_confidence_from_iou_only": false
+          },
+          "missing_information": "要知道推理预测 confidence，须有网络预测输出；只给 IoU 不足。文章另明确承认，有目标格子中落选预测器的置信度掩码未展开；本题没有要求求 A 的置信度训练项，所以不影响上述答案。"
+        },
+        {
+          "question": 4,
+          "source_sections": [
+            "第 3 节：IoU 的交并比定义",
+            "第 7 节：NMS 过程",
+            "第 5 节：矩形面积与交并面积计算示例"
+          ],
+          "derivation": [
+            "A、B、C 各自面积均为 100×100=10000。",
+            "A∩B 的横向范围是 [10,100]，宽 90；纵向范围是 [0,100]，高 100。因此交集面积=9000，并集面积=10000+10000−9000=11000，IoU=9000/11000=9/11≈0.818182。",
+            "A 与 C 没有重叠：交集面积=0，并集面积=20000，IoU=0。B 与 C 也没有重叠：交集面积=0，并集面积=20000，IoU=0。",
+            "分数从高到低是 A(0.82)、C(0.76)、B(0.70)。",
+            "阈值 0.5：先保留 A；A 与 B 的 IoU≈0.818182>0.5，抑制 B；C 与 A 的 IoU=0，随后保留 C。结果为 A、C。",
+            "阈值 0.85：先保留 A；A 与 B 的 IoU≈0.818182<0.85，不抑制 B；接着保留 C，再保留 B。保留集合为 A、B、C，按实际挑选顺序为 A、C、B。"
+          ],
+          "answer": {
+            "pairwise_areas_and_iou": {
+              "A_B": {
+                "intersection_area": 9000,
+                "union_area": 11000,
+                "iou_exact": "9/11",
+                "iou_approx": 0.8181818181818182
+              },
+              "A_C": {
+                "intersection_area": 0,
+                "union_area": 20000,
+                "iou": 0
+              },
+              "B_C": {
+                "intersection_area": 0,
+                "union_area": 20000,
+                "iou": 0
+              }
+            },
+            "threshold_0_5_selection_order": [
+              "A",
+              "C"
+            ],
+            "threshold_0_85_selection_order": [
+              "A",
+              "C",
+              "B"
+            ]
+          },
+          "missing_information": "无。将题目给出的三个候选视为进入 NMS 的候选即可；题目未另设类别得分过滤阈值。文章没有定义 IoU 恰好等于阈值时的实现边界，但本题两个阈值都不与 IoU 相等，不影响结果。"
+        },
+        {
+          "question": 5,
+          "source_sections": [
+            "第 9 节：实验里的快和准"
+          ],
+          "corrections": [
+            {
+              "claim": "63.4 mAP 表示 63.4% 图片识别正确。",
+              "correction": "不成立。文章把 mAP 定义为检测任务各类别 AP 的平均，综合检测排序和定位是否达标。它不是以整张图片为单位计算的识别正确率。",
+              "information_limit": "文章没有展开 AP 的完整计算过程，但足以否定题中解释。"
+            },
+            {
+              "claim": "错误饼图中的 Correct 是剩余错误百分比。",
+              "correction": "不成立。文章说明每类取排名最高的 N 个预测，N 等于该类真实目标数；把这些预测分成正确、定位错误、相似类别、其他类别与背景，再跨 20 类平均比例。Correct 是这一统计口径下的正确预测比例，分母包含正确预测和错误预测，并非只含错误。该比例也不能直接当作 mAP。"
+            },
+            {
+              "claim": "组合从 70.0 到 75.0 提升 5 点。",
+              "correction": "70.0 不是文章中这组 VOC2007 组合实验的基线。正确基线是 71.8 mAP，组合后为 75.0 mAP，增益=75.0−71.8=3.2 个 mAP 点。70.0 到 75.0 在算术上确实相差 5，但不是文中对应实验的比较。",
+              "additional_distinction": "另一组 VOC2012 数据为 YOLO 57.9、Fast R-CNN 68.4、组合 70.7；若以该组 Fast R-CNN 为基线，增益为 70.7−68.4=2.3 个点。不能与 VOC2007 的 75.0 混算。"
+            },
+            {
+              "claim": "因此自己电脑一定有 45 FPS。",
+              "correction": "不能推出。45 FPS 是文章引用的 YOLO 论文实验结果，文章明确说不能当作任意电脑上的速度；mAP 增益也没有给出自己电脑的运行速度。文中没有足以估算这台电脑 FPS 的设备及实测信息。"
+            }
+          ],
+          "answer": {
+            "voc2007_combination_baseline_map": 71.8,
+            "voc2007_combination_map": 75.0,
+            "voc2007_gain_map_points": 3.2,
+            "guaranteed_local_fps": null
+          },
+          "missing_information": "若要求计算完整 AP/mAP 或预测用户电脑 FPS，文章信息不足；本题要求辨别统计含义、基线与不成立的推断，正文已提供充分信息。"
+        }
+      ],
+      "article_gap_assessment": {
+        "blocking_gaps_for_these_five_question_groups": [],
+        "conclusion": "上述五组题都能仅凭正文完成；没有妨碍这些特定计算和纠错的缺口。第 3 题仅给 IoU 不能得到推理预测 confidence，是题目条件不足且正文已明确区分的知识边界，不应补出一个虚构数值。",
+        "limits_outside_the_requested_calculations": [
+          "完整训练复现仍缺有目标格子中落选预测器的无目标置信度掩码约定；正文第 6 节主动标明这一缺口。",
+          "文章没有给出非正方形实际网络输入的预处理及坐标回映射流程；题 2 已给出 W、H、S，因此不受影响。",
+          "文章未规定得分过滤的具体阈值、NMS 相等边界或分数相同时的处理；本题只比较指定 NMS 阈值，且不存在这些边界情况。",
+          "文章没有 AP 的完整数值计算步骤，也没有推算任意电脑 FPS 所需的实测条件；题 5 无需这些信息就能纠正错误解释。"
+        ],
+        "reproducibility_of_arithmetic": "网格输出数量、两种坐标尺度、负责预测器选择、置信度目标与预测值区别、类别得分相乘、NMS 交并面积以及组合实验的基线均由正文明确支撑。"
+      }
+    },
+    "claim_scope": "acceptance on these tasks, not evidence of human learning gain"
+  },
+  "software": {
+    "tests_passed": 544,
+    "ruff": "passed",
+    "skill_validation": "passed",
+    "offline_lock": "passed",
+    "wheel_sdist_build": "passed",
+    "isolated_install": "passed",
+    "mcp_tools_default": 19,
+    "mcp_tools_advanced": 24,
+    "version": "0.1.0"
+  },
+  "render": {
+    "viewports_width": [
+      1280,
+      390
+    ],
+    "all_images_loaded": 8,
+    "narrow_page_horizontal_overflow": false,
+    "anchors_work": true,
+    "five_diagrams_and_three_source_crops_viewed": true
+  },
+  "cost_scope": "see compact-reading.json; estimates cover serialized tool text only; no whole-task wall-time or actual-billing claim"
+}
